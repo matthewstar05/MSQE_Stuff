@@ -1,0 +1,45 @@
+========================================================================
+LAB PROGRAM OUTPUT (readable summary)
+Program: microols.py
+Note: Training prints 10000 progress lines with carriage return (\r).
+Below: first step, last step, then final printed sections.
+Captured (UTC): 2026-04-08T22:16:10.611405+00:00
+========================================================================
+
+num observations: 28947
+num params: 4
+training for 10000 steps...
+
+--- first training line ---
+step     1 / 10000 | loss 86.0754 | a = 0.0100  b0 = 0.0100  b_mm = 0.0100  b_tr = 0.0100
+
+--- last training line ---
+step 10000 / 10000 | loss 0.8775 | a = -3.1207  b0 = 10.8151  b_mm = 0.8523  b_tr = 1.4959
+
+--- remainder of stdout ---
+--- trained model ---
+ln(Q) = -3.1207 * ln(P) + 0.8523 * MinuteMaid + 1.4959 * Tropicana + 10.8151
+demand elasticity: -3.1207
+residual standard error: 0.7938
+--- inference: 20 draws from Q | P = $3.00, brand = Tropicana ---
+predicted ln(Q) = 8.8825
+sample  1: Q = 7,031 units
+sample  2: Q = 22,939 units
+sample  3: Q = 9,096 units
+sample  4: Q = 8,803 units
+sample  5: Q = 2,328 units
+sample  6: Q = 19,934 units
+sample  7: Q = 13,393 units
+sample  8: Q = 9,726 units
+sample  9: Q = 3,570 units
+sample 10: Q = 2,552 units
+sample 11: Q = 10,569 units
+sample 12: Q = 2,814 units
+sample 13: Q = 15,448 units
+sample 14: Q = 19,160 units
+sample 15: Q = 10,292 units
+sample 16: Q = 8,881 units
+sample 17: Q = 27,262 units
+sample 18: Q = 15,031 units
+sample 19: Q = 28,160 units
+sample 20: Q = 7,467 units

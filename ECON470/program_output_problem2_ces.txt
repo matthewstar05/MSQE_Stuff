@@ -1,0 +1,12 @@
+========================================================================
+LAB PROGRAM OUTPUT
+Program: problem2_ces.py
+Command: /Library/Developer/CommandLineTools/usr/bin/python3 /Users/star/Desktop/CSC/ECON470/problem2_ces.py
+Exit code: 0
+Captured (UTC): 2026-04-08T22:16:07.984652+00:00
+========================================================================
+
+CES check: Y = (0.5*L^0.5 + 0.5*K^0.5)^2 with L=4, K=9
+Y    = 6.25
+MP_L = 0.625
+MP_K = 0.41666666666666663
