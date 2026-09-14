@@ -4,39 +4,32 @@ Matthew Suban
 @matthewsuban
 """
 
-# 1. first 100 positive integers
-a = []
+a = [] # 1-100
 for i in range(1, 101):
     a.append(i)
 
-# 2. perfect squares of the first 100 positive integers
-b = []
+b = [] # (1-100)^2
 for i in range(1, 101):
     b.append(i * i)
 
-# 3. first 100 triangular numbers: n*(n+1)/2
-c = []
+c = [] # (1-100)*(1-100+1)/2
 for n in range(1, 101):
     c.append(n * (n + 1) // 2)
 
-# 4. True iff the corresponding triangular number is divisible by 3
-d = []
+d = [] # x e c is divisible by 3, bool
 for x in c:
     d.append(x % 3 == 0)
 
-# 5. indices in c of the triangular numbers divisible by 3
-e = []
+e = [] # indicies of x e c // 3 == 0
 for i in range(len(c)):
     if c[i] % 3 == 0:
         e.append(i)
 
-# 6. those triangular numbers themselves
-f = []
+f = [] # x e c is divisible by 3, numbers
 for x in c:
     if x % 3 == 0:
         f.append(x)
 
-# 7. cumulative sum of b (works for any list named b)
-g = [b[0]]
+g = [b[0]] # sum of b
 for i in range(1, len(b)):
     g.append(b[i] + g[i - 1])
