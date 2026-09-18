@@ -1,0 +1,184 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\newcommand{\pref}{\succsim}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{C(X,\pref)}
+
+\title{Problem set 1 \\ \large Solution Key}
+\author{Econ 5030}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Preferences and Utility}
+
+Throughout, $x \succ y$ means ($x \pref y$ and not $y \pref x$), and $x \sim y$ means ($x \pref y$ and $y \pref x$).
+
+\begin{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item Assume that $\pref$ is complete and transitive on $X$.
+
+\begin{enumerate}[(a)]
+\item \emph{$x \succ x$ never holds.}
+By definition, $x \succ x$ would require $x \pref x$ and not $x \pref x$ simultaneously, which is a contradiction. Hence $x \succ x$ never holds. (Completeness in fact gives $x \pref x$ for every $x$, so the second requirement always fails.)
+
+\item \emph{If $x \succ y$ and $y \succ z$, then $x \succ z$.}
+From $x \succ y$ and $y \succ z$ we have $x \pref y$ and $y \pref z$, so $x \pref z$ by transitivity. It remains to show that $z \pref x$ fails. Suppose $z \pref x$. Together with $x \pref y$, transitivity gives $z \pref y$, contradicting $y \succ z$. Therefore not $z \pref x$, and $x \succ z$.
+
+\item \emph{$x \sim x$ for all $x$.}
+By completeness (applied to the pair $x,x$), $x \pref x$. Then $x \pref x$ and $x \pref x$, which is exactly $x \sim x$.
+
+\item \emph{If $x \sim y$ and $y \sim z$, then $x \sim z$.}
+We have $x \pref y$, $y \pref x$, $y \pref z$, $z \pref y$. Transitivity on $x \pref y$, $y \pref z$ gives $x \pref z$; transitivity on $z \pref y$, $y \pref x$ gives $z \pref x$. Hence $x \sim z$.
+
+\item \emph{If $x \sim y$, then $y \sim x$.}
+$x \sim y$ means $x \pref y$ and $y \pref x$. This is the same pair of statements as $y \pref x$ and $x \pref y$, i.e.\ $y \sim x$.
+
+\item \emph{If $x \succ y$ and $y \pref z$, then $x \succ z$.}
+From $x \pref y$ and $y \pref z$, transitivity gives $x \pref z$. Suppose $z \pref x$. Then $y \pref z$ and $z \pref x$ give $y \pref x$ by transitivity, contradicting $x \succ y$. Hence not $z \pref x$, so $x \succ z$.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item $X=\{a,b,c,d\}$ and $\pref$ is complete and transitive on $X$.
+
+\begin{enumerate}[(a)]
+\item \emph{$\C$ is non-empty.}
+Build a best element by pairwise comparison. By completeness, either $a \pref b$ or $b \pref a$; let $x_2 \in \{a,b\}$ denote the (weakly) preferred one, so $x_2 \pref a$ and $x_2 \pref b$ (using $x_2 \pref x_2$ from completeness). By completeness again, compare $x_2$ with $c$ and let $x_3 \in \{x_2, c\}$ be the preferred one. If $x_3 = x_2$ then $x_3 \pref a,b,c$ directly. If $x_3 = c$, then $c \pref x_2$, and $x_2 \pref a$, $x_2 \pref b$ give $c \pref a$ and $c \pref b$ by transitivity; also $c \pref c$. Either way $x_3 \pref y$ for all $y \in \{a,b,c\}$. Repeat once more with $d$ to obtain $x_4$ with $x_4 \pref y$ for all $y \in X$. Then $x_4 \in \C$, so $\C \neq \emptyset$.
+
+(The same induction works for any finite $X$. Alternatively: if $\C = \emptyset$, then for every $x$ some $y$ satisfies $y \succ x$ (by completeness, ``not $x \pref y$'' implies $y \succ x$). Starting anywhere, this produces a chain $x_1 \prec x_2 \prec x_3 \prec \cdots$; with only four elements some element repeats, and transitivity of $\succ$ (part 1(b)) then yields $x_i \succ x_i$, contradicting 1(a).)
+
+\item \emph{$x \sim y$ for all $x,y \in \C$.}
+Let $x,y \in \C$. Since $x \in \C$, $x \pref z$ for every $z \in X$; in particular $x \pref y$. Since $y \in \C$, $y \pref x$. Hence $x \sim y$.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item $X=\{a,b,c,d\}$.
+
+\begin{enumerate}[(a)]
+\item \emph{Complete and transitive $\pref$ on $X$ has a utility representation.}
+Define, for each $x \in X$,
+\[
+u(x) \;=\; \big|\{\, z \in X : x \pref z \,\}\big|,
+\]
+the number of alternatives that $x$ is weakly preferred to. Let $L(x) = \{z \in X : x \pref z\}$, so $u(x)=|L(x)|$. We show $x \pref y \iff u(x) \ge u(y)$.
+
+($\Rightarrow$) Suppose $x \pref y$. If $z \in L(y)$ then $y \pref z$, and transitivity gives $x \pref z$, i.e.\ $z \in L(x)$. Thus $L(y) \subseteq L(x)$ and $u(y) \le u(x)$.
+
+($\Leftarrow$) Suppose $u(x) \ge u(y)$ but not $x \pref y$. By completeness $y \pref x$, so $y \succ x$. By the argument just given, $L(x) \subseteq L(y)$. Moreover $y \in L(y)$ (completeness gives $y \pref y$) while $y \notin L(x)$ (since not $x \pref y$). So $L(x) \subsetneq L(y)$ and $u(x) < u(y)$, a contradiction. Hence $x \pref y$.
+
+Therefore $u : X \to \R$ represents $\pref$. (Only finiteness of $X$ is used, so this proves the result for any finite set.)
+
+\item \emph{Why an extra assumption is needed on $X' = [0,1]^2$.}
+The construction above relies on $X$ being finite (or, more generally, countable) so that counting, or an enumeration, produces real numbers in the right order. When $X'$ is uncountable, completeness and transitivity alone do not guarantee a representation: the preference may have ``too many'' strictly ordered levels to fit into $\R$ in an order-preserving way. The standard additional assumption is \emph{continuity} (for every $x$, the sets $\{y : y \pref x\}$ and $\{y : x \pref y\}$ are closed), which, together with completeness and transitivity, guarantees a (continuous) utility representation (Debreu's theorem).
+
+\emph{Example (lexicographic preferences).} On $X'=[0,1]^2$ define
+\[
+(x_1,x_2) \pref (y_1,y_2) \iff \big[\, x_1 > y_1 \,\big] \ \text{or} \ \big[\, x_1 = y_1 \text{ and } x_2 \ge y_2 \,\big].
+\]
+This is complete (for any two bundles either the first coordinates differ, or they agree and the second coordinates are comparable) and transitive (check the cases: if $x_1>y_1\ge z_1$ or $x_1 \ge y_1 > z_1$ then $x_1>z_1$; if $x_1=y_1=z_1$ then $x_2\ge y_2\ge z_2$).
+
+Suppose $u$ represents it. For each $t \in [0,1]$, $(t,1) \succ (t,0)$, so $u(t,1) > u(t,0)$ and the open interval $I_t = \big(u(t,0),\,u(t,1)\big)$ is non-empty. If $t < t'$, then $(t',0) \succ (t,1)$, so $u(t',0) > u(t,1)$ and $I_t \cap I_{t'} = \emptyset$. Thus $\{I_t\}_{t \in [0,1]}$ is an uncountable family of pairwise disjoint non-empty open intervals in $\R$. Each contains a rational number $q_t$, and $t \mapsto q_t$ is injective, giving an injection from $[0,1]$ into $\mathbb{Q}$. This contradicts the countability of $\mathbb{Q}$. Hence no utility function represents lexicographic preferences. (Lexicographic preferences fail continuity: the upper contour set of $(1/2,1/2)$ is not closed.)
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item Cobb--Douglas: $u(x_1,x_2) = x_1^{1/2}x_2^{1/2}$ on $\R^2_+$, $p \in \R^2_{++}$, $w>0$.
+
+\begin{enumerate}[(a)]
+\item \emph{Interior and budget-exhausting.}
+If $x_1 = 0$ or $x_2 = 0$ then $u(x) = 0$. The bundle $\big(\tfrac{w}{2p_1},\tfrac{w}{2p_2}\big)$ is affordable (it costs exactly $w$) and yields $u = \tfrac{w}{2\sqrt{p_1p_2}} > 0$. Hence any optimal bundle has $x_1>0$ and $x_2>0$, i.e.\ is interior.
+
+$u$ is strictly increasing in each argument on $\R^2_{++}$. If $p\cdot x < w$ at an interior $x$, then $x' = (x_1+\varepsilon, x_2)$ is affordable for small $\varepsilon>0$ and $u(x')>u(x)$, so $x$ is not optimal. Hence the optimum satisfies $p_1x_1+p_2x_2 = w$.
+
+\emph{First-order conditions.} Since the optimum is interior with a binding budget, the Lagrangian
+$\mathcal{L} = x_1^{1/2}x_2^{1/2} - \lambda(p_1x_1+p_2x_2-w)$ gives
+\[
+\tfrac12 x_1^{-1/2}x_2^{1/2} = \lambda p_1, \qquad
+\tfrac12 x_1^{1/2}x_2^{-1/2} = \lambda p_2, \qquad
+p_1x_1+p_2x_2 = w.
+\]
+Dividing the first two conditions,
+\[
+\frac{x_2}{x_1} = \frac{p_1}{p_2} \quad\Longrightarrow\quad p_2 x_2 = p_1 x_1 .
+\]
+Substituting into the budget: $2p_1x_1 = w$. Hence the Marshallian demand is
+\[
+D(p,w) \;=\; \Big( \frac{w}{2p_1},\ \frac{w}{2p_2} \Big).
+\]
+(Each good receives exactly half of income, the Cobb--Douglas exponent share.) The FOCs are sufficient because $\ln u = \tfrac12\ln x_1 + \tfrac12 \ln x_2$ is strictly concave on $\R^2_{++}$ and the budget set is convex, so the maximizer is unique. The indirect utility function is
+\[
+v(p,w) \;=\; \Big(\frac{w}{2p_1}\Big)^{1/2}\Big(\frac{w}{2p_2}\Big)^{1/2} \;=\; \frac{w}{2\sqrt{p_1p_2}} .
+\]
+
+\item \emph{$(p_1,p_2,w) = (4,1,80)$.}
+\[
+x_1 = \frac{80}{2\cdot 4} = 10, \qquad x_2 = \frac{80}{2\cdot 1} = 40, \qquad
+v(4,1,80) = \frac{80}{2\sqrt{4\cdot 1}} = 20 .
+\]
+Check: $u(10,40) = \sqrt{10\cdot 40} = \sqrt{400} = 20$.
+
+\item \emph{Walras' law and homogeneity of degree zero with $\lambda = 2$.}
+Walras' law: $p\cdot D(p,w) = 4\cdot 10 + 1 \cdot 40 = 80 = w$. \checkmark
+
+Homogeneity: $(\lambda p, \lambda w) = (8, 2, 160)$, and
+\[
+D(8,2,160) = \Big(\frac{160}{2\cdot 8},\ \frac{160}{2\cdot 2}\Big) = (10,40) = D(4,1,80). \ \checkmark
+\]
+In general $D(\lambda p,\lambda w) = \big(\tfrac{\lambda w}{2\lambda p_1}, \tfrac{\lambda w}{2\lambda p_2}\big) = D(p,w)$, and likewise $v(8,2,160) = \tfrac{160}{2\sqrt{16}} = 20 = v(4,1,80)$.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item Perfect complements: $u(x_1,x_2) = \min\{x_1, 2x_2\}$ on $\R^2_+$, $p \in \R^2_{++}$, $w \ge 0$.
+
+\begin{enumerate}[(a)]
+\item \emph{Marshallian demand and indirect utility.}
+Take any affordable bundle $x$ and let $t = \min\{x_1, 2x_2\}$. Then $x_1 \ge t$ and $x_2 \ge t/2$, so
+\[
+w \;\ge\; p_1x_1 + p_2x_2 \;\ge\; p_1 t + p_2 \tfrac{t}{2} \;=\; \frac{t\,(2p_1+p_2)}{2}
+\quad\Longrightarrow\quad t \;\le\; \frac{2w}{2p_1+p_2}.
+\]
+So no affordable bundle gives utility above $\tfrac{2w}{2p_1+p_2}$. The bundle
+\[
+x^* = \Big( \frac{2w}{2p_1+p_2},\ \frac{w}{2p_1+p_2} \Big)
+\]
+costs $p_1\tfrac{2w}{2p_1+p_2} + p_2\tfrac{w}{2p_1+p_2} = w$ and satisfies $x_1^* = 2x_2^*$, so $u(x^*) = \tfrac{2w}{2p_1+p_2}$, attaining the bound. It is the unique maximizer: attaining the bound requires every inequality above to hold with equality, i.e.\ $x_1 = t$, $x_2 = t/2$ (no ``wasted'' units of either good) and $p\cdot x = w$, which pins down $x = x^*$. Therefore
+\[
+D(p,w) = \Big( \frac{2w}{2p_1+p_2},\ \frac{w}{2p_1+p_2} \Big), \qquad
+v(p,w) = \frac{2w}{2p_1+p_2}.
+\]
+
+\emph{Economic explanation.} The goods are consumed in the fixed proportion $x_1 = 2x_2$: two units of good 1 are needed for each unit of good 2, and any unit beyond that ratio adds nothing to utility. The consumer therefore buys ``kits'' of $(2,1)$, each costing $2p_1 + p_2$; with income $w$ the number of kits is $w/(2p_1+p_2)$, which is exactly $v(p,w)/2$. Relative prices do not change the proportions (there is no substitution between the goods); prices only affect how many kits are affordable.
+
+\item \emph{$(p_1,p_2,w) = (3,2,80)$.}
+$2p_1+p_2 = 8$, so
+\[
+x_1 = \frac{2\cdot 80}{8} = 20, \qquad x_2 = \frac{80}{8} = 10, \qquad v(3,2,80) = \frac{160}{8} = 20 .
+\]
+Check: $3\cdot 20 + 2\cdot 10 = 80$ and $\min\{20, 2\cdot 10\} = 20$.
+
+\item \emph{Convex but not strictly convex; demand is still a singleton.}
+
+\emph{Convex.} For any $t$, the upper contour set is
+\[
+\{x \in \R^2_+ : \min\{x_1,2x_2\} \ge t\} = \{x_1 \ge t\} \cap \{x_2 \ge t/2\},
+\]
+an intersection of two half-planes, hence convex. So $\pref$ is convex. (Equivalently, $u$ is the minimum of two linear functions, hence concave, hence quasi-concave.)
+
+\emph{Not strictly convex.} Take $x = (2,1)$ and $y = (4,1)$. Then $u(x) = \min\{2,2\} = 2$ and $u(y) = \min\{4,2\} = 2$, so $x \sim y$ with $x \ne y$. The midpoint $z = \tfrac12 x + \tfrac12 y = (3,1)$ has $u(z) = \min\{3,2\} = 2$, so $z \sim x$ rather than $z \succ x$. Strict convexity would require $z \succ x$, so it fails: indifference curves are L-shaped and contain flat segments.
+
+\emph{Why demand is nonetheless a singleton.} Strict convexity is sufficient, not necessary, for single-valued demand. The flat parts of an indifference curve are bundles with $x_1 \ne 2x_2$, and on any such bundle some expenditure is wasted; by the argument in (a), such a bundle can be affordably replaced by one on a strictly higher indifference curve (when $w>0$), so it is never optimal. Only the kink $x_1 = 2x_2$ can be optimal, and the budget line meets that ray at exactly one point. Hence $D(p,w)$ is the single bundle found in (a) (and $D(p,0) = \{(0,0)\}$ when $w=0$). A singleton is trivially a convex set, consistent with the general result that convex preferences yield convex-valued demand.
+\end{enumerate}
+
+\end{enumerate}
+\end{document}

@@ -1,0 +1,101 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumerate}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+
+\newcommand{\pref}{\succsim}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{C(X,\pref)}
+
+\begin{document}
+
+\begin{center}
+{\large Problem set 1 -- Econ 5030}
+\end{center}
+
+\begin{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item Defs: $x \succ y \iff x \pref y \wedge \neg(y \pref x)$;\quad $x \sim y \iff x \pref y \wedge y \pref x$.
+
+\begin{enumerate}[(a)]
+\item $x \succ x$ needs $x \pref x$ and $\neg(x \pref x)$. Contradiction.
+\item $x \pref y,\ y \pref z \Rightarrow x \pref z$ (trans.). Suppose $z \pref x$: then $z \pref x,\ x \pref y \Rightarrow z \pref y$, contradicts $y \succ z$. So $\neg(z \pref x)$, hence $x \succ z$.
+\item Completeness $\Rightarrow x \pref x$. So $x \pref x \wedge x \pref x \Rightarrow x \sim x$.
+\item $x \pref y,\ y \pref z \Rightarrow x \pref z$;\quad $z \pref y,\ y \pref x \Rightarrow z \pref x$. So $x \sim z$.
+\item $x \sim y \iff x \pref y \wedge y \pref x \iff y \pref x \wedge x \pref y \iff y \sim x$.
+\item $x \pref y,\ y \pref z \Rightarrow x \pref z$. Suppose $z \pref x$: then $y \pref z,\ z \pref x \Rightarrow y \pref x$, contradicts $x \succ y$. So $x \succ z$.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item
+\begin{enumerate}[(a)]
+\item Completeness: pick $x_2 \in \{a,b\}$ with $x_2 \pref a,\ x_2 \pref b$. Compare $x_2$ vs $c$; pick the better one $x_3$. If $x_3 = c$ then $c \pref x_2 \pref a,b \Rightarrow c \pref a,b$ (trans.). Either way $x_3 \pref a,b,c$. Repeat with $d$: get $x_4 \pref a,b,c,d$. So $x_4 \in \C \ne \emptyset$.
+\item $x,y \in \C \Rightarrow x \pref y$ (since $x \pref$ all) and $y \pref x$ (since $y \pref$ all) $\Rightarrow x \sim y$.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item
+\begin{enumerate}[(a)]
+\item Let $L(x) = \{z \in X : x \pref z\}$, $u(x) = |L(x)|$. Claim $x \pref y \iff u(x) \ge u(y)$.
+
+($\Rightarrow$) $x \pref y$, $z \in L(y) \Rightarrow y \pref z \Rightarrow x \pref z$ (trans.) $\Rightarrow z \in L(x)$. So $L(y) \subseteq L(x)$, $u(y) \le u(x)$.
+
+($\Leftarrow$) Suppose $u(x) \ge u(y)$ but $\neg(x \pref y)$. Completeness $\Rightarrow y \pref x$, so $L(x) \subseteq L(y)$ by above. But $y \in L(y)$ ($y \pref y$) and $y \notin L(x)$. So $L(x) \subsetneq L(y) \Rightarrow u(x) < u(y)$. Contradiction.
+
+\item $[0,1]^2$ is uncountable; complete + transitive alone may have too many strict levels to embed in $\R$. Need \emph{continuity} (contour sets closed) $\Rightarrow$ Debreu.
+
+Example: lexicographic $x \pref y \iff x_1 > y_1$ or ($x_1 = y_1$, $x_2 \ge y_2$). Complete, transitive. Suppose $u$ represents it. $\forall t \in [0,1]$: $(t,1) \succ (t,0) \Rightarrow I_t = (u(t,0), u(t,1)) \ne \emptyset$. $t < t' \Rightarrow (t',0) \succ (t,1) \Rightarrow I_t \cap I_{t'} = \emptyset$. Uncountably many disjoint open intervals, each contains a rational $\Rightarrow$ injection $[0,1] \to \mathbb{Q}$. Contradiction.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item $u = x_1^{1/2} x_2^{1/2}$.
+\begin{enumerate}[(a)]
+\item Interior: $x_i = 0 \Rightarrow u = 0$, but $(\tfrac{w}{2p_1}, \tfrac{w}{2p_2})$ affordable with $u > 0$. Budget binds: $u$ strictly increasing, so if $p \cdot x < w$ raise $x_1$ by $\varepsilon$, still affordable, $u$ up.
+
+FOC: $\mathcal{L} = x_1^{1/2}x_2^{1/2} - \lambda(p_1 x_1 + p_2 x_2 - w)$
+\[
+\tfrac12 x_1^{-1/2} x_2^{1/2} = \lambda p_1, \qquad \tfrac12 x_1^{1/2} x_2^{-1/2} = \lambda p_2
+\ \Rightarrow\ \frac{x_2}{x_1} = \frac{p_1}{p_2} \Rightarrow p_1 x_1 = p_2 x_2 .
+\]
+Budget: $2 p_1 x_1 = w$. So
+\[
+D(p,w) = \Big( \frac{w}{2p_1}, \frac{w}{2p_2} \Big), \qquad
+v(p,w) = \frac{w}{2\sqrt{p_1 p_2}} .
+\]
+(Sufficient: $\ln u$ strictly concave, budget set convex.)
+
+\item $x_1 = \tfrac{80}{8} = 10$, $x_2 = \tfrac{80}{2} = 40$, $v = \tfrac{80}{2\sqrt{4}} = 20$. Check $\sqrt{10 \cdot 40} = 20$.
+
+\item Walras: $4(10) + 1(40) = 80 = w$. \checkmark
+
+$\lambda = 2$: $D(8,2,160) = (\tfrac{160}{16}, \tfrac{160}{4}) = (10,40) = D(4,1,80)$. \checkmark
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\item $u = \min\{x_1, 2x_2\}$.
+\begin{enumerate}[(a)]
+\item Any affordable $x$, $t = \min\{x_1, 2x_2\}$: $x_1 \ge t$, $x_2 \ge t/2$, so
+\[
+w \ge p_1 x_1 + p_2 x_2 \ge p_1 t + p_2 \tfrac{t}{2} \Rightarrow t \le \frac{2w}{2p_1 + p_2}.
+\]
+Bound attained (uniquely) iff $x_1 = 2x_2$ and $p \cdot x = w$:
+\[
+D(p,w) = \Big( \frac{2w}{2p_1+p_2}, \frac{w}{2p_1+p_2} \Big), \qquad v(p,w) = \frac{2w}{2p_1+p_2}.
+\]
+Econ: goods used in fixed ratio $x_1 = 2x_2$; extra units of either are wasted. Buy ``kits'' $(2,1)$ at price $2p_1 + p_2$; \# kits $= w/(2p_1+p_2)$. No substitution, relative prices don't change proportions.
+
+\item $2p_1 + p_2 = 8$: $x_1 = \tfrac{160}{8} = 20$, $x_2 = \tfrac{80}{8} = 10$, $v = 20$. Check: $3(20)+2(10) = 80$, $\min\{20,20\} = 20$.
+
+\item Convex: $\{u \ge t\} = \{x_1 \ge t\} \cap \{x_2 \ge t/2\}$, intersection of half-planes $\Rightarrow$ convex. (Or: $\min$ of linear $\Rightarrow$ concave $\Rightarrow$ quasiconcave.)
+
+Not strictly: $x = (2,1)$, $y = (4,1)$, $u(x) = u(y) = 2$, $x \sim y$, $x \ne y$. $z = \tfrac12 x + \tfrac12 y = (3,1)$, $u(z) = 2$, so $z \sim x$, not $z \succ x$.
+
+Singleton: strict convexity is sufficient, not necessary. Flat parts of the L have $x_1 \ne 2x_2$: wasted spending, dominated by (a). Only the kink $x_1 = 2x_2$ can be optimal, and it meets the budget line once. Singleton $\Rightarrow$ convex-valued.
+\end{enumerate}
+
+\end{enumerate}
+\end{document}
