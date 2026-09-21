@@ -1,26 +1,12 @@
-# Past 1 year of Microsoft (MSFT) daily prices from Yahoo Finance
+library(quantmod)
+library(dplyr)
 
-if (!require("quantmod", quietly = TRUE)) {
-  install.packages("quantmod")
-  library(quantmod)
-}
+x = getSymbols("NVDA", from = "2013-02-01", 
+               to = "2026-06-30", auto.assign = FALSE) %>%
+  Ad() %>% monthlyReturn() %>% as.data.frame() %>% pull(monthly.returns)
 
-end_date   <- Sys.Date()
-start_date <- end_date - 365
-
-getSymbols(
-  "MSFT",
-  src         = "yahoo",
-  from        = start_date,
-  to          = end_date,
-  auto.assign = TRUE
-)
-
-head(MSFT)
-tail(MSFT)
-summary(MSFT)
-
-# Convenient data frame with a date column
-msft <- data.frame(date = index(MSFT), coredata(MSFT))
-nrow(msft)
-head(msft)
+length(x)
+100*quantile(x, probs = 0.2)
+100*IQR(x)
+mean(x > 0)
+mean(x < -0.1)
