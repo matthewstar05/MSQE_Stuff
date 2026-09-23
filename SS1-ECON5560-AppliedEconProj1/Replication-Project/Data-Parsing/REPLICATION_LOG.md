@@ -13,7 +13,7 @@ A chronological record of what we tried, what worked, and what didn't. It is wri
 
 ## 2. First reproduced number: Table 1
 - Gender (67.5 / 32.5), all five age bands, and residence (58.2 / 41.8) match **exactly using all 180 respondents**, so Table 1 describes everyone who started the survey.
-- **Not reproduced:** the town-size row. The paper has 36.7 / 30.9 / 21.3 / 11.2%; the file gives 39.1 / 29.0 / 20.1 / 11.8% (180 respondents) and no sample we tried matches. The published shares fit 169 respondents with counts 62 / 52 / 36 / 19, against 66 / 49 / 34 / 20 in the file. It may be a different recode or a later data revision; we can't tell from the file.
+- **Not reproduced:** the town-size row. The paper has 36.7 / 30.9 / 21.3 / 11.2%; the file gives 39.1 / 29.0 / 20.1 / 11.8% (180 respondents) and no sample we tried matches. The published shares only correspond to whole-number counts at **188 respondents** (69 / 58 / 40 / 21); the file has 180, of whom 169 answered (66 / 49 / 34 / 20). So this row was computed on a different, larger version of the data than the one published (see §11).
 
 ## 3. Identifying the estimation sample (N = 1,968)
 Table 3 reports N = 1,968 (all) and 1,476 (councillors). With 12 rows per person, that means 164 and 123 people.
@@ -58,14 +58,14 @@ Table 3 reports N = 1,968 (all) and 1,476 (councillors). With 12 rows per person
 | **design card 1–12, pooled across people** | **−852.92** | **4.260** | **4.553** | **4.112** |
 | *published* | *−852.9* | *4.260* | *4.553* | *4.112* |
 
-With `group = design card` (as in Stata `clogit …, group(choice_variables)`), **20 of 24 coefficient and p-value pairs match to 3 decimals** across models 1 and 2. The remaining differences look like typos in the paper:
+With `group = design card` (as in Stata `clogit …, group(choice_variables)`), **20 of 24 coefficient and p-value pairs match to 3 decimals** across models 1 and 2. The remaining differences are reporting errors in the paper, diagnosed in §11:
 
-| Where | Published | From data | Why we think it's a typo |
+| Where | Published | From data | Diagnosis |
 |---|---|---|---|
-| Model 2, water: medium | −0.393 | −3.891 | Every other model-2 number matches; the size is off by about 10× |
-| Model 2, water: low | −0.602 | −6.184 | Same |
-| Model 1, Residential × $ | 0.670 | 0.699 | The p-value (0.018) matches exactly |
-| Model 1, Stables & landscape (p) | 0.031 | 0.001 | Coefficient matches; the model-2 p is also 0.001 |
+| Model 2, water: medium | −0.393 | −3.891 | −0.393 is our **standard error** (0.3926), printed in place of the coefficient (§11) |
+| Model 2, water: low | −0.602 | −6.184 | −0.602 is our **standard error** (0.6017) (§11) |
+| Model 1, Residential × $ | 0.670 | 0.699 | The printed p (0.018) is what 0.699 gives; 0.670 would give 0.023 (§11) |
+| Model 1, Stables & landscape (p) | 0.031 | 0.001 | The same model on all 180 respondents gives exactly p = 0.031: likely a stale value (§11) |
 | Model 4, Residential × $ | 3.450** (p = 0.062) | — | Stars inconsistent with the printed p |
 
 **Independent check:** `crosscheck_clogit.R` (R, `survival::clogit`, exact conditional likelihood) gives identical numbers, including LL −852.92 / −646.98.
@@ -96,18 +96,32 @@ The paper's five exhibits are saved in `replication-targets/` and numbered in th
 
 | # | Exhibit | Result |
 |---|---|---|
-| 01 | Table 1 | 9 of 13 cells exact (town-size row differs) |
+| 01 | Table 1 | 9 of 13 cells exact; the town-size row was computed on 188 respondents, not the public file (§11) |
 | 02 | Table 2 | Ours shows how each level is coded in the data. Every “$ shown” term follows the treatment rule exactly |
 | 03 | Figure 1 | All 36 bars exact |
-| 04 | Table 3 | CL columns exact apart from 4 apparent typos (shaded); ML columns within simulation noise |
+| 04 | Table 3 | CL columns exact apart from 4 reporting errors (shaded, diagnosed in §11); ML columns within simulation noise |
 | 05 | Figure 2 | Shape reproduced; 4 of 5 peaks close (see below) |
 
 - **Figure 1** (responses per choice card by treatment): **all 36 bar heights match** the published figure. It uses the 164 complete respondents: the totals of 228 / 208 / 220 are 4 × 57 / 52 / 55.
 - **Figure 2** (density across respondents of their own "$ shown" coefficients, with dashed 95% lines): we re-estimated the mixed logit from the CSV with the paper's 500 draws and used posterior means E[βₙ | choicesₙ] with Stata-style Epanechnikov densities. The fit statistic is −421.06 (paper −421.92). Four of the five panel peaks land close to the published ones (1.39 / 3.23 / 1.73 / −2.26 vs 1.27 / 3.30 / 1.85 / −2.30). The low-water panel sits at −5.9 vs −4.3, which is the same draw sensitivity seen in Table 3. Our 95% bands are wider than the published ones for the development panels.
 - **The published Figure 2 is from model 3, not model 4.** The text says model 4 (councillors), but the published peaks sit at the model 3 coefficients in Table 3 (1.29, 3.22, 1.75, −2.27, −4.31), not model 4's (2.65, 3.45, 2.23, −2.09, −8.65). We draw it from model 3 and also save a model-4 version (`05c_fig2_model4_variant.png`).
 
-## 11. Not done yet / open items
+## 11. Debugging the differences (`08_debug_discrepancies.py`)
+Every published number we could not reproduce was tested against concrete explanations. The results are in `output/tables/discrepancy_diagnosis.csv`.
+
+| Cell | Published | Ours | Diagnosis | Confidence |
+|---|---|---|---|---|
+| Table 3 (2), water: medium | −0.393 | −3.891 | Our **standard error is 0.3926**. The SE was printed in the coefficient cell with a minus sign | Certain (both cells match the SEs to 3 decimals) |
+| Table 3 (2), water: low | −0.602 | −6.184 | Our **standard error is 0.6017**. Same error | Certain |
+| Table 3 (1), Residential × $ | 0.670 (p 0.018) | 0.699 (p 0.018) | With SE 0.295, 0.670 would give p = 0.023. The printed 0.018 is 0.699's p-value, so the coefficient is a typo. No alternative sample or coding gives 0.670 | High |
+| Table 3 (1), Stables & landscape p | 0.031 (\*\*) | 0.001 (\*\*\*) | The same model on **all 180 respondents** gives exactly p = 0.031 for this row, and Table 1 also uses 180. Likely left over from an earlier run. That run's coefficient differs (−0.985), so this is suggestive rather than proof | Medium |
+| Table 1, town size | 36.7 / 30.9 / 21.3 / 11.2 | 39.1 / 29.0 / 20.1 / 11.8 | The shares are whole-number counts only for **n = 188** (69/58/40/21). The file has 180 respondents, 169 of whom answered. The row was computed on a larger version of the data than the one published. No sample of the public file matches | High that it's not reproducible; its source is unknown |
+| Table 3 (4), Residential × $ stars | 3.450\*\* (p 0.062) | — | \*\* contradicts the table's own legend (p 0.062 would be \*) | Certain |
+
+**Bottom line:** none of the differences comes from our code or data parsing. Four are reporting errors in the paper, one is likely a stale value from an earlier sample, and the town-size row was computed on data not included in the published file.
+
+## 12. Not done yet / open items
 - Hausman–McFadden IIA test (the paper says IIA "could not be confirmed" but reports no test).
 - Confirm the mixed logit in Stata `mixlogit` if a licence becomes available (Cal Poly labs).
-- Explain the Table 1 town-size mismatch (possibly ask the authors).
+- Ask the authors for the 188-respondent file behind Table 1's town-size row, and confirm where the p = 0.031 came from.
 - Optional extensions: correlated random coefficients; separate T2-vs-T1 and T3-vs-T2 contrasts; a willingness-to-trade calculation using the $ amounts.

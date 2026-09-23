@@ -57,7 +57,7 @@ save(fig, "slide1_raw_pattern.png")
 # ---------------------------------------------------------------- slide 2: reproduced
 cl = json.loads((RES_OUT / "cl.json").read_text())
 fig = slide("We reproduce the paper's main model from its raw data",
-            "Model 1 (conditional logit, all respondents): published coefficients (◇) vs our estimates (●). 20 of 24 CL numbers match to 3 decimals; the rest look like typos")
+            "Model 1 (conditional logit, all respondents): published coefficients (◇) vs our estimates (●). 20 of 24 CL numbers match to 3 decimals; the other 4 are reporting errors in the paper")
 ax = fig.add_axes([0.2, 0.12, 0.74, 0.66])
 y = np.arange(len(VARS))[::-1]
 ax.scatter(cl["m1"]["paper_spec"]["coef"], y, s=110, color=US, zorder=3, label="Ours (replicated)")

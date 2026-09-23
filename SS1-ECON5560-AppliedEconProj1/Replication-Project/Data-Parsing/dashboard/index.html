@@ -373,10 +373,10 @@ footer .wrap{display:grid;gap:8px}
 
 <section class="block" id="reproduce"><div class="wrap">
   <div class="head"><div class="eyebrow">Reproduce</div><h2>Every number comes from a script</h2>
-    <p class="lede">The pipeline is seven short Python scripts plus an R cross-check. Running them in order rebuilds every table, figure and this page from the raw data file.</p></div>
+    <p class="lede">The pipeline is eight short Python scripts plus an R cross-check. Running them in order rebuilds every table, figure and this page from the raw data file.</p></div>
   <div class="tscroll"><table id="files"></table></div>
   <pre>pip install -r requirements.txt
-python run_all.py              # steps 1-7, about 5 minutes (the mixed logit is the slow part)
+python run_all.py              # steps 1-8, about 6 minutes (the mixed logit is the slow part)
 Rscript crosscheck_clogit.R    # optional: re-estimates models 1-2 in R</pre>
   <p class="small muted" id="meta"></p>
 </div></section>
@@ -448,8 +448,8 @@ function mlInside() { let yes = 0, n = 0; for (const m of ["m3", "m4"]) V.forEac
   const t1exact = DATA.table1.filter(r => Math.abs(r.diff_all) <= 0.05).length;
   const items = [
     ["Sample size", "good", "Exact", `N = 1,968 (all) and 1,476 (councillors), as published`],
-    ["Table 1 (who answered)", "info", `${t1exact} of ${DATA.table1.length} exact`, "Gender, age and residence match; town size does not"],
-    ["Models 1–2 (conditional logit)", "good", `${cy} of ${cn} exact`, "Coefficient and p-value to 3 decimals; the rest look like typos"],
+    ["Table 1 (who answered)", "info", `${t1exact} of ${DATA.table1.length} exact`, "Gender, age and residence match; town size came from a larger dataset (n = 188)"],
+    ["Models 1–2 (conditional logit)", "good", `${cy} of ${cn} exact`, "Coefficient and p-value to 3 decimals; the other 4 are reporting errors in the paper"],
     ["Models 3–4 (mixed logit)", "info", `${my} of ${mn} in range`, "Same signs; values move with the random draws"],
     ["Main caveat", "warn", "Grouping", "Conditional logit pools each card across people"]];
   $("#status").innerHTML = items.map(([k, c, chip, v]) => `<div class="stat"><div class="k">${k}</div><div><span class="chip ${c}">${chip}</span></div><div class="v">${v}</div></div>`).join("");
@@ -684,16 +684,17 @@ mount($("#chCoef"), () => drawModel());
      p: `The only setup that reproduces models 1–2 pools everyone who answered the same card into one group, as if 50-odd people made one joint choice. A correct 3-option choice model can never score below <b class="num">${f(null1, 1)}</b>, the score of a model that gives every option a 1-in-3 chance. The paper reports <b class="num">−852.9</b>, which only makes sense under the pooled grouping. Grouping correctly (one person, one card) roughly halves the main coefficients. All signs survive, and the “$ shown” effects keep their direction with similar p-values.`, ll: true},
     {sev: "info", chip: "Robustness", t: "The mixed logit results move with the random draws",
      p: `The log likelihood barely changes across draw sequences, but the coefficients do. The likelihood is flat: 24 parameters estimated from ${FL.choice_occasions} choices. The paper's model 3 values sit inside our spread. For councillors (model 4), the headline “low water × $” effect is <b class="num">−8.65</b> (p = 0.015) in the paper but <b class="num">${f(DATA.ml.m4.primary.coef[11], 2)}</b> (p = ${pf(DATA.ml.m4.primary.p[11])}) with 2,000 draws.`},
-    {sev: "warn", chip: "Typos", t: "A few numbers in Table 3 look mistyped",
-     li: ["Model 2 water quality: published −0.393 and −0.602; the data give −3.891 and −6.184. Every other number in that column matches.",
-          "Model 1 Residential × $: published 0.670 against 0.699 from the data, with an identical p-value (0.018).",
-          "Model 1 Stables & landscape: p-value published as 0.031, but the data give 0.001 (confirmed in R).",
-          "Model 4 Residential × $ is marked ** (p < 0.05) with a printed p-value of 0.062."]},
+    {sev: "warn", chip: "Reporting errors", t: "Every unmatched number in Table 3 traces to a reporting error",
+     li: ["Model 2 water quality: published −0.393 and −0.602; the data give −3.891 and −6.184. The published values are exactly our standard errors (0.393, 0.602), printed in place of the coefficients.",
+          "Model 1 Residential × $: published 0.670 against 0.699 from the data. The printed p-value (0.018) is what 0.699 gives; 0.670 would give 0.023.",
+          "Model 1 Stables & landscape: p-value published as 0.031, but the data give 0.001 (confirmed in R). The same model on all 180 respondents gives exactly 0.031, so it is likely left over from an earlier run.",
+          "Model 4 Residential × $ is marked ** (p < 0.05) with a printed p-value of 0.062, which by the table's own legend earns only *.",
+          "None of these come from our code: 08_debug_discrepancies.py tests each explanation and writes the evidence to discrepancy_diagnosis.csv."]},
     {sev: "info", chip: "Description", t: "Some methods are described differently from what the data show",
      li: ["“In each Halton draw, 15 individuals are randomly dropped” most likely describes Stata's burn(15), which discards the first 15 Halton points. No people are dropped.",
           "The design is described as “two blocks”, but each respondent received a random 4 of the 12 cards.",
           "Figure 2 is described as model 4 (councillors), but its peaks sit at the model 3 (all respondents) coefficients from Table 3.",
-          `Table 1 describes all ${FL.raw_respondents} respondents, including the ${FL.incomplete_respondents} who did not finish, and its town-size row does not match the file (39.1 / 29.0 / 20.1 / 11.8% against 36.7 / 30.9 / 21.3 / 11.2%).`]},
+          `Table 1 describes all ${FL.raw_respondents} respondents, including the ${FL.incomplete_respondents} who did not finish, and its town-size row does not match the file (39.1 / 29.0 / 20.1 / 11.8% against 36.7 / 30.9 / 21.3 / 11.2%). The published shares only work out to whole-number counts for 188 respondents, so that row came from a larger version of the data.`]},
     {sev: "info", chip: "Design", t: "Limits worth raising in the appraisal",
      li: ["“No development” only ever appears in the status quo, so the development coefficients also absorb any general tendency to pick a new plan over doing nothing.",
           "The dollar effects rest on comparisons between about 55 people per group, and in T3 development and water prices always appear together.",
@@ -740,6 +741,7 @@ mount($("#chCoef"), () => drawModel());
     ["04_mixed_logit.py", "Models 3–4 (simulated maximum likelihood), the draw-sensitivity runs, and Figure 2", "output/tables/table3_ml.csv"],
     ["05_build_dashboard.py", "Puts every result into this page", "dashboard/index.html"],
     ["06_slide_figures.py", "Slide-ready 16:9 figures for the presentation", "output/slides/*.png"],
+    ["08_debug_discrepancies.py", "Tests explanations for every published number we could not reproduce", "output/tables/discrepancy_diagnosis.csv"],
     ["07_paper_figures.py", "Redraws the paper's five exhibits from the parsed CSVs, numbered to match replication-targets/, with side-by-side comparisons", "output/paper_figures/"],
     ["crosscheck_clogit.R", "Re-estimates models 1–2 in R (survival::clogit) as an independent check", "output/tables/r_crosscheck_clogit.csv"],
     ["replication_walkthrough.ipynb", "The same steps as a narrated notebook, with outputs", "(renders on GitHub)"]];

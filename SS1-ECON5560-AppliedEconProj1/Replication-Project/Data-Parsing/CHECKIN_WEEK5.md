@@ -8,8 +8,8 @@
 |---|---|---|
 | Data opened and understood | ✅ Done | `01_parse_data.py`, `output/logs/01_parse_data.log` |
 | Estimation sample (N = 1,968 / 1,476) | ✅ Exact | Complete respondents (164) and councillors (123); see `REPLICATION_LOG.md` §3–4 |
-| Table 1 | ✅ 9 / 13 cells exact | Town-size row doesn't match |
-| **Main result: Table 3, conditional logit** | ✅ 20 / 24 exact, the rest likely typos | Python + R agree |
+| Table 1 | ✅ 9 / 13 cells exact | Town-size row fits 188 respondents, not the 180 in the file |
+| **Main result: Table 3, conditional logit** | ✅ 20 / 24 exact; the other 4 diagnosed as reporting errors | Python + R agree; `08_debug_discrepancies.py` |
 | **Main result: Table 3, mixed logit** | ≈ Reproduced within simulation noise | Model 4 fragile |
 | Figures 1 & 2 | ✅ Rebuilt | `output/figures/` |
 | Interactive dashboard | ✅ | `dashboard/index.html` and GitHub Pages |
@@ -19,7 +19,7 @@
 ## Where we're stuck / questions for Prof. Doremus
 1. **Which version counts as "our replication"?** We plan to report both: an exact reproduction of the published specification, and a corrected specification. We'd lead the appraisal with the grouping issue. Is that the right framing for the memo?
 2. **Mixed logit without Stata.** We wrote our own estimator. The fit statistics match, but coefficients vary with the random draws. Is comparing against a 20-run range an acceptable standard, or should we try to get Stata `mixlogit` access to confirm?
-3. **Unexplained Table 1 row (town size).** Should we contact the authors about this and the Table 3 typos, or simply document them?
+3. **Contact the authors?** Table 1's town-size row only fits 188 respondents (the public file has 180), and Table 3 has reporting errors, including standard errors printed as coefficients. Should we ask the authors, or document them?
 4. **Client translation.** Which local stakeholder should the recommendations target? A county or city planning body and a water-quality agency both fit the paper's question, which is whether to price non-market impacts in development decisions.
 
 ## Next steps (course timeline)
@@ -33,7 +33,7 @@
 - Specification: CL grouping pools choices across people (the LL is below the 3-option floor); the corrected estimates are smaller; no clustering by respondent.
 - Robustness: the ML is sensitive to simulation draws; the model 4 headline effect isn't stable; the paper describes `burn(15)` as dropping individuals.
 - Design: "no development" appears only in the status quo, so the development coefficients double as an opt-out constant; the water $ values were chosen by the authors, not taken from a valuation study; culture was never priced, so "culture barely mattered" may reflect the attribute framing (the authors say so themselves).
-- Reporting: typos in Table 3; the Table 1 town-size mismatch; Table 1 describes 180 respondents, not the 164 in the models.
+- Reporting: model 2's water "coefficients" are its standard errors; one coefficient typo; one p-value likely from a 180-respondent run; Table 1's town-size row comes from a 188-respondent file; Figure 2 is labelled model 4 but is model 3.
 
 **Real-world audience**
 - Takeaway that survives: showing a dollar figure makes decision-makers weigh that impact more. The direction holds in every version we ran.

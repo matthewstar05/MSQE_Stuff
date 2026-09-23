@@ -1,10 +1,10 @@
-"""Run the full replication pipeline in order: parse -> descriptives -> CL -> ML -> dashboard -> slide figures -> paper figures."""
+"""Run the full replication pipeline in order: parse -> descriptives -> CL -> ML -> dashboard -> slide figures -> paper figures -> discrepancy diagnosis."""
 import runpy
 import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-STEPS = ["01_parse_data.py", "02_descriptives.py", "03_conditional_logit.py", "04_mixed_logit.py", "05_build_dashboard.py", "06_slide_figures.py", "07_paper_figures.py"]
+STEPS = ["01_parse_data.py", "02_descriptives.py", "03_conditional_logit.py", "04_mixed_logit.py", "05_build_dashboard.py", "06_slide_figures.py", "07_paper_figures.py", "08_debug_discrepancies.py"]
 
 if __name__ == "__main__":
     for step in STEPS:

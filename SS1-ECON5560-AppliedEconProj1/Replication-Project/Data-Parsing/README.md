@@ -11,8 +11,8 @@
 | Target | Result |
 |---|---|
 | Estimation samples (N = 1,968 all / 1,476 councillors) | ✅ Exact. 164 people answered all 4 cards; 123 of them are councillors (121 by role code + a Mayor and a Councillor/Commissioner from the free-text answers) |
-| Table 1 (respondent characteristics) | ✅ 9 of 13 cells exact on all 180 respondents; ❗ the town-size row does not match |
-| Table 3, models 1–2 (conditional logit) | ✅ 20 of 24 coefficient + p-value pairs exact to 3 decimals; the other 4 look like typos in the paper; identical results in R |
+| Table 1 (respondent characteristics) | ✅ 9 of 13 cells exact on all 180 respondents; ❗ the town-size row only fits 188 respondents, so it came from a larger version of the data than the one published |
+| Table 3, models 1–2 (conditional logit) | ✅ 20 of 24 coefficient + p-value pairs exact to 3 decimals; the other 4 are reporting errors in the paper (two are standard errors printed as coefficients), diagnosed in `08_debug_discrepancies.py`; identical results in R |
 | Table 3, models 3–4 (mixed logit) | ≈ Same signs and similar magnitudes; 21 of 24 published values fall inside our simulation-draw range; model 4 is fragile |
 | Figure 1, Figure 2 | ✅ Figure 1: all 36 bars exact. Figure 2: redrawn from the CSV; 4 of 5 panel peaks close to the published ones. The published figure is model 3, although the text says model 4 |
 
@@ -43,6 +43,7 @@ The raw data file is read from `../Resources/S1Table.DTA`.
 | 5 | `05_build_dashboard.py` | Injects all results into `dashboard/template.html` | `dashboard/index.html` |
 | 6 | `06_slide_figures.py` | Slide-ready 16:9 figures with headline titles | `output/slides/*.png` |
 | 7 | `07_paper_figures.py` | Redraws all five published exhibits (Tables 1–3, Figures 1–2) in the paper's layout, reading **only** the parsed CSVs in `output/data/` (models are re-estimated from them). Files are numbered to match `replication-targets/`, and each pair is also placed side by side | `output/paper_figures/01_…05_*.png`, `*_comparison.csv`, `side_by_side/*.png` |
+| 8 | `08_debug_discrepancies.py` | Tests explanations for every published number we could not reproduce, and prints the evidence | `output/tables/discrepancy_diagnosis.csv` |
 | — | `crosscheck_clogit.R` | Models 1–2 again with `survival::clogit` | `output/tables/r_crosscheck_clogit.csv` |
 | — | `common.py` | Paths, published numbers, estimators (conditional logit wrapper, `MixedLogit`) | — |
 
@@ -56,7 +57,7 @@ The raw data file is read from `../Resources/S1Table.DTA`.
 ## Folder layout
 ```
 Data-Parsing/
-├── 01_parse_data.py … 07_paper_figures.py, run_all.py, common.py
+├── 01_parse_data.py … 08_debug_discrepancies.py, run_all.py, common.py
 ├── crosscheck_clogit.R
 ├── replication_walkthrough.ipynb
 ├── dashboard/        template.html (source) → index.html (built)

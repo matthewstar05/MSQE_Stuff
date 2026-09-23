@@ -214,7 +214,7 @@ rows.append({"cells": ["N", f"{len(sample):,}", f"{len(counc):,}", f"{len(sample
 pd.DataFrame(cmp).to_csv(FIG_DIR / f"{EXHIBITS[4]}_comparison.csv", index=False)
 draw_table(FIG_DIR / f"{EXHIBITS[4]}.png", rows, [3.0, 1.9, 1.9, 1.9, 1.9],
            ["p-values in parentheses. *** p < 0.01, ** p < 0.05, * p < 0.1.",
-            "(1)-(2): conditional logit grouped by design card, as the authors did. Shaded = differs from the published value.",
+            "(1)-(2): conditional logit grouped by design card, as the authors did. Shaded = differs from published (diagnosed in discrepancy_diagnosis.csv).",
             f"(3)-(4): mixed logit, {DRAWS} Halton draws; values shift with the draws (see table3_ml.csv for a 20-run range).",
             "Table 3 reproduced from the parsed data."], n_header=3)
 print("04 Table 3 written")
