@@ -1,0 +1,18 @@
+{
+ "raw_rows": 2160,
+ "raw_respondents": 180,
+ "finished_flag": 171,
+ "incomplete_respondents": 16,
+ "complete_respondents": 164,
+ "complete_rows": 1968,
+ "choice_occasions": 656,
+ "councillor_respondents": 123,
+ "councillor_rows": 1476,
+ "councillor_by_code": 121,
+ "respondents_by_treatment": {
+  "1": 57,
+  "2": 52,
+  "3": 55
+ },
+ "status_quo_share": 0.26676829268292684
+}

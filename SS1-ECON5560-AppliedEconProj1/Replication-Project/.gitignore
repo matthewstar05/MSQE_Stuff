@@ -1,0 +1,5 @@
+# Saved Canvas pages embed personal Canvas account identifiers (and the syllabus has the
+# instructor's Zoom link) - keep them local, never commit them to a public repo.
+Resources/pages/
+__pycache__/
+.ipynb_checkpoints/

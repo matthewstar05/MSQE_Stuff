@@ -1,0 +1,801 @@
+{
+ "table1": [
+  {
+   "variable": "Gender",
+   "category": "Female",
+   "paper": 32.5,
+   "ours_all_180": 32.5,
+   "ours_complete_164": 31.9,
+   "diff_all": 0.0
+  },
+  {
+   "variable": "Gender",
+   "category": "Male",
+   "paper": 67.5,
+   "ours_all_180": 67.5,
+   "ours_complete_164": 68.1,
+   "diff_all": -0.0
+  },
+  {
+   "variable": "Age",
+   "category": "<40",
+   "paper": 8.4,
+   "ours_all_180": 8.4,
+   "ours_complete_164": 8.0,
+   "diff_all": -0.0
+  },
+  {
+   "variable": "Age",
+   "category": "40\u201349",
+   "paper": 14.8,
+   "ours_all_180": 14.8,
+   "ours_complete_164": 14.7,
+   "diff_all": 0.0
+  },
+  {
+   "variable": "Age",
+   "category": "50\u201359",
+   "paper": 27.7,
+   "ours_all_180": 27.7,
+   "ours_complete_164": 28.7,
+   "diff_all": 0.0
+  },
+  {
+   "variable": "Age",
+   "category": "60\u201369",
+   "paper": 36.8,
+   "ours_all_180": 36.8,
+   "ours_complete_164": 36.7,
+   "diff_all": -0.0
+  },
+  {
+   "variable": "Age",
+   "category": ">70",
+   "paper": 12.3,
+   "ours_all_180": 12.3,
+   "ours_complete_164": 12.0,
+   "diff_all": -0.0
+  },
+  {
+   "variable": "Personal residence",
+   "category": "Rural",
+   "paper": 41.8,
+   "ours_all_180": 41.8,
+   "ours_complete_164": 41.5,
+   "diff_all": -0.0
+  },
+  {
+   "variable": "Personal residence",
+   "category": "Urban",
+   "paper": 58.2,
+   "ours_all_180": 58.2,
+   "ours_complete_164": 58.5,
+   "diff_all": 0.0
+  },
+  {
+   "variable": "City inhabitants",
+   "category": ">50,000",
+   "paper": 36.7,
+   "ours_all_180": 39.1,
+   "ours_complete_164": 40.4,
+   "diff_all": 2.4
+  },
+  {
+   "variable": "City inhabitants",
+   "category": "15,001\u201350,000",
+   "paper": 30.9,
+   "ours_all_180": 29.0,
+   "ours_complete_164": 28.2,
+   "diff_all": -1.9
+  },
+  {
+   "variable": "City inhabitants",
+   "category": "5,000\u201315,000",
+   "paper": 21.3,
+   "ours_all_180": 20.1,
+   "ours_complete_164": 19.2,
+   "diff_all": -1.2
+  },
+  {
+   "variable": "City inhabitants",
+   "category": "<5,000",
+   "paper": 11.2,
+   "ours_all_180": 11.8,
+   "ours_complete_164": 12.2,
+   "diff_all": 0.6
+  }
+ ],
+ "fig1": {
+  "1": {
+   "1": 18,
+   "2": 17,
+   "3": 19
+  },
+  "2": {
+   "1": 19,
+   "2": 15,
+   "3": 20
+  },
+  "3": {
+   "1": 19,
+   "2": 20,
+   "3": 20
+  },
+  "4": {
+   "1": 22,
+   "2": 18,
+   "3": 16
+  },
+  "5": {
+   "1": 18,
+   "2": 17,
+   "3": 18
+  },
+  "6": {
+   "1": 17,
+   "2": 20,
+   "3": 18
+  },
+  "7": {
+   "1": 18,
+   "2": 18,
+   "3": 14
+  },
+  "8": {
+   "1": 21,
+   "2": 19,
+   "3": 22
+  },
+  "9": {
+   "1": 19,
+   "2": 15,
+   "3": 17
+  },
+  "10": {
+   "1": 21,
+   "2": 18,
+   "3": 18
+  },
+  "11": {
+   "1": 18,
+   "2": 17,
+   "3": 20
+  },
+  "12": {
+   "1": 18,
+   "2": 14,
+   "3": 18
+  }
+ },
+ "rates": [
+  {
+   "attribute": "development",
+   "level": "Limited",
+   "treatment": 1,
+   "shown": 151,
+   "chosen": 45,
+   "rate": 0.2980132450331126
+  },
+  {
+   "attribute": "development",
+   "level": "Limited",
+   "treatment": 2,
+   "shown": 140,
+   "chosen": 49,
+   "rate": 0.35
+  },
+  {
+   "attribute": "development",
+   "level": "Limited",
+   "treatment": 3,
+   "shown": 150,
+   "chosen": 40,
+   "rate": 0.26666666666666666
+  },
+  {
+   "attribute": "development",
+   "level": "Residential",
+   "treatment": 1,
+   "shown": 167,
+   "chosen": 52,
+   "rate": 0.31137724550898205
+  },
+  {
+   "attribute": "development",
+   "level": "Residential",
+   "treatment": 2,
+   "shown": 156,
+   "chosen": 53,
+   "rate": 0.33974358974358976
+  },
+  {
+   "attribute": "development",
+   "level": "Residential",
+   "treatment": 3,
+   "shown": 163,
+   "chosen": 60,
+   "rate": 0.36809815950920244
+  },
+  {
+   "attribute": "development",
+   "level": "Commercial",
+   "treatment": 1,
+   "shown": 138,
+   "chosen": 61,
+   "rate": 0.4420289855072464
+  },
+  {
+   "attribute": "development",
+   "level": "Commercial",
+   "treatment": 2,
+   "shown": 120,
+   "chosen": 64,
+   "rate": 0.5333333333333333
+  },
+  {
+   "attribute": "development",
+   "level": "Commercial",
+   "treatment": 3,
+   "shown": 127,
+   "chosen": 57,
+   "rate": 0.44881889763779526
+  },
+  {
+   "attribute": "water",
+   "level": "High",
+   "treatment": 1,
+   "shown": 152,
+   "chosen": 108,
+   "rate": 0.7105263157894737
+  },
+  {
+   "attribute": "water",
+   "level": "High",
+   "treatment": 2,
+   "shown": 139,
+   "chosen": 115,
+   "rate": 0.8273381294964028
+  },
+  {
+   "attribute": "water",
+   "level": "High",
+   "treatment": 3,
+   "shown": 146,
+   "chosen": 119,
+   "rate": 0.815068493150685
+  },
+  {
+   "attribute": "water",
+   "level": "Medium",
+   "treatment": 1,
+   "shown": 174,
+   "chosen": 41,
+   "rate": 0.23563218390804597
+  },
+  {
+   "attribute": "water",
+   "level": "Medium",
+   "treatment": 2,
+   "shown": 156,
+   "chosen": 42,
+   "rate": 0.2692307692307692
+  },
+  {
+   "attribute": "water",
+   "level": "Medium",
+   "treatment": 3,
+   "shown": 161,
+   "chosen": 33,
+   "rate": 0.20496894409937888
+  },
+  {
+   "attribute": "water",
+   "level": "Low",
+   "treatment": 1,
+   "shown": 130,
+   "chosen": 9,
+   "rate": 0.06923076923076923
+  },
+  {
+   "attribute": "water",
+   "level": "Low",
+   "treatment": 2,
+   "shown": 121,
+   "chosen": 9,
+   "rate": 0.0743801652892562
+  },
+  {
+   "attribute": "water",
+   "level": "Low",
+   "treatment": 3,
+   "shown": 133,
+   "chosen": 5,
+   "rate": 0.03759398496240601
+  },
+  {
+   "attribute": "cultural",
+   "level": "None",
+   "treatment": 1,
+   "shown": 0,
+   "chosen": 0,
+   "rate": NaN
+  },
+  {
+   "attribute": "cultural",
+   "level": "None",
+   "treatment": 2,
+   "shown": 0,
+   "chosen": 0,
+   "rate": NaN
+  },
+  {
+   "attribute": "cultural",
+   "level": "None",
+   "treatment": 3,
+   "shown": 0,
+   "chosen": 0,
+   "rate": NaN
+  },
+  {
+   "attribute": "cultural",
+   "level": "Stables",
+   "treatment": 1,
+   "shown": 155,
+   "chosen": 49,
+   "rate": 0.3161290322580645
+  },
+  {
+   "attribute": "cultural",
+   "level": "Stables",
+   "treatment": 2,
+   "shown": 136,
+   "chosen": 51,
+   "rate": 0.375
+  },
+  {
+   "attribute": "cultural",
+   "level": "Stables",
+   "treatment": 3,
+   "shown": 153,
+   "chosen": 46,
+   "rate": 0.3006535947712418
+  },
+  {
+   "attribute": "cultural",
+   "level": "Stables & landscape",
+   "treatment": 1,
+   "shown": 186,
+   "chosen": 99,
+   "rate": 0.532258064516129
+  },
+  {
+   "attribute": "cultural",
+   "level": "Stables & landscape",
+   "treatment": 2,
+   "shown": 175,
+   "chosen": 106,
+   "rate": 0.6057142857142858
+  },
+  {
+   "attribute": "cultural",
+   "level": "Stables & landscape",
+   "treatment": 3,
+   "shown": 176,
+   "chosen": 108,
+   "rate": 0.6136363636363636
+  },
+  {
+   "attribute": "status quo",
+   "level": "Status quo",
+   "treatment": 1,
+   "shown": 228,
+   "chosen": 70,
+   "rate": 0.30701754385964913
+  },
+  {
+   "attribute": "status quo",
+   "level": "Status quo",
+   "treatment": 2,
+   "shown": 208,
+   "chosen": 42,
+   "rate": 0.20192307692307693
+  },
+  {
+   "attribute": "status quo",
+   "level": "Status quo",
+   "treatment": 3,
+   "shown": 220,
+   "chosen": 63,
+   "rate": 0.2863636363636364
+  }
+ ],
+ "card_shares": [
+  {
+   "card": 1,
+   "treatment": 1,
+   "A": 8,
+   "B": 3,
+   "SQ": 7
+  },
+  {
+   "card": 1,
+   "treatment": 2,
+   "A": 12,
+   "B": 2,
+   "SQ": 3
+  },
+  {
+   "card": 1,
+   "treatment": 3,
+   "A": 18,
+   "B": 1,
+   "SQ": 0
+  },
+  {
+   "card": 2,
+   "treatment": 1,
+   "A": 0,
+   "B": 17,
+   "SQ": 2
+  },
+  {
+   "card": 2,
+   "treatment": 2,
+   "A": 0,
+   "B": 15,
+   "SQ": 0
+  },
+  {
+   "card": 2,
+   "treatment": 3,
+   "A": 0,
+   "B": 17,
+   "SQ": 3
+  },
+  {
+   "card": 3,
+   "treatment": 1,
+   "A": 2,
+   "B": 11,
+   "SQ": 6
+  },
+  {
+   "card": 3,
+   "treatment": 2,
+   "A": 1,
+   "B": 12,
+   "SQ": 7
+  },
+  {
+   "card": 3,
+   "treatment": 3,
+   "A": 1,
+   "B": 9,
+   "SQ": 10
+  },
+  {
+   "card": 4,
+   "treatment": 1,
+   "A": 16,
+   "B": 4,
+   "SQ": 2
+  },
+  {
+   "card": 4,
+   "treatment": 2,
+   "A": 12,
+   "B": 4,
+   "SQ": 2
+  },
+  {
+   "card": 4,
+   "treatment": 3,
+   "A": 14,
+   "B": 1,
+   "SQ": 1
+  },
+  {
+   "card": 5,
+   "treatment": 1,
+   "A": 3,
+   "B": 6,
+   "SQ": 9
+  },
+  {
+   "card": 5,
+   "treatment": 2,
+   "A": 4,
+   "B": 6,
+   "SQ": 7
+  },
+  {
+   "card": 5,
+   "treatment": 3,
+   "A": 5,
+   "B": 6,
+   "SQ": 7
+  },
+  {
+   "card": 6,
+   "treatment": 1,
+   "A": 1,
+   "B": 12,
+   "SQ": 4
+  },
+  {
+   "card": 6,
+   "treatment": 2,
+   "A": 0,
+   "B": 17,
+   "SQ": 3
+  },
+  {
+   "card": 6,
+   "treatment": 3,
+   "A": 1,
+   "B": 14,
+   "SQ": 3
+  },
+  {
+   "card": 7,
+   "treatment": 1,
+   "A": 12,
+   "B": 1,
+   "SQ": 5
+  },
+  {
+   "card": 7,
+   "treatment": 2,
+   "A": 15,
+   "B": 2,
+   "SQ": 1
+  },
+  {
+   "card": 7,
+   "treatment": 3,
+   "A": 8,
+   "B": 1,
+   "SQ": 5
+  },
+  {
+   "card": 8,
+   "treatment": 1,
+   "A": 0,
+   "B": 18,
+   "SQ": 3
+  },
+  {
+   "card": 8,
+   "treatment": 2,
+   "A": 0,
+   "B": 18,
+   "SQ": 1
+  },
+  {
+   "card": 8,
+   "treatment": 3,
+   "A": 0,
+   "B": 19,
+   "SQ": 3
+  },
+  {
+   "card": 9,
+   "treatment": 1,
+   "A": 13,
+   "B": 1,
+   "SQ": 5
+  },
+  {
+   "card": 9,
+   "treatment": 2,
+   "A": 12,
+   "B": 2,
+   "SQ": 1
+  },
+  {
+   "card": 9,
+   "treatment": 3,
+   "A": 14,
+   "B": 1,
+   "SQ": 2
+  },
+  {
+   "card": 10,
+   "treatment": 1,
+   "A": 2,
+   "B": 8,
+   "SQ": 11
+  },
+  {
+   "card": 10,
+   "treatment": 2,
+   "A": 1,
+   "B": 9,
+   "SQ": 8
+  },
+  {
+   "card": 10,
+   "treatment": 3,
+   "A": 0,
+   "B": 5,
+   "SQ": 13
+  },
+  {
+   "card": 11,
+   "treatment": 1,
+   "A": 0,
+   "B": 12,
+   "SQ": 6
+  },
+  {
+   "card": 11,
+   "treatment": 2,
+   "A": 2,
+   "B": 14,
+   "SQ": 1
+  },
+  {
+   "card": 11,
+   "treatment": 3,
+   "A": 0,
+   "B": 15,
+   "SQ": 5
+  },
+  {
+   "card": 12,
+   "treatment": 1,
+   "A": 7,
+   "B": 1,
+   "SQ": 10
+  },
+  {
+   "card": 12,
+   "treatment": 2,
+   "A": 3,
+   "B": 3,
+   "SQ": 8
+  },
+  {
+   "card": 12,
+   "treatment": 3,
+   "A": 5,
+   "B": 2,
+   "SQ": 11
+  }
+ ],
+ "cards": [
+  {
+   "card": 1,
+   "a_development": "Residential",
+   "b_development": "Limited",
+   "a_water": "High",
+   "b_water": "Low",
+   "a_cultural": "Stables & landscape",
+   "b_cultural": NaN
+  },
+  {
+   "card": 2,
+   "a_development": "Commercial",
+   "b_development": "Residential",
+   "a_water": "Low",
+   "b_water": "High",
+   "a_cultural": NaN,
+   "b_cultural": "Stables & landscape"
+  },
+  {
+   "card": 3,
+   "a_development": "Residential",
+   "b_development": "Limited",
+   "a_water": "Low",
+   "b_water": "Medium",
+   "a_cultural": "Stables & landscape",
+   "b_cultural": "Stables"
+  },
+  {
+   "card": 4,
+   "a_development": "Residential",
+   "b_development": "Commercial",
+   "a_water": "High",
+   "b_water": "Medium",
+   "a_cultural": "Stables & landscape",
+   "b_cultural": NaN
+  },
+  {
+   "card": 5,
+   "a_development": "Limited",
+   "b_development": "Residential",
+   "a_water": "Medium",
+   "b_water": "Medium",
+   "a_cultural": "Stables",
+   "b_cultural": "Stables & landscape"
+  },
+  {
+   "card": 6,
+   "a_development": "Residential",
+   "b_development": "Limited",
+   "a_water": "Low",
+   "b_water": "High",
+   "a_cultural": NaN,
+   "b_cultural": "Stables & landscape"
+  },
+  {
+   "card": 7,
+   "a_development": "Commercial",
+   "b_development": "Residential",
+   "a_water": "High",
+   "b_water": "Medium",
+   "a_cultural": "Stables & landscape",
+   "b_cultural": "Stables & landscape"
+  },
+  {
+   "card": 8,
+   "a_development": "Limited",
+   "b_development": "Commercial",
+   "a_water": "Medium",
+   "b_water": "High",
+   "a_cultural": "Stables",
+   "b_cultural": "Stables"
+  },
+  {
+   "card": 9,
+   "a_development": "Commercial",
+   "b_development": "Limited",
+   "a_water": "High",
+   "b_water": "Medium",
+   "a_cultural": "Stables & landscape",
+   "b_cultural": "Stables"
+  },
+  {
+   "card": 10,
+   "a_development": "Commercial",
+   "b_development": "Limited",
+   "a_water": "Low",
+   "b_water": "Medium",
+   "a_cultural": NaN,
+   "b_cultural": "Stables"
+  },
+  {
+   "card": 11,
+   "a_development": "Residential",
+   "b_development": "Commercial",
+   "a_water": "Low",
+   "b_water": "High",
+   "a_cultural": NaN,
+   "b_cultural": "Stables & landscape"
+  },
+  {
+   "card": 12,
+   "a_development": "Limited",
+   "b_development": "Residential",
+   "a_water": "Medium",
+   "b_water": "Low",
+   "a_cultural": "Stables",
+   "b_cultural": "Stables"
+  }
+ ],
+ "flow": {
+  "raw_rows": 2160,
+  "raw_respondents": 180,
+  "finished_flag": 171,
+  "incomplete_respondents": 16,
+  "complete_respondents": 164,
+  "complete_rows": 1968,
+  "choice_occasions": 656,
+  "councillor_respondents": 123,
+  "councillor_rows": 1476,
+  "councillor_by_code": 121,
+  "respondents_by_treatment": {
+   "1": 57,
+   "2": 52,
+   "3": 55
+  },
+  "status_quo_share": 0.26676829268292684
+ },
+ "sq_by_person": {
+  "0": 78,
+  "1": 39,
+  "2": 18,
+  "3": 16,
+  "4": 13
+ }
+}

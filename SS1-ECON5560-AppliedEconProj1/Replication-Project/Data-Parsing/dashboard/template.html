@@ -1,0 +1,744 @@
+<title>Pricing the Stream</title>
+<meta name="description" content="Team 3 replication of Eppink et al. (2016), PLoS ONE: does showing dollar values change how councillors weigh development against water quality and heritage?">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,500;7..72,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+:root{
+  --page:#f3f5f1; --surface:#fcfdfb; --surface-2:#e9eee8; --ink:#14201b; --ink-2:#48554f; --muted:#7a8680;
+  --hair:#dbe1da; --axis:#bfc6be; --accent:#1c5e50; --accent-ink:#ffffff; --accent-soft:#dcebe5;
+  --us:#4a3aa7; --us-soft:rgba(74,58,167,.16); --us-run:rgba(74,58,167,.38); --paper-mk:#4f5550;
+  --t1:#2a78d6; --t2:#eb6834; --t3:#1baf7a;
+  --optA:#1c5e50; --optB:#7fb5a6; --sq:#c9cfc7; --sq-ink:#3b443f;
+  --good-ink:#0b6b0b; --good-bg:#e1f1df; --warn-ink:#7a5200; --warn-bg:#fbefcf; --crit-ink:#a02828; --crit-bg:#f8e0de;
+  --info-ink:#2d4f7c; --info-bg:#e2ebf7; --shade:rgba(208,59,59,.08); --money-bg:#e3eed6; --money-ink:#35561b;
+  --shadow:0 1px 2px rgba(20,32,27,.06),0 4px 16px rgba(20,32,27,.06);
+  --serif:"Literata",Georgia,"Times New Roman",serif; --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --page:#0e1311; --surface:#161c19; --surface-2:#1f2723; --ink:#eaf0ec; --ink-2:#b7c2bc; --muted:#85918b;
+  --hair:#27302c; --axis:#3a4540; --accent:#72c5ae; --accent-ink:#0e1311; --accent-soft:#1a2e28;
+  --us:#9a8ff0; --us-soft:rgba(154,143,240,.2); --us-run:rgba(154,143,240,.42); --paper-mk:#c9cdc6;
+  --t1:#3987e5; --t2:#d95926; --t3:#199e70;
+  --optA:#72c5ae; --optB:#2f6b5d; --sq:#3a4540; --sq-ink:#dfe6e1;
+  --good-ink:#7fd67f; --good-bg:#15301a; --warn-ink:#f2c35c; --warn-bg:#352a0e; --crit-ink:#f09a9a; --crit-bg:#3a1818;
+  --info-ink:#a9c6ef; --info-bg:#172538; --shade:rgba(230,103,103,.1); --money-bg:#233318; --money-ink:#b9dc8f;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25)}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --page:#0e1311; --surface:#161c19; --surface-2:#1f2723; --ink:#eaf0ec; --ink-2:#b7c2bc; --muted:#85918b;
+  --hair:#27302c; --axis:#3a4540; --accent:#72c5ae; --accent-ink:#0e1311; --accent-soft:#1a2e28;
+  --us:#9a8ff0; --us-soft:rgba(154,143,240,.2); --us-run:rgba(154,143,240,.42); --paper-mk:#c9cdc6;
+  --t1:#3987e5; --t2:#d95926; --t3:#199e70;
+  --optA:#72c5ae; --optB:#2f6b5d; --sq:#3a4540; --sq-ink:#dfe6e1;
+  --good-ink:#7fd67f; --good-bg:#15301a; --warn-ink:#f2c35c; --warn-bg:#352a0e; --crit-ink:#f09a9a; --crit-bg:#3a1818;
+  --info-ink:#a9c6ef; --info-bg:#172538; --shade:rgba(230,103,103,.1); --money-bg:#233318; --money-ink:#b9dc8f;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25)}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{background:var(--page);color:var(--ink);font:15.5px/1.6 var(--sans);margin:0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h2{font-size:clamp(1.55rem,2.6vw,2rem);line-height:1.2}
+h3{font-size:1.12rem;line-height:1.3}
+p{margin:0}
+a{color:var(--accent);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.eyebrow{font:600 .72rem/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.lede{font-size:1.06rem;color:var(--ink-2);max-width:66ch}
+.prose{max-width:68ch;display:grid;gap:.8em;color:var(--ink-2)}
+.prose strong{color:var(--ink)}
+.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:.86rem}
+
+/* header */
+header.top{padding-block:44px 30px;border-bottom:1px solid var(--hair);background:
+  linear-gradient(180deg,var(--accent-soft),transparent 85%)}
+header.top h1{font-size:clamp(2rem,5vw,3.25rem);line-height:1.08;margin-top:14px;max-width:21ch}
+header.top .sub{margin-top:16px;font-size:1.1rem;color:var(--ink-2);max-width:62ch}
+.cite{margin-top:18px;font-size:.86rem;color:var(--muted);max-width:80ch}
+.status{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:26px}
+.stat{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:12px 14px;display:grid;gap:6px;align-content:start}
+.stat .k{font-size:.78rem;color:var(--muted);font-weight:600;letter-spacing:.02em}
+.stat .v{font-size:.95rem;line-height:1.35}
+
+/* nav */
+nav.sections{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--page);background:color-mix(in srgb,var(--page) 92%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
+nav.sections .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-block:8px}
+nav.sections a{flex:none;text-decoration:none;color:var(--ink-2);font-size:.86rem;font-weight:500;padding:6px 11px;border-radius:999px;white-space:nowrap}
+nav.sections a:hover{background:var(--surface-2)}
+nav.sections a.on{background:var(--accent);color:var(--accent-ink)}
+
+section.block{padding-block:56px;border-bottom:1px solid var(--hair)}
+section.block>.wrap{display:grid;gap:22px}
+.head{display:grid;gap:10px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:860px){.two{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:18px}
+.panel h3{margin-bottom:4px}
+.panel .cap{font-size:.86rem;color:var(--muted);margin-bottom:10px}
+.callout{border-left:3px solid var(--accent);padding:4px 0 4px 16px;color:var(--ink);max-width:68ch}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:5px;font:600 .74rem/1 var(--sans);padding:4px 8px;border-radius:999px;white-space:nowrap}
+.chip::before{font-size:.8rem;line-height:1}
+.chip.good{background:var(--good-bg);color:var(--good-ink)} .chip.good::before{content:"✓"}
+.chip.warn{background:var(--warn-bg);color:var(--warn-ink)} .chip.warn::before{content:"!"}
+.chip.crit{background:var(--crit-bg);color:var(--crit-ink)} .chip.crit::before{content:"✕"}
+.chip.info{background:var(--info-bg);color:var(--info-ink)} .chip.info::before{content:"≈"}
+
+/* treatments */
+.treats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.treats{grid-template-columns:minmax(0,1fr)}}
+.treat{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:14px 16px;display:grid;gap:6px;align-content:start}
+.treat .tag{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.9rem}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block}
+.treat p{font-size:.9rem;color:var(--ink-2)}
+.treat .n{font-size:.8rem;color:var(--muted)}
+
+/* segmented controls */
+.controls{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
+.ctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ctl>label,.ctl>.lab{font-size:.8rem;font-weight:600;color:var(--muted)}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--surface-2);border-radius:9px;padding:3px;gap:2px}
+.seg button{font:500 .84rem var(--sans);border:0;background:transparent;color:var(--ink-2);padding:6px 11px;border-radius:7px;cursor:pointer}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow);font-weight:600}
+select{font:500 .88rem var(--sans);color:var(--ink);background:var(--surface);border:1px solid var(--hair);border-radius:8px;padding:6px 8px}
+
+/* survey card */
+.card{background:var(--surface);border:1px solid var(--hair);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.card .ch{padding:12px 16px;border-bottom:1px solid var(--hair);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.86rem;color:var(--ink-2)}
+.card .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:640px){.card .cols{grid-template-columns:minmax(0,1fr)}}
+.opt{padding:14px 16px;display:grid;gap:12px;align-content:start;border-right:1px solid var(--hair)}
+.opt:last-child{border-right:0;background:var(--surface-2)}
+@media (max-width:640px){.opt{border-right:0;border-bottom:1px solid var(--hair)}}
+.opt h4{margin:0;font:700 .95rem var(--sans)}
+.attr{display:grid;gap:2px}
+.attr .an{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.attr .lv{font-weight:600}
+.attr .ds{font-size:.82rem;color:var(--ink-2);line-height:1.4}
+.money{font:500 .8rem var(--mono);background:var(--money-bg);color:var(--money-ink);border-radius:6px;padding:3px 7px;justify-self:start;margin-top:3px}
+
+/* stacked share bars */
+.shares{display:grid;gap:9px}
+.srow{display:grid;grid-template-columns:118px minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:.84rem}
+@media (max-width:520px){.srow{grid-template-columns:84px minmax(0,1fr) 38px}}
+.srow .l{display:flex;align-items:center;gap:6px;color:var(--ink-2);line-height:1.2}
+.srow.sel .l{color:var(--ink);font-weight:600}
+.bar{display:flex;height:24px;border-radius:5px;overflow:hidden;gap:2px;background:var(--surface)}
+.bar span{display:flex;align-items:center;justify-content:center;font:500 .74rem var(--mono);min-width:0;overflow:hidden;white-space:nowrap}
+.bar .a{background:var(--optA);color:var(--accent-ink)} .bar .b{background:var(--optB);color:var(--ink)} .bar .s{background:var(--sq);color:var(--sq-ink)}
+.srow.pred .bar{opacity:.92;outline:1.5px dashed var(--axis);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.8rem;color:var(--ink-2)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend .dia{width:10px;height:10px;border:2px solid var(--paper-mk);transform:rotate(45deg);border-radius:1px;background:transparent}
+.legend .circ{border-radius:50%;background:var(--us)}
+.legend .ring{border-radius:50%;border:2px solid var(--us);background:transparent}
+.legend .rng{width:18px;height:6px;border-radius:3px;background:var(--us-soft)}
+.legend .runs{border-radius:50%;background:var(--us-run);width:8px;height:8px}
+
+/* steps */
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:12px;counter-reset:s}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
+ol.steps li::before{content:counter(s);font:600 .9rem var(--mono);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+ol.steps b{display:block;color:var(--ink)} ol.steps span{color:var(--ink-2);font-size:.92rem}
+.flow{display:grid;gap:10px}
+.frow{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}
+.frow .fl{display:flex;justify-content:space-between;gap:8px;font-size:.86rem}
+.frow .fb{height:14px;border-radius:4px;background:var(--accent)}
+.frow.drop .fb{background:var(--sq)}
+
+/* tables */
+.tscroll{overflow-x:auto;border:1px solid var(--hair);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.85rem}
+th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--hair);white-space:nowrap}
+th{font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+td.r,th.r{text-align:right}
+tr:last-child td{border-bottom:0}
+tr.gh td{background:var(--surface-2);font-weight:600;color:var(--ink-2);font-size:.78rem}
+tr.hl td{background:var(--accent-soft)}
+details{font-size:.86rem}
+details summary{cursor:pointer;color:var(--accent);font-weight:600;margin-top:8px}
+details .tscroll{margin-top:8px}
+
+/* charts */
+.chart{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--sans);fill:var(--ink-2);font-size:12px}
+.chart .tick{fill:var(--muted);font-size:11px;font-family:var(--mono)}
+.chart .grp{fill:var(--ink);font-weight:700;font-size:11.5px;letter-spacing:.02em}
+.chart .grid{stroke:var(--hair);stroke-width:1}
+.chart .zero{stroke:var(--axis);stroke-width:1.5}
+.chart .hair{stroke:var(--hair)}
+.chart .base{stroke:var(--axis)}
+.chart .range{stroke:var(--us-soft);stroke-width:7;stroke-linecap:round}
+.chart .run{fill:var(--us-run)}
+.chart .mk-us{fill:var(--us);stroke:var(--surface);stroke-width:2}
+.chart .mk-ring{fill:var(--surface);stroke:var(--us);stroke-width:2.2}
+.chart .mk-paper{fill:none;stroke:var(--paper-mk);stroke-width:1.6}
+.chart .hit{fill:transparent}
+.chart .hit:hover{fill:var(--surface-2);fill-opacity:.6}
+.chart .ref{stroke:var(--crit-ink);stroke-dasharray:4 3;stroke-width:1.3}
+.chart .shade{fill:var(--shade)}
+.chart .reflab{fill:var(--crit-ink);font-size:11px;font-weight:600}
+.chart .t1{fill:var(--t1)} .chart .t2{fill:var(--t2)} .chart .t3{fill:var(--t3)}
+.chart .area{fill:var(--us-soft)} .chart .line{fill:none;stroke:var(--us);stroke-width:2}
+.chart .q{stroke:var(--ink-2);stroke-dasharray:2 3;stroke-width:1.2}
+.chart .val{fill:var(--ink);font-family:var(--mono);font-size:11.5px}
+.chart .xl{fill:var(--muted);font-size:11.5px}
+.chart .labn{font-size:11px}
+.dens{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.dens{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:460px){.dens{grid-template-columns:minmax(0,1fr)}}
+.dens h4{margin:0 0 4px;font:600 .8rem var(--sans);color:var(--ink)}
+#tip{position:fixed;z-index:50;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--hair);
+  box-shadow:var(--shadow);border-radius:8px;padding:8px 10px;font-size:.8rem;line-height:1.45;max-width:280px}
+#tip b{font-weight:700} #tip .num{font-size:.78rem}
+
+/* findings */
+.findings{display:grid;gap:14px}
+.find{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:18px;display:grid;gap:10px}
+.find .fh{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;justify-content:space-between}
+.find p{color:var(--ink-2);max-width:78ch}
+.find ul{margin:0;padding-left:1.1em;color:var(--ink-2);display:grid;gap:4px;max-width:78ch}
+
+/* simulator */
+.sim{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:640px){.sim{grid-template-columns:minmax(0,1fr)}}
+.simopt{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:14px;display:grid;gap:10px}
+.simopt h4{margin:0;font:700 .95rem var(--sans);display:flex;align-items:center;gap:8px}
+.simopt .f{display:grid;grid-template-columns:96px minmax(0,1fr);gap:8px;align-items:center;font-size:.85rem;color:var(--ink-2)}
+.simopt select{width:100%}
+.score{font:500 .8rem var(--mono);color:var(--ink-2);line-height:1.6;border-top:1px solid var(--hair);padding-top:8px}
+.score b{color:var(--ink)}
+pre{background:var(--surface-2);border-radius:10px;padding:14px 16px;overflow-x:auto;font:.84rem/1.55 var(--mono);margin:0}
+footer{padding-block:36px 56px;color:var(--muted);font-size:.85rem}
+footer .wrap{display:grid;gap:8px}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">ECON S5560 · Team 3 · Replication checkpoint</div>
+    <h1>Does putting a dollar figure on it change the decision?</h1>
+    <p class="sub">We rebuilt the main results of a choice experiment with New Zealand councillors, asking whether showing dollar values for some impacts of a development tilts decisions toward those impacts. Every number below comes from the authors' own data file, re-estimated by us.</p>
+    <p class="cite">Paper: Eppink, F. V., Winden, M., Wright, W. C. C., &amp; Greenhalgh, S. (2016). Non-market values in a cost-benefit world: Evidence from a choice experiment. <i>PLoS ONE, 11</i>(10), e0165365. <a href="https://doi.org/10.1371/journal.pone.0165365" target="_blank" rel="noopener">doi.org/10.1371/journal.pone.0165365</a></p>
+    <div class="status" id="status"></div>
+  </div>
+</header>
+
+<nav class="sections" aria-label="Sections">
+  <div class="wrap">
+    <a href="#question">The question</a><a href="#experiment">The survey card</a><a href="#data">The data</a>
+    <a href="#raw">Raw pattern</a><a href="#result">Table 3</a><a href="#size">Effect size</a>
+    <a href="#findings">What we found</a><a href="#simulate">Try the model</a><a href="#reproduce">Reproduce</a>
+  </div>
+</nav>
+
+<main>
+<section class="block" id="question"><div class="wrap">
+  <div class="head"><div class="eyebrow">The question</div><h2>Some impacts come with a price tag. Others don't.</h2></div>
+  <div class="two">
+    <div class="prose">
+      <p>When a council decides whether to rezone farmland for housing, the benefits arrive with a number attached: <strong>new rates revenue for the district</strong>. The costs often don't: <strong>a murkier stream</strong>, or a historic tavern that loses its open views.</p>
+      <p>The authors ran an online survey of the people who actually make these calls: <strong>regional and district councillors and council staff</strong> in New Zealand. Each person imagined a town of 20,000 growing by 4% a year and picked between two development plans and "keep things as they are", four times over.</p>
+      <p>The key move: people were <strong>randomly split into three groups</strong> that saw the same plans with different information. Because the split was random, any difference in choices between groups can be traced to the information itself.</p>
+    </div>
+    <div class="panel">
+      <h3>The paper's answer</h3>
+      <p class="cap">As stated in the abstract and results</p>
+      <div class="prose">
+        <p>Showing revenue in dollars made development options <strong>more</strong> attractive. Showing water-quality losses in dollars made people <strong>avoid</strong> polluted outcomes more strongly. Cultural heritage, which was never priced, barely registered.</p>
+        <p class="callout">If only some impacts get a dollar value, decisions may tilt toward those impacts. That matters for every cost–benefit analysis that leaves nature or culture unpriced.</p>
+      </div>
+    </div>
+  </div>
+  <div class="treats" id="treats"></div>
+</div></section>
+
+<section class="block" id="experiment"><div class="wrap">
+  <div class="head"><div class="eyebrow">The survey card</div><h2>What respondents actually saw</h2>
+    <p class="lede">There were 12 cards in total, and each respondent got a random 4. Pick a card and a group to see the card as that group saw it, and what people in each group actually chose.</p></div>
+  <div class="controls">
+    <div class="ctl"><label for="cardSel">Card</label><select id="cardSel"></select></div>
+    <div class="ctl"><span class="lab" id="tLab">Group</span><div class="seg" id="cardTreat" role="group" aria-labelledby="tLab"></div></div>
+  </div>
+  <div class="card" id="surveyCard"></div>
+  <div class="panel">
+    <h3>What people picked on this card</h3>
+    <p class="cap">Observed choices by group (the 164 people who answered all four cards). The dashed row shows what our corrected model predicts for the selected group.</p>
+    <div class="legend" style="margin-bottom:10px"><span><i style="background:var(--optA)"></i>Option A</span><span><i style="background:var(--optB)"></i>Option B</span><span><i style="background:var(--sq)"></i>Keep as is</span></div>
+    <div class="shares" id="cardShares"></div>
+  </div>
+</div></section>
+
+<section class="block" id="data"><div class="wrap">
+  <div class="head"><div class="eyebrow">The data</div><h2>From the authors' raw file to the paper's sample</h2>
+    <p class="lede">The paper's supplement is one Stata file. Before any model can be run, it has to be understood, cleaned, and cut down to exactly the people the authors used. This is the parsing step, done in <span class="mono">01_parse_data.py</span>.</p></div>
+  <div class="two">
+    <ol class="steps" id="steps"></ol>
+    <div class="panel">
+      <h3>Who ends up in each model</h3>
+      <p class="cap">Respondents; one respondent = 12 rows in the data</p>
+      <div class="flow" id="flow"></div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>One respondent, as the data stores them</h3>
+    <p class="cap" id="exCap"></p>
+    <div class="tscroll"><table id="exTable"></table></div>
+  </div>
+</div></section>
+
+<section class="block" id="raw"><div class="wrap">
+  <div class="head"><div class="eyebrow">Before any model</div><h2>The raw pattern already points the paper's way</h2>
+    <p class="lede">The simplest check: when an option appeared on a card, how often was it picked, split by group? No regression, just counting.</p></div>
+  <div class="legend" id="tLegend"></div>
+  <div class="two">
+    <div class="panel"><h3>Options with each water-quality level</h3><p class="cap">% of times the option was picked when it was on the card</p><div id="chWater"></div></div>
+    <div class="panel"><h3>“Keep things as they are”</h3><p class="cap">% of cards where the status quo was picked</p><div id="chSQ"></div></div>
+  </div>
+  <div class="panel"><h3>Options with each development level</h3><p class="cap">% of times the option was picked when it was on the card</p><div id="chDev"></div>
+    <details><summary>Show all numbers</summary><div class="tscroll"><table id="ratesTable"></table></div></details></div>
+  <p class="callout" id="rawTake"></p>
+</div></section>
+
+<section class="block" id="result"><div class="wrap">
+  <div class="head"><div class="eyebrow">The main result</div><h2>Table 3, replicated</h2>
+    <p class="lede">Each number is a <strong>coefficient</strong>: how strongly a feature pulls someone toward an option, compared with keeping things as they are. Positive means more attractive, negative means less. Only signs and relative sizes carry meaning; the units are arbitrary. The bottom rows are the paper's question: the <em>extra</em> pull when a dollar figure was shown.</p></div>
+  <div class="controls">
+    <div class="ctl"><span class="lab" id="mLab">Model</span><div class="seg" id="modelSeg" role="group" aria-labelledby="mLab"></div></div>
+  </div>
+  <div class="panel">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline">
+      <h3 id="mTitle"></h3><div id="mStats" class="small muted"></div>
+    </div>
+    <p class="cap" id="mNote"></p>
+    <div class="legend" id="mLegend" style="margin-bottom:6px"></div>
+    <div id="chCoef"></div>
+  </div>
+  <div class="tscroll"><table id="coefTable"></table></div>
+  <div class="panel">
+    <h3>Figure 2, replicated: each councillor's own “$ shown” effect</h3>
+    <p class="cap">The mixed logit gives every respondent their own coefficients. These are the respondent-level estimates from model 4 (Councillors), with dotted lines marking the middle 95% of respondents, drawn the same way as the paper's Figure 2.</p>
+    <div class="dens" id="dens"></div>
+  </div>
+</div></section>
+
+<section class="block" id="size"><div class="wrap">
+  <div class="head"><div class="eyebrow">Comparing across models</div><h2>How much stronger does a preference get when a price is shown?</h2>
+    <p class="lede">Raw coefficients can't be compared across models because each model has its own scale. Dividing each “$ shown” effect by its baseline effect cancels the scale, leaving a plain percentage: how much stronger the pull (or push) becomes once a dollar figure is attached.</p></div>
+  <div class="panel">
+    <div class="legend" id="sLegend" style="margin-bottom:6px"></div>
+    <div id="chRel"></div>
+  </div>
+  <p class="callout" id="relTake"></p>
+</div></section>
+
+<section class="block" id="findings"><div class="wrap">
+  <div class="head"><div class="eyebrow">Appraisal notes</div><h2>What the replication turned up</h2>
+    <p class="lede">Reproducing the numbers exactly showed us <em>how</em> they were produced, including a few things the paper does not say.</p></div>
+  <div class="findings" id="findList"></div>
+</div></section>
+
+<section class="block" id="simulate"><div class="wrap">
+  <div class="head"><div class="eyebrow">Try the model</div><h2>Build a card and predict the choice</h2>
+    <p class="lede">Set up two plans, choose what information is shown, and the fitted model predicts how the group would split. This is how the regression turns attributes into choices: each option gets a score, and higher-scoring options are picked more often.</p></div>
+  <div class="controls">
+    <div class="ctl"><span class="lab" id="sgLab">Information shown</span><div class="seg" id="simTreat" role="group" aria-labelledby="sgLab"></div></div>
+    <div class="ctl"><span class="lab" id="ssLab">Respondents</span><div class="seg" id="simSample" role="group" aria-labelledby="ssLab"></div></div>
+  </div>
+  <div class="sim" id="simOpts"></div>
+  <div class="panel">
+    <h3>Predicted choice shares</h3>
+    <p class="cap">From our corrected conditional logit (one group per person per card). The status quo scores 0 by construction.</p>
+    <div class="shares" id="simOut"></div>
+  </div>
+</div></section>
+
+<section class="block" id="reproduce"><div class="wrap">
+  <div class="head"><div class="eyebrow">Reproduce</div><h2>Every number comes from a script</h2>
+    <p class="lede">The pipeline is six short Python scripts plus an R cross-check. Running them in order rebuilds every table, figure and this page from the raw data file.</p></div>
+  <div class="tscroll"><table id="files"></table></div>
+  <pre>pip install -r requirements.txt
+python run_all.py              # steps 1-6, about 5 minutes (the mixed logit is the slow part)
+Rscript crosscheck_clogit.R    # optional: re-estimates models 1-2 in R</pre>
+  <p class="small muted" id="meta"></p>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div>Team 3: Daniel T., Alistair K., Matthew S., Sam W. · ECON S5560 Applied Economics Project, Fall 2026.</div>
+  <div>Data: S1 Table of Eppink et al. (2016), CC BY 4.0. AI use: code and this page were drafted with an AI coding assistant (Claude). Every estimate was checked against the published tables and re-run independently in R.</div>
+</div></footer>
+<div id="tip" hidden></div>
+
+<script>
+const DATA = /*__DATA__*/null;
+const $ = (s, r = document) => r.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const minus = s => s.replace(/-/g, "−");
+const f = (v, d = 3) => minus((+v).toFixed(d));
+const pct = (v, d = 0) => (v * 100).toFixed(d) + "%";
+const pf = p => p < 0.001 ? "<0.001" : (+p).toFixed(3);
+const stars = p => p < 0.01 ? "***" : p < 0.05 ? "**" : p < 0.1 ? "*" : "";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function el(tag, attrs = {}, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+function txt(parent, x, y, s, cls, anchor = "start") { const t = el("text", {x, y, class: cls || "", "text-anchor": anchor}, parent); t.textContent = s; return t; }
+function ticks(a, b, n) { const st0 = (b - a) / n, mag = 10 ** Math.floor(Math.log10(st0)), e = st0 / mag;
+  const st = (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag, out = [];
+  for (let v = Math.ceil(a / st) * st; v <= b + 1e-9; v += st) out.push(+v.toFixed(10)); return out; }
+function seg(host, opts, get, set) {
+  host.replaceChildren(...opts.map(([val, label]) => { const b = document.createElement("button"); b.type = "button"; b.textContent = label;
+    b.setAttribute("aria-pressed", String(get() === val)); b.onclick = () => { set(val); [...host.children].forEach((c, i) => c.setAttribute("aria-pressed", String(opts[i][0] === get()))); }; return b; }));
+}
+function mount(host, draw) { let w = -1; host._draw = draw; new ResizeObserver(() => { const nw = host.clientWidth; if (Math.abs(nw - w) > 2) { w = nw; draw(); } }).observe(host); }
+
+// tooltip
+const tip = $("#tip");
+function showTip(e, html) { tip.innerHTML = html; tip.hidden = false; const r = tip.getBoundingClientRect();
+  let x = e.clientX + 14, y = e.clientY + 14; if (x + r.width > innerWidth - 8) x = e.clientX - r.width - 14; if (y + r.height > innerHeight - 8) y = e.clientY - r.height - 14;
+  tip.style.left = Math.max(8, x) + "px"; tip.style.top = Math.max(8, y) + "px"; }
+const hideTip = () => { tip.hidden = true; };
+addEventListener("scroll", hideTip, {passive: true});
+
+const V = DATA.vars, P = DATA.paper, TKEYS = [1, 2, 3];
+const TNAME = {1: "No $ figures", 2: "$ for development", 3: "$ for development + water"};
+const TSHORT = {1: "T1", 2: "T2", 3: "T3"};
+const DEV = ["None", "Limited", "Residential", "Commercial"], WAT = ["High", "Medium", "Low"], CUL = ["None", "Stables", "Stables & landscape"];
+const DESC = {
+  dev: {None: "No land rezoned; growth goes elsewhere in the district. No increase in revenues or costs", Limited: "Half of the growth housed; low-density housing",
+        Residential: "All of the growth housed; medium-density housing", Commercial: "All growth housed, plus shops and a ‘super store’"},
+  wat: {High: "Clear water; game fish and native birds; safe to swim", Medium: "Slightly murky; no game fish; not safe to swim",
+        Low: "Very murky; few birds; unsafe for boating, fishing or swimming"},
+  cul: {None: "The Stables tavern stays a solitary landmark; views unaffected", Stables: "New buildings surround the historic Stables tavern",
+        "Stables & landscape": "Tavern surrounded and development visible across the landscape"}};
+const REV = {None: null, Limited: "+$1,000,000 district revenue", Residential: "+$2,000,000 district revenue", Commercial: "+$3,000,000 district revenue"};
+const WLOSS = {High: "No loss in well-being", Medium: "Well-being loss valued at $250,000", Low: "Well-being loss valued at $500,000"};
+const GROUPS = {dev_limited: "Development", dev_high: "Development", dev_com: "Development", wat_med: "Water quality", wat_low: "Water quality",
+  cult_s: "Cultural heritage", cult_sl: "Cultural heritage"};
+const SHORT = {dev_limited: "Limited", dev_high: "Residential", dev_com: "Commercial", wat_med: "Medium", wat_low: "Low", cult_s: "Stables",
+  cult_sl: "Stables & landscape", lim_money: "Limited dev.", res_money: "Residential dev.", com_money: "Commercial dev.",
+  med_money: "Medium water", low_money: "Low water"};
+const grpOf = k => GROUPS[k] || "Extra pull when $ shown";
+const FL = DATA.flow;
+
+/* ---------------- status strip ---------------- */
+function clMatches() { let yes = 0, n = 0; for (const m of ["m1", "m2"]) V.forEach((v, i) => { n++;
+  const r = DATA.cl[m].paper_spec; if (Math.abs(r.coef[i] - P[m].coef[i]) < 0.0015 && Math.abs(r.p[i] - P[m].p[i]) < 0.0015) yes++; }); return [yes, n]; }
+function mlInside() { let yes = 0, n = 0; for (const m of ["m3", "m4"]) V.forEach((v, i) => { n++; const xs = DATA.ml[m].runs.map(r => r.coef[i]);
+  if (P[m].coef[i] >= Math.min(...xs) && P[m].coef[i] <= Math.max(...xs)) yes++; }); return [yes, n]; }
+(function status() {
+  const [cy, cn] = clMatches(), [my, mn] = mlInside();
+  const t1exact = DATA.table1.filter(r => Math.abs(r.diff_all) <= 0.05).length;
+  const items = [
+    ["Sample size", "good", "Exact", `N = 1,968 (all) and 1,476 (councillors), as published`],
+    ["Table 1 (who answered)", "info", `${t1exact} of ${DATA.table1.length} exact`, "Gender, age and residence match; town size does not"],
+    ["Models 1–2 (conditional logit)", "good", `${cy} of ${cn} exact`, "Coefficient and p-value to 3 decimals; the rest look like typos"],
+    ["Models 3–4 (mixed logit)", "info", `${my} of ${mn} in range`, "Same signs; values move with the random draws"],
+    ["Main caveat", "warn", "Grouping", "Conditional logit pools each card across people"]];
+  $("#status").innerHTML = items.map(([k, c, chip, v]) => `<div class="stat"><div class="k">${k}</div><div><span class="chip ${c}">${chip}</span></div><div class="v">${v}</div></div>`).join("");
+})();
+
+/* ---------------- treatments ---------------- */
+(function treats() {
+  const n = FL.respondents_by_treatment;
+  const txt = {1: "Plans described in words only. The baseline group.",
+    2: "The same words, plus the added district revenue of each development level: $1M, $2M or $3M.",
+    3: "Revenue as in T2, plus the well-being losses from lower water quality: $250k (medium) or $500k (low)."};
+  $("#treats").innerHTML = TKEYS.map(t => `<div class="treat"><div class="tag"><span class="dot" style="background:var(--t${t})"></span>${TSHORT[t]} · ${TNAME[t]}</div>
+    <p>${txt[t]}</p><div class="n">${n[t]} respondents in the analysis sample · cultural impacts never priced</div></div>`).join("");
+  $("#tLegend").innerHTML = TKEYS.map(t => `<span><i style="background:var(--t${t})"></i>${TSHORT[t]} · ${TNAME[t]}</span>`).join("");
+})();
+
+/* ---------------- survey card explorer ---------------- */
+const coefC = key => Object.fromEntries(V.map((v, i) => [v.key, DATA.cl[key].corrected.coef[i]]));
+function util(o, t, b) {
+  const md = t >= 2 ? 1 : 0, mw = t === 3 ? 1 : 0, parts = [];
+  const add = (k, lab) => parts.push([lab, b[k]]);
+  if (o.dev === "Limited") { add("dev_limited", "Limited"); if (md) add("lim_money", "Limited × $"); }
+  if (o.dev === "Residential") { add("dev_high", "Residential"); if (md) add("res_money", "Residential × $"); }
+  if (o.dev === "Commercial") { add("dev_com", "Commercial"); if (md) add("com_money", "Commercial × $"); }
+  if (o.wat === "Medium") { add("wat_med", "Medium water"); if (mw) add("med_money", "Medium water × $"); }
+  if (o.wat === "Low") { add("wat_low", "Low water"); if (mw) add("low_money", "Low water × $"); }
+  if (o.cul === "Stables") add("cult_s", "Stables");
+  if (o.cul === "Stables & landscape") add("cult_sl", "Stables & landscape");
+  return {v: parts.reduce((s, p) => s + p[1], 0), parts};
+}
+function shares3(vs) { const m = Math.max(...vs), e = vs.map(v => Math.exp(v - m)), s = e.reduce((a, b) => a + b, 0); return e.map(x => x / s); }
+function barHTML(sh) { const cls = ["a", "b", "s"]; return `<div class="bar">${sh.map((p, i) => `<span class="${cls[i]}" style="flex:${Math.max(p, 0.0001)}">${p >= 0.1 ? pct(p) : ""}</span>`).join("")}</div>`; }
+const cardState = {card: 1, t: 1};
+function attrBlock(name, level, desc, money) { return `<div class="attr"><div class="an">${name}</div><div class="lv">${esc(level)}</div><div class="ds">${desc}</div>${money ? `<div class="money">${money}</div>` : ""}</div>`; }
+function drawCard() {
+  const c = DATA.cards.find(r => r.card === cardState.card), t = cardState.t;
+  const opts = [{h: "Option A", dev: c.a_development, wat: c.a_water, cul: c.a_cultural}, {h: "Option B", dev: c.b_development, wat: c.b_water, cul: c.b_cultural},
+    {h: "Keep things as they are", dev: "None", wat: "High", cul: "None"}];
+  $("#surveyCard").innerHTML = `<div class="ch"><span>Card ${c.card} of 12 · as shown to <b>${TSHORT[t]}</b> (${TNAME[t]})</span><span>Which would you choose?</span></div>
+    <div class="cols">${opts.map(o => `<div class="opt"><h4>${o.h}</h4>
+      ${attrBlock("Development", o.dev, DESC.dev[o.dev], t >= 2 ? REV[o.dev] : null)}
+      ${attrBlock("Water quality", o.wat, DESC.wat[o.wat], t === 3 ? WLOSS[o.wat] : null)}
+      ${attrBlock("Cultural heritage", o.cul, DESC.cul[o.cul], null)}</div>`).join("")}</div>`;
+  const rows = TKEYS.map(tt => { const r = DATA.card_shares.find(x => x.card === c.card && x.treatment === tt) || {A: 0, B: 0, SQ: 0};
+    const n = r.A + r.B + r.SQ; const sh = n ? [r.A / n, r.B / n, r.SQ / n] : [0, 0, 0];
+    return `<div class="srow ${tt === t ? "sel" : ""}"><div class="l"><span class="dot" style="background:var(--t${tt})"></span>${TSHORT[tt]} observed</div>${barHTML(sh)}<div class="num small muted">n=${n}</div></div>`; });
+  const b = coefC("m1"), pr = shares3([util(opts[0], t, b).v, util(opts[1], t, b).v, 0]);
+  rows.push(`<div class="srow pred"><div class="l">${TSHORT[t]} predicted</div>${barHTML(pr)}<div class="num small muted">model</div></div>`);
+  $("#cardShares").innerHTML = rows.join("");
+}
+(function initCard() {
+  $("#cardSel").innerHTML = DATA.cards.map(c => `<option value="${c.card}">Card ${c.card}</option>`).join("");
+  $("#cardSel").onchange = e => { cardState.card = +e.target.value; drawCard(); };
+  seg($("#cardTreat"), TKEYS.map(t => [t, TSHORT[t] + " · " + TNAME[t]]), () => cardState.t, v => { cardState.t = v; drawCard(); });
+  drawCard();
+})();
+
+/* ---------------- data section ---------------- */
+(function dataSection() {
+  const steps = [
+    ["Read the raw file", `${FL.raw_rows.toLocaleString()} rows × 147 columns. It is already in “long” form: one row per option shown to a person.`],
+    ["Confirm the structure", `${FL.raw_respondents} people × 4 cards × 3 options = 12 rows each. Exactly one option is marked “chosen” per card, and the status quo is always no development, high water quality, and no cultural impact.`],
+    ["Find the paper's sample", `The paper reports N = 1,968, which is 164 people × 12 rows. ${FL.incomplete_respondents} people answered fewer than 4 cards, and the file fills their blanks with copies of cards they did answer. Dropping them leaves exactly ${FL.complete_respondents}.`],
+    ["Find the councillors", `Role code “Councillor” gives ${FL.councillor_by_code}. Two more wrote “Mayor” and “Councillor but also Resource Consent Hearing Commissioner” under “Other”. Together they make ${FL.councillor_respondents}, matching N = 1,476 and the “75% councillors” in the text.`],
+    ["Build the model variables", "Dummy variables for each attribute level, plus “$ shown” interactions: development × (T2 or T3) and water quality × T3. One trap: the file's own <span class=\"mono\">water_high3</span> means <i>high</i> water in T3, not low, so we built that term ourselves."],
+    ["Estimate and compare", "Conditional logit (models 1–2), then mixed logit (models 3–4). Every coefficient, p-value, log likelihood and N is compared with the published Table 3."]];
+  $("#steps").innerHTML = steps.map(([b, s]) => `<li><div><b>${b}</b><span>${s}</span></div></li>`).join("");
+  const rows = [["All respondents in the file", FL.raw_respondents, ""], ["Answered fewer than 4 cards (dropped)", FL.incomplete_respondents, "drop"],
+    ["Models 1 & 3: all respondents", FL.complete_respondents, ""], ["Models 2 & 4: councillors only", FL.councillor_respondents, ""]];
+  $("#flow").innerHTML = rows.map(([l, n, c]) => `<div class="frow ${c}"><div class="fl"><span>${l}</span><span class="num">${n}${c ? "" : ` · ${(n * 12).toLocaleString()} rows`}</span></div>
+    <div class="fb" style="width:${n / FL.raw_respondents * 100}%"></div></div>`).join("");
+  const ex = DATA.example.rows;
+  $("#exCap").textContent = `Respondent #${DATA.example.id} was in group T3 (saw both kinds of $ figures). Four cards × three options = 12 rows. “Chosen” marks their pick; the “× $” columns switch on only when that option has that level and the group saw its price.`;
+  const head = ["Card #", "Card", "Option", "Development", "Water", "Cultural", "Chosen", "Residential × $", "Medium water × $", "Low water × $"];
+  $("#exTable").innerHTML = `<thead><tr>${head.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${ex.map(r => `<tr class="${r.chosen ? "hl" : ""}">
+    <td class="num">${r.choice_set}</td><td class="num">${r.card}</td><td>${r.alt_label}</td><td>${r.development}</td><td>${r.water}</td><td>${esc(r.cultural)}</td>
+    <td>${r.chosen ? "<b>✓ chosen</b>" : ""}</td><td class="num r">${r.res_money}</td><td class="num r">${r.med_money}</td><td class="num r">${r.low_money}</td></tr>`).join("")}</tbody>`;
+})();
+
+/* ---------------- grouped bars ---------------- */
+function barPath(x, y, w, h, r) { if (h <= 0) return ""; r = Math.min(r, w / 2, h);
+  return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`; }
+function groupedBars(host, cats, getVal, getTip, opt = {}) {
+  const W = host.clientWidth || 500, H = opt.h || 230, pl = 40, pr = 6, pt = 10, pb = 30;
+  const vals = cats.flatMap((c, ci) => TKEYS.map(t => getVal(ci, t)));
+  const ymax = opt.ymax || Math.max(...vals) * 1.12, tk = ticks(0, ymax, 4);
+  const sy = v => pt + (1 - v / ymax) * (H - pt - pb);
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, class: "chart", role: "img", "aria-label": opt.aria || ""});
+  tk.forEach(t => { el("line", {x1: pl, x2: W - pr, y1: sy(t), y2: sy(t), class: t === 0 ? "base" : "grid"}, svg); txt(svg, pl - 6, sy(t) + 4, Math.round(t * 100) + "%", "tick", "end"); });
+  const gw = (W - pl - pr) / cats.length, inner = gw * 0.68, bw = (inner - 4) / 3;
+  cats.forEach((c, ci) => {
+    const gx = pl + ci * gw + (gw - inner) / 2;
+    txt(svg, pl + ci * gw + gw / 2, H - 10, c, "xl", "middle");
+    TKEYS.forEach((t, k) => { const v = getVal(ci, t), x = gx + k * (bw + 2), y = sy(v);
+      el("path", {d: barPath(x, y, bw, sy(0) - y, 4), class: "t" + t}, svg);
+      if (opt.labels) txt(svg, x + bw / 2, y - 5, pct(v), "val", "middle");
+      const hit = el("rect", {x: x - 1, y: pt, width: bw + 2, height: H - pt - pb, class: "hit"}, svg);
+      hit.addEventListener("pointermove", e => showTip(e, getTip(ci, t))); hit.addEventListener("pointerleave", hideTip); });
+  });
+  host.replaceChildren(svg);
+}
+(function rawCharts() {
+  const R = DATA.rates, get = (attr, lev, t) => R.find(r => r.attribute === attr && r.level === lev && r.treatment === t);
+  const tipR = r => `<b>${TSHORT[r.treatment]} · ${TNAME[r.treatment]}</b><br>${esc(r.level)}: picked <span class="num">${r.chosen}</span> of <span class="num">${r.shown}</span> times<br><b class="num">${pct(r.rate, 1)}</b>`;
+  const mk = (id, attr, levels, o) => { const h = $(id); mount(h, () => groupedBars(h, levels, (ci, t) => get(attr, levels[ci], t).rate, (ci, t) => tipR(get(attr, levels[ci], t)), o)); };
+  mk("#chWater", "water", WAT, {aria: "Pick rate by water quality and group", ymax: 1});
+  mk("#chDev", "development", ["Limited", "Residential", "Commercial"], {aria: "Pick rate by development level and group", h: 210, ymax: 0.7});
+  mk("#chSQ", "status quo", ["Status quo"], {aria: "Status quo pick rate by group", labels: true, ymax: 0.4});
+  const piv = {}; R.forEach(r => { const k = r.attribute + "|" + r.level; (piv[k] = piv[k] || {a: r.attribute, l: r.level})[r.treatment] = r; });
+  $("#ratesTable").innerHTML = `<thead><tr><th>Attribute</th><th>Level</th>${TKEYS.map(t => `<th class="r">${TSHORT[t]}</th>`).join("")}</tr></thead><tbody>${Object.values(piv).map(p =>
+    `<tr><td>${p.a}</td><td>${esc(p.l)}</td>${TKEYS.map(t => `<td class="num r">${pct(p[t].rate, 1)} <span class="muted">(${p[t].chosen}/${p[t].shown})</span></td>`).join("")}</tr>`).join("")}</tbody>`;
+  const sq = t => get("status quo", "Status quo", t).rate, lw = t => get("water", "Low", t).rate;
+  $("#rawTake").innerHTML = `When revenue figures were shown (T2), people kept the status quo on <b>${pct(sq(2))}</b> of cards, against <b>${pct(sq(1))}</b> with no figures. When water losses were priced as well (T3), options with <b>low</b> water quality were picked <b>${pct(lw(3), 1)}</b> of the time, against ${pct(lw(1), 1)} (T1) and ${pct(lw(2), 1)} (T2). The regressions ask whether these gaps hold up once everything else on the card is accounted for.`;
+})();
+
+/* ---------------- dot plot ---------------- */
+function dotPlot(host, rows, opt = {}) {
+  const W = host.clientWidth || 700, narrow = W < 520, lw = narrow ? 132 : 190, rh = narrow ? 30 : 28, gh = 26, pt = 4, pb = 40, pr = 14;
+  let y = pt, last = null; const pos = [];
+  rows.forEach(r => { if (r.group && r.group !== last) { pos.push({g: r.group, y}); y += gh; last = r.group; } pos.push({r, y: y + rh / 2}); y += rh; });
+  const H = y + pb;
+  let vals = rows.flatMap(r => [r.paper, r.ours, r.ring, r.lo, r.hi, ...(r.runs || [])]).filter(v => v != null && isFinite(v));
+  let [mn, mx] = opt.domain || [Math.min(0, ...vals), Math.max(0, ...vals)];
+  if (!opt.domain) { const pd = (mx - mn) * 0.05; mn -= pd; mx += pd; }
+  const x0 = lw, x1 = W - pr, sx = v => x0 + (v - mn) / (mx - mn) * (x1 - x0);
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, class: "chart", role: "img", "aria-label": opt.aria || ""});
+  if (opt.shadeBelow != null) el("rect", {x: x0, y: pt, width: Math.max(0, sx(opt.shadeBelow) - x0), height: H - pt - pb, class: "shade"}, svg);
+  ticks(mn, mx, narrow ? 4 : 7).forEach(t => { el("line", {x1: sx(t), x2: sx(t), y1: pt, y2: H - pb, class: t === 0 && !opt.noZero ? "zero" : "grid"}, svg);
+    txt(svg, sx(t), H - pb + 16, opt.tickFmt ? opt.tickFmt(t) : minus(String(t)), "tick", "middle"); });
+  if (opt.xTitle) txt(svg, (x0 + x1) / 2, H - 6, opt.xTitle, "xl", "middle");
+  if (opt.ref) { el("line", {x1: sx(opt.ref.x), x2: sx(opt.ref.x), y1: pt, y2: H - pb, class: "ref"}, svg); }
+  pos.forEach(p => {
+    if (p.g) { txt(svg, 0, p.y + 17, p.g, "grp"); el("line", {x1: 0, x2: W - pr, y1: p.y + gh - 1.5, y2: p.y + gh - 1.5, class: "hair"}, svg); return; }
+    const r = p.r, cy = p.y;
+    txt(svg, lw - 12, cy + 4, r.label, narrow ? "labn" : "", "end");
+    (r.runs || []).forEach((v, i) => el("circle", {cx: sx(v), cy: cy + ((i * 7) % 11 - 5), r: 2.6, class: "run"}, svg));
+    if (r.lo != null) el("line", {x1: sx(r.lo), x2: sx(r.hi), y1: cy, y2: cy, class: "range"}, svg);
+    if (r.ring != null) el("circle", {cx: sx(r.ring), cy, r: 4.8, class: "mk-ring"}, svg);
+    if (r.ours != null) el("circle", {cx: sx(r.ours), cy, r: 4.6, class: "mk-us"}, svg);
+    if (r.paper != null) { const x = sx(r.paper), s = 8; el("path", {d: `M${x},${cy - s}L${x + s},${cy}L${x},${cy + s}L${x - s},${cy}Z`, class: "mk-paper"}, svg); }
+    const hit = el("rect", {x: 0, y: cy - rh / 2, width: W, height: rh, class: "hit"}, svg);
+    svg.insertBefore(hit, svg.firstChild.nextSibling);
+    hit.addEventListener("pointermove", e => showTip(e, r.tip)); hit.addEventListener("pointerleave", hideTip);
+  });
+  if (opt.ref) txt(svg, sx(opt.ref.x) - 6, pt + 12, opt.ref.label, "reflab", "end");
+  host.replaceChildren(svg);
+}
+
+/* ---------------- Table 3 ---------------- */
+const MODELS = [["m1", "(1) CL · All"], ["m2", "(2) CL · Councillors"], ["m3", "(3) ML · All"], ["m4", "(4) ML · Councillors"]];
+let model = "m1";
+function modelRows(m) {
+  const isML = m === "m3" || m === "m4";
+  return V.map((v, i) => {
+    const pc = P[m].coef[i], pp = P[m].p[i];
+    let ours, op, lo, hi, runs, status, tipx;
+    if (!isML) { const r = DATA.cl[m].paper_spec; ours = r.coef[i]; op = r.p[i];
+      const cm = Math.abs(ours - pc) < 0.0015, pm = Math.abs(op - pp) < 0.0015;
+      status = cm && pm ? ["good", "Exact"] : cm ? ["warn", "p differs"] : ["warn", "Differs"];
+      tipx = `Corrected grouping: <span class="num">${f(DATA.cl[m].corrected.coef[i])}${stars(DATA.cl[m].corrected.p_cl[i])}</span> (clustered p ${pf(DATA.cl[m].corrected.p_cl[i])})`;
+    } else { const r = DATA.ml[m].primary; ours = r.coef[i]; op = r.p[i]; runs = DATA.ml[m].runs.map(x => x.coef[i]);
+      lo = Math.min(...runs); hi = Math.max(...runs);
+      status = pc >= lo && pc <= hi ? ["info", "In range"] : ["warn", "Outside range"];
+      tipx = `20 runs with 500 draws: <span class="num">${f(lo, 2)} to ${f(hi, 2)}</span>`; }
+    return {key: v.key, group: grpOf(v.key), label: SHORT[v.key], paper: pc, ours, lo, hi, runs, status, pp, op,
+      tip: `<b>${esc(v.label)}</b><br>Paper: <span class="num">${f(pc)}${stars(pp)}</span> (p ${pf(pp)})<br>Ours: <span class="num">${f(ours)}${stars(op)}</span> (p ${pf(op)})<br>${tipx}`};
+  });
+}
+function drawModel() {
+  const m = model, isML = m === "m3" || m === "m4", rows = modelRows(m);
+  $("#mTitle").textContent = "Model " + P[m].name;
+  const ll = isML ? DATA.ml[m].primary.ll : DATA.cl[m].paper_spec.ll;
+  $("#mStats").innerHTML = `Log likelihood: paper <span class="num">${f(P[m].ll, 2)}</span> · ours <span class="num">${f(ll, 2)}</span> · N = <span class="num">${P[m].n.toLocaleString()}</span>`;
+  $("#mNote").textContent = isML
+    ? "Mixed logit: every respondent gets their own coefficients, and the model is fitted by simulation. The violet dot uses 2,000 draws. Faint dots are 20 re-runs at the paper's 500 draws with different random sequences; their spread is pure simulation noise."
+    : "Conditional logit fitted with the paper's apparent setup, which pools each design card across respondents. Hover a row to see the same coefficient under the corrected, per-person grouping.";
+  $("#mLegend").innerHTML = `<span><i class="dia"></i>Published</span><span><i class="circ"></i>${isML ? "Ours (2,000 draws)" : "Ours (replicated): a dot inside a diamond = exact match"}</span>` +
+    (isML ? `<span><i class="runs"></i>20 runs at 500 draws</span><span><i class="rng"></i>Range of those runs</span>` : "");
+  const h = $("#chCoef"); h._draw = () => dotPlot(h, rows, {aria: `Coefficients for model ${P[m].name}, paper vs ours`, xTitle: "Coefficient (pull toward the option vs. keeping things as they are)"}); h._draw();
+  const head = isML ? ["Variable", "Paper", "Ours (2,000 draws)", "20 runs × 500 draws", "Status"] : ["Variable", "Paper", "Ours", "Status", "Corrected grouping (clustered p)"];
+  let lastG = null;
+  const body = rows.map((r, i) => { const g = r.group !== lastG ? `<tr class="gh"><td colspan="5">${r.group}</td></tr>` : ""; lastG = r.group;
+    const cells = isML
+      ? `<td class="num r">${f(r.paper)}${stars(r.pp)} <span class="muted">(${pf(r.pp)})</span></td><td class="num r">${f(r.ours)}${stars(r.op)} <span class="muted">(${pf(r.op)})</span></td><td class="num r">${f(r.lo, 2)} to ${f(r.hi, 2)}</td><td><span class="chip ${r.status[0]}">${r.status[1]}</span></td>`
+      : `<td class="num r">${f(r.paper)}${stars(r.pp)} <span class="muted">(${pf(r.pp)})</span></td><td class="num r">${f(r.ours)}${stars(r.op)} <span class="muted">(${pf(r.op)})</span></td><td><span class="chip ${r.status[0]}">${r.status[1]}</span></td><td class="num r">${f(DATA.cl[m].corrected.coef[i])}${stars(DATA.cl[m].corrected.p_cl[i])} <span class="muted">(${pf(DATA.cl[m].corrected.p_cl[i])})</span></td>`;
+    return g + `<tr><td>${esc(r.label)}</td>${cells}</tr>`; }).join("");
+  $("#coefTable").innerHTML = `<thead><tr>${head.map((x, i) => `<th class="${i && i < 3 ? "r" : ""}">${x}</th>`).join("")}</tr></thead><tbody>${body}</tbody>`;
+}
+seg($("#modelSeg"), MODELS, () => model, v => { model = v; drawModel(); });
+mount($("#chCoef"), () => drawModel());
+
+/* ---------------- Figure 2 densities ---------------- */
+(function dens() {
+  const keys = ["lim_money", "res_money", "com_money", "med_money", "low_money"], host = $("#dens");
+  host.innerHTML = keys.map(k => `<div><h4>${SHORT[k]} × $</h4><div data-k="${k}"></div></div>`).join("");
+  host.querySelectorAll("[data-k]").forEach(h => mount(h, () => {
+    const d = DATA.fig2[h.dataset.k], W = h.clientWidth || 180, H = 120, pb = 22, pt = 6;
+    const xmn = Math.min(d.grid[0], 0), xmx = Math.max(d.grid[d.grid.length - 1], 0), ymx = Math.max(...d.density) || 1;
+    const sx = v => 4 + (v - xmn) / (xmx - xmn) * (W - 8), sy = v => pt + (1 - v / ymx) * (H - pt - pb);
+    const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, class: "chart", role: "img", "aria-label": `Distribution of respondent-level ${SHORT[h.dataset.k]} × $ effects`});
+    ticks(xmn, xmx, 3).forEach(t => { el("line", {x1: sx(t), x2: sx(t), y1: pt, y2: H - pb, class: t === 0 ? "zero" : "grid"}, svg); txt(svg, sx(t), H - 6, minus(String(t)), "tick", "middle"); });
+    const pts = d.grid.map((g, i) => `${sx(g).toFixed(1)},${sy(d.density[i]).toFixed(1)}`);
+    el("path", {d: `M${sx(d.grid[0])},${sy(0)}L${pts.join("L")}L${sx(d.grid[d.grid.length - 1])},${sy(0)}Z`, class: "area"}, svg);
+    el("path", {d: "M" + pts.join("L"), class: "line"}, svg);
+    [d.p2_5, d.p97_5].forEach(q => el("line", {x1: sx(q), x2: sx(q), y1: pt, y2: H - pb, class: "q"}, svg));
+    const hit = el("rect", {x: 0, y: 0, width: W, height: H - pb, class: "hit"}, svg);
+    hit.addEventListener("pointermove", e => showTip(e, `<b>${SHORT[h.dataset.k]} × $</b><br>Mean across councillors: <span class="num">${f(d.mean, 2)}</span><br>Middle 95%: <span class="num">${f(d.p2_5, 2)} to ${f(d.p97_5, 2)}</span>`));
+    hit.addEventListener("pointerleave", hideTip);
+    h.replaceChildren(svg);
+  }));
+})();
+
+/* ---------------- relative effects ---------------- */
+(function rel() {
+  const keys = ["lim_money", "res_money", "com_money", "med_money", "low_money"];
+  const base = {lim_money: "Limited development", res_money: "Residential development", com_money: "Commercial development", med_money: "Medium water quality", low_money: "Low water quality"};
+  $("#sLegend").innerHTML = `<span><i class="dia"></i>Paper, model 1 (CL)</span><span><i class="circ"></i>Ours, corrected CL</span><span><i class="ring"></i>Ours, mixed logit (median of 20 runs)</span><span><i class="rng"></i>Range of those runs</span>`;
+  const rows = keys.map(k => { const pc = DATA.cl_relative.m1.paper[k], cc = DATA.cl_relative.m1.corrected[k], ml = DATA.ml.m3.relative;
+    return {group: ["med_money", "low_money"].includes(k) ? "Water quality: extra aversion" : "Development: extra pull", label: SHORT[k].replace(" dev.", ""),
+      paper: pc, ours: cc, ring: ml.median[k], lo: ml.min[k], hi: ml.max[k],
+      tip: `<b>${base[k]}</b>: effect with $ shown, as a share of the effect without<br>Paper CL: <span class="num">${pct(pc)}</span><br>Corrected CL: <span class="num">${pct(cc)}</span><br>Mixed logit: <span class="num">${pct(ml.median[k])}</span> (runs ${pct(ml.min[k])} to ${pct(ml.max[k])})`}; });
+  const h = $("#chRel"); mount(h, () => dotPlot(h, rows, {aria: "Treatment effect as a percent of the baseline effect", tickFmt: t => Math.round(t * 100) + "%", xTitle: "How much stronger the preference is when $ is shown"}));
+  const c = DATA.cl_relative.m1.corrected;
+  $("#relTake").innerHTML = `In our corrected model, a price tag makes people <b>${pct(c.low_money)}</b> more averse to low water quality and <b>${pct(c.med_money)}</b> more averse to medium water quality. Residential development becomes <b>${pct(c.res_money)}</b> more attractive when its revenue is shown. The paper's own model 1 implies smaller shifts (${pct(DATA.cl_relative.m1.paper.low_money)} and ${pct(DATA.cl_relative.m1.paper.res_money)}). Every version agrees on the direction.`;
+})();
+
+/* ---------------- findings ---------------- */
+(function findings() {
+  const c1 = DATA.cl.m1, null1 = c1.null_ll_occasion;
+  const F = [
+    {sev: "warn", chip: "Specification", t: "The conditional logit treats each design card as a single choice",
+     p: `The only setup that reproduces models 1–2 pools everyone who answered the same card into one group, as if 50-odd people made one joint choice. A correct 3-option choice model can never score below <b class="num">${f(null1, 1)}</b>, the score of a model that gives every option a 1-in-3 chance. The paper reports <b class="num">−852.9</b>, which only makes sense under the pooled grouping. Grouping correctly (one person, one card) roughly halves the main coefficients. All signs survive, and the “$ shown” effects keep their direction with similar p-values.`, ll: true},
+    {sev: "info", chip: "Robustness", t: "The mixed logit results move with the random draws",
+     p: `The log likelihood barely changes across draw sequences, but the coefficients do. The likelihood is flat: 24 parameters estimated from ${FL.choice_occasions} choices. The paper's model 3 values sit inside our spread. For councillors (model 4), the headline “low water × $” effect is <b class="num">−8.65</b> (p = 0.015) in the paper but <b class="num">${f(DATA.ml.m4.primary.coef[11], 2)}</b> (p = ${pf(DATA.ml.m4.primary.p[11])}) with 2,000 draws.`},
+    {sev: "warn", chip: "Typos", t: "A few numbers in Table 3 look mistyped",
+     li: ["Model 2 water quality: published −0.393 and −0.602; the data give −3.891 and −6.184. Every other number in that column matches.",
+          "Model 1 Residential × $: published 0.670 against 0.699 from the data, with an identical p-value (0.018).",
+          "Model 1 Stables & landscape: p-value published as 0.031, but the data give 0.001 (confirmed in R).",
+          "Model 4 Residential × $ is marked ** (p < 0.05) with a printed p-value of 0.062."]},
+    {sev: "info", chip: "Description", t: "Some methods are described differently from what the data show",
+     li: ["“In each Halton draw, 15 individuals are randomly dropped” most likely describes Stata's burn(15), which discards the first 15 Halton points. No people are dropped.",
+          "The design is described as “two blocks”, but each respondent received a random 4 of the 12 cards.",
+          `Table 1 describes all ${FL.raw_respondents} respondents, including the ${FL.incomplete_respondents} who did not finish, and its town-size row does not match the file (39.1 / 29.0 / 20.1 / 11.8% against 36.7 / 30.9 / 21.3 / 11.2%).`]},
+    {sev: "info", chip: "Design", t: "Limits worth raising in the appraisal",
+     li: ["“No development” only ever appears in the status quo, so the development coefficients also absorb any general tendency to pick a new plan over doing nothing.",
+          "The dollar effects rest on comparisons between about 55 people per group, and in T3 development and water prices always appear together.",
+          "The published p-values treat a person's four answers as independent. Clustering by respondent widens them; the corrected results above use clustered errors.",
+          "The water-loss dollar values were chosen by the authors to be “significant, but not overly large” and were not drawn from a valuation study."]}];
+  $("#findList").innerHTML = F.map((x, i) => `<article class="find"><div class="fh"><h3>${x.t}</h3><span class="chip ${x.sev}">${x.chip}</span></div>
+    ${x.p ? `<p>${x.p}</p>` : ""}${x.li ? `<ul>${x.li.map(l => `<li>${l}</li>`).join("")}</ul>` : ""}${x.ll ? `<div class="legend" style="margin-top:4px"><span><i class="dia"></i>Published</span><span><i class="circ"></i>Ours</span><span><i style="background:var(--shade);border:1px dashed var(--crit-ink)"></i>Impossible for a correct 3-option model</span></div><div id="chLL"></div>` : ""}</article>`).join("");
+  const rows = [
+    {label: "CL as published", paper: -852.9, ours: c1.paper_spec.ll, tip: `<b>Model 1 as published</b><br>Paper <span class="num">−852.9</span> · ours <span class="num">${f(c1.paper_spec.ll, 2)}</span><br>Only possible with card-level pooling`},
+    {label: "CL, corrected", ours: c1.corrected.ll, tip: `<b>Model 1, one group per person per card</b><br><span class="num">${f(c1.corrected.ll, 2)}</span>`},
+    {label: "Mixed logit", paper: P.m3.ll, ours: DATA.ml.m3.primary.ll, tip: `<b>Model 3</b><br>Paper <span class="num">${f(P.m3.ll, 2)}</span> · ours <span class="num">${f(DATA.ml.m3.primary.ll, 2)}</span>`}];
+  const h = $("#chLL"); mount(h, () => dotPlot(h, rows, {domain: [-900, -380], shadeBelow: null1, ref: {x: null1, label: "1-in-3 guess"}, noZero: true,
+    aria: "Log likelihoods compared with the random-guess floor", xTitle: "Log likelihood, all respondents (higher = better fit)"}));
+})();
+
+/* ---------------- simulator ---------------- */
+(function sim() {
+  const st = {t: 1, s: "m1", A: {dev: "Residential", wat: "Low", cul: "None"}, B: {dev: "Limited", wat: "High", cul: "Stables & landscape"}};
+  const sel = (id, list, val) => `<select id="${id}">${list.map(x => `<option ${x === val ? "selected" : ""}>${esc(x)}</option>`).join("")}</select>`;
+  $("#simOpts").innerHTML = ["A", "B"].map(o => `<div class="simopt"><h4><span class="dot" style="background:var(--opt${o})"></span>Option ${o}</h4>
+    <div class="f"><label for="s${o}d">Development</label>${sel("s" + o + "d", DEV.slice(1), st[o].dev)}</div>
+    <div class="f"><label for="s${o}w">Water</label>${sel("s" + o + "w", WAT, st[o].wat)}</div>
+    <div class="f"><label for="s${o}c">Cultural</label>${sel("s" + o + "c", CUL, st[o].cul)}</div>
+    <div class="score" id="sc${o}"></div></div>`).join("");
+  ["A", "B"].forEach(o => { [["d", "dev"], ["w", "wat"], ["c", "cul"]].forEach(([s, k]) => { $("#s" + o + s).onchange = e => { st[o][k] = e.target.value; draw(); }; }); });
+  seg($("#simTreat"), TKEYS.map(t => [t, TSHORT[t] + " · " + TNAME[t]]), () => st.t, v => { st.t = v; draw(); });
+  seg($("#simSample"), [["m1", "All"], ["m2", "Councillors"]], () => st.s, v => { st.s = v; draw(); });
+  function draw() {
+    const b = coefC(st.s), uA = util(st.A, st.t, b), uB = util(st.B, st.t, b);
+    const show = (u, id) => { $(id).innerHTML = u.parts.map(([l, v]) => `${esc(l)} <span style="float:right">${v >= 0 ? "+" : ""}${f(v, 2)}</span>`).join("<br>") + `<br><b>Score <span style="float:right">${f(u.v, 2)}</span></b>`; };
+    show(uA, "#scA"); show(uB, "#scB");
+    const all = TKEYS.map(t => shares3([util(st.A, t, b).v, util(st.B, t, b).v, 0]));
+    $("#simOut").innerHTML = TKEYS.map((t, i) => `<div class="srow ${t === st.t ? "sel" : ""}"><div class="l"><span class="dot" style="background:var(--t${t})"></span>${TSHORT[t]}</div>${barHTML(all[i])}<div class="num small muted">${t === st.t ? "shown" : ""}</div></div>`).join("") +
+      `<div class="legend" style="margin-top:4px"><span><i style="background:var(--optA)"></i>Option A</span><span><i style="background:var(--optB)"></i>Option B</span><span><i style="background:var(--sq)"></i>Keep as is</span></div>`;
+  }
+  draw();
+})();
+
+/* ---------------- reproduce ---------------- */
+(function repro() {
+  const files = [["01_parse_data.py", "Reads S1Table.DTA, checks its structure, rebuilds both samples and the “$ shown” variables", "output/data/*.csv, logs/01_parse_data.log"],
+    ["02_descriptives.py", "Table 1, Figure 1 and the raw pick-rate comparison", "output/tables, output/figures"],
+    ["03_conditional_logit.py", "Models 1–2 as published, plus the corrected grouping with clustered errors", "output/tables/table3_cl.csv"],
+    ["04_mixed_logit.py", "Models 3–4 (simulated maximum likelihood), the draw-sensitivity runs, and Figure 2", "output/tables/table3_ml.csv"],
+    ["05_build_dashboard.py", "Puts every result into this page", "dashboard/index.html"],
+    ["06_slide_figures.py", "Slide-ready 16:9 figures for the presentation", "output/slides/*.png"],
+    ["crosscheck_clogit.R", "Re-estimates models 1–2 in R (survival::clogit) as an independent check", "output/tables/r_crosscheck_clogit.csv"],
+    ["replication_walkthrough.ipynb", "The same steps as a narrated notebook, with outputs", "(renders on GitHub)"]];
+  $("#files").innerHTML = `<thead><tr><th>File</th><th>What it does</th><th>Writes</th></tr></thead><tbody>${files.map(r => `<tr><td class="mono">${r[0]}</td><td style="white-space:normal;min-width:260px">${r[1]}</td><td class="mono small">${r[2]}</td></tr>`).join("")}</tbody>`;
+  const m = DATA.meta; $("#meta").textContent = `Built ${m.built} with Python ${m.python}, pandas ${m.pandas}, numpy ${m.numpy}, scipy ${m.scipy}, statsmodels ${m.statsmodels}.`;
+})();
+
+/* ---------------- nav highlight ---------------- */
+(function nav() {
+  const links = [...document.querySelectorAll("nav.sections a")], map = new Map(links.map(a => [a.getAttribute("href").slice(1), a]));
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { links.forEach(a => a.classList.remove("on")); const a = map.get(e.target.id); if (a) { a.classList.add("on"); a.parentElement.scrollLeft = a.offsetLeft - 24; } } }),
+    {rootMargin: "-45% 0px -50% 0px"});
+  document.querySelectorAll("section.block").forEach(s => io.observe(s));
+})();
+</script>

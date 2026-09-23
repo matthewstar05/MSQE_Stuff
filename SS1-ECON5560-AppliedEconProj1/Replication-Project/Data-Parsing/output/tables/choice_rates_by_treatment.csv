@@ -1,0 +1,31 @@
+attribute,level,treatment,shown,chosen,rate
+development,Limited,1,151,45,0.2980132450331126
+development,Limited,2,140,49,0.35
+development,Limited,3,150,40,0.26666666666666666
+development,Residential,1,167,52,0.31137724550898205
+development,Residential,2,156,53,0.33974358974358976
+development,Residential,3,163,60,0.36809815950920244
+development,Commercial,1,138,61,0.4420289855072464
+development,Commercial,2,120,64,0.5333333333333333
+development,Commercial,3,127,57,0.44881889763779526
+water,High,1,152,108,0.7105263157894737
+water,High,2,139,115,0.8273381294964028
+water,High,3,146,119,0.815068493150685
+water,Medium,1,174,41,0.23563218390804597
+water,Medium,2,156,42,0.2692307692307692
+water,Medium,3,161,33,0.20496894409937888
+water,Low,1,130,9,0.06923076923076923
+water,Low,2,121,9,0.0743801652892562
+water,Low,3,133,5,0.03759398496240601
+cultural,None,1,0,0,
+cultural,None,2,0,0,
+cultural,None,3,0,0,
+cultural,Stables,1,155,49,0.3161290322580645
+cultural,Stables,2,136,51,0.375
+cultural,Stables,3,153,46,0.3006535947712418
+cultural,Stables & landscape,1,186,99,0.532258064516129
+cultural,Stables & landscape,2,175,106,0.6057142857142858
+cultural,Stables & landscape,3,176,108,0.6136363636363636
+status quo,Status quo,1,228,70,0.30701754385964913
+status quo,Status quo,2,208,42,0.20192307692307693
+status quo,Status quo,3,220,63,0.2863636363636364
