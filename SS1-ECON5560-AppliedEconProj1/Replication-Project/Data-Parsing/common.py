@@ -72,7 +72,7 @@ def stars(p):
 
 def load_long(sample="all"):
     """Parsed long-format choice data written by 01_parse_data.py."""
-    df = pd.read_csv(DATA_OUT / "choice_long.csv")
+    df = pd.read_csv(DATA_OUT / "choice_long.csv", keep_default_na=False, na_values=[""])
     df = df[df.complete == 1]
     return df[df.councillor == 1] if sample == "councillors" else df
 

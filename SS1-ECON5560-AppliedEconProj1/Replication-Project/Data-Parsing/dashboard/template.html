@@ -74,7 +74,9 @@ nav.sections a:hover{background:var(--surface-2)}
 nav.sections a.on{background:var(--accent);color:var(--accent-ink)}
 
 section.block{padding-block:56px;border-bottom:1px solid var(--hair)}
-section.block>.wrap{display:grid;gap:22px}
+section.block>.wrap{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+section.block>.wrap>*,.two>*,.panel{min-width:0}
+ol.steps li>div{min-width:0;overflow-wrap:anywhere}
 .head{display:grid;gap:10px}
 .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
 @media (max-width:860px){.two{grid-template-columns:minmax(0,1fr)}}
@@ -568,7 +570,7 @@ function dotPlot(host, rows, opt = {}) {
   if (opt.shadeBelow != null) el("rect", {x: x0, y: pt, width: Math.max(0, sx(opt.shadeBelow) - x0), height: H - pt - pb, class: "shade"}, svg);
   ticks(mn, mx, narrow ? 4 : 7).forEach(t => { el("line", {x1: sx(t), x2: sx(t), y1: pt, y2: H - pb, class: t === 0 && !opt.noZero ? "zero" : "grid"}, svg);
     txt(svg, sx(t), H - pb + 16, opt.tickFmt ? opt.tickFmt(t) : minus(String(t)), "tick", "middle"); });
-  if (opt.xTitle) txt(svg, (x0 + x1) / 2, H - 6, opt.xTitle, "xl", "middle");
+  if (opt.xTitle) txt(svg, narrow ? W / 2 : (x0 + x1) / 2, H - 6, narrow && opt.xShort ? opt.xShort : opt.xTitle, "xl", "middle");
   if (opt.ref) { el("line", {x1: sx(opt.ref.x), x2: sx(opt.ref.x), y1: pt, y2: H - pb, class: "ref"}, svg); }
   pos.forEach(p => {
     if (p.g) { txt(svg, 0, p.y + 17, p.g, "grp"); el("line", {x1: 0, x2: W - pr, y1: p.y + gh - 1.5, y2: p.y + gh - 1.5, class: "hair"}, svg); return; }
@@ -617,7 +619,7 @@ function drawModel() {
     : "Conditional logit fitted with the paper's apparent setup, which pools each design card across respondents. Hover a row to see the same coefficient under the corrected, per-person grouping.";
   $("#mLegend").innerHTML = `<span><i class="dia"></i>Published</span><span><i class="circ"></i>${isML ? "Ours (2,000 draws)" : "Ours (replicated): a dot inside a diamond = exact match"}</span>` +
     (isML ? `<span><i class="runs"></i>20 runs at 500 draws</span><span><i class="rng"></i>Range of those runs</span>` : "");
-  const h = $("#chCoef"); h._draw = () => dotPlot(h, rows, {aria: `Coefficients for model ${P[m].name}, paper vs ours`, xTitle: "Coefficient (pull toward the option vs. keeping things as they are)"}); h._draw();
+  const h = $("#chCoef"); h._draw = () => dotPlot(h, rows, {aria: `Coefficients for model ${P[m].name}, paper vs ours`, xTitle: "Coefficient (pull toward the option vs. keeping things as they are)", xShort: "Coefficient vs. status quo"}); h._draw();
   const head = isML ? ["Variable", "Paper", "Ours (2,000 draws)", "20 runs × 500 draws", "Status"] : ["Variable", "Paper", "Ours", "Status", "Corrected grouping (clustered p)"];
   let lastG = null;
   const body = rows.map((r, i) => { const g = r.group !== lastG ? `<tr class="gh"><td colspan="5">${r.group}</td></tr>` : ""; lastG = r.group;
@@ -660,7 +662,7 @@ mount($("#chCoef"), () => drawModel());
     return {group: ["med_money", "low_money"].includes(k) ? "Water quality: extra aversion" : "Development: extra pull", label: SHORT[k].replace(" dev.", ""),
       paper: pc, ours: cc, ring: ml.median[k], lo: ml.min[k], hi: ml.max[k],
       tip: `<b>${base[k]}</b>: effect with $ shown, as a share of the effect without<br>Paper CL: <span class="num">${pct(pc)}</span><br>Corrected CL: <span class="num">${pct(cc)}</span><br>Mixed logit: <span class="num">${pct(ml.median[k])}</span> (runs ${pct(ml.min[k])} to ${pct(ml.max[k])})`}; });
-  const h = $("#chRel"); mount(h, () => dotPlot(h, rows, {aria: "Treatment effect as a percent of the baseline effect", tickFmt: t => Math.round(t * 100) + "%", xTitle: "How much stronger the preference is when $ is shown"}));
+  const h = $("#chRel"); mount(h, () => dotPlot(h, rows, {aria: "Treatment effect as a percent of the baseline effect", tickFmt: t => Math.round(t * 100) + "%", xTitle: "How much stronger the preference is when $ is shown", xShort: "Extra strength when $ shown"}));
   const c = DATA.cl_relative.m1.corrected;
   $("#relTake").innerHTML = `In our corrected model, a price tag makes people <b>${pct(c.low_money)}</b> more averse to low water quality and <b>${pct(c.med_money)}</b> more averse to medium water quality. Residential development becomes <b>${pct(c.res_money)}</b> more attractive when its revenue is shown. The paper's own model 1 implies smaller shifts (${pct(DATA.cl_relative.m1.paper.low_money)} and ${pct(DATA.cl_relative.m1.paper.res_money)}). Every version agrees on the direction.`;
 })();
@@ -694,7 +696,7 @@ mount($("#chCoef"), () => drawModel());
     {label: "CL, corrected", ours: c1.corrected.ll, tip: `<b>Model 1, one group per person per card</b><br><span class="num">${f(c1.corrected.ll, 2)}</span>`},
     {label: "Mixed logit", paper: P.m3.ll, ours: DATA.ml.m3.primary.ll, tip: `<b>Model 3</b><br>Paper <span class="num">${f(P.m3.ll, 2)}</span> · ours <span class="num">${f(DATA.ml.m3.primary.ll, 2)}</span>`}];
   const h = $("#chLL"); mount(h, () => dotPlot(h, rows, {domain: [-900, -380], shadeBelow: null1, ref: {x: null1, label: "1-in-3 guess"}, noZero: true,
-    aria: "Log likelihoods compared with the random-guess floor", xTitle: "Log likelihood, all respondents (higher = better fit)"}));
+    aria: "Log likelihoods compared with the random-guess floor", xTitle: "Log likelihood, all respondents (higher = better fit)", xShort: "Log likelihood (higher = better)"}));
 })();
 
 /* ---------------- simulator ---------------- */

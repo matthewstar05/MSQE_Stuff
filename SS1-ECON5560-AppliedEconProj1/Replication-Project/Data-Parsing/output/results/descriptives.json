@@ -316,25 +316,25 @@
    "attribute": "cultural",
    "level": "None",
    "treatment": 1,
-   "shown": 0,
-   "chosen": 0,
-   "rate": NaN
+   "shown": 115,
+   "chosen": 10,
+   "rate": 0.08695652173913043
   },
   {
    "attribute": "cultural",
    "level": "None",
    "treatment": 2,
-   "shown": 0,
-   "chosen": 0,
-   "rate": NaN
+   "shown": 105,
+   "chosen": 9,
+   "rate": 0.08571428571428572
   },
   {
    "attribute": "cultural",
    "level": "None",
    "treatment": 3,
-   "shown": 0,
-   "chosen": 0,
-   "rate": NaN
+   "shown": 111,
+   "chosen": 3,
+   "rate": 0.02702702702702703
   },
   {
    "attribute": "cultural",
@@ -671,7 +671,7 @@
    "a_water": "High",
    "b_water": "Low",
    "a_cultural": "Stables & landscape",
-   "b_cultural": NaN
+   "b_cultural": "None"
   },
   {
    "card": 2,
@@ -679,7 +679,7 @@
    "b_development": "Residential",
    "a_water": "Low",
    "b_water": "High",
-   "a_cultural": NaN,
+   "a_cultural": "None",
    "b_cultural": "Stables & landscape"
   },
   {
@@ -698,7 +698,7 @@
    "a_water": "High",
    "b_water": "Medium",
    "a_cultural": "Stables & landscape",
-   "b_cultural": NaN
+   "b_cultural": "None"
   },
   {
    "card": 5,
@@ -715,7 +715,7 @@
    "b_development": "Limited",
    "a_water": "Low",
    "b_water": "High",
-   "a_cultural": NaN,
+   "a_cultural": "None",
    "b_cultural": "Stables & landscape"
   },
   {
@@ -751,7 +751,7 @@
    "b_development": "Limited",
    "a_water": "Low",
    "b_water": "Medium",
-   "a_cultural": NaN,
+   "a_cultural": "None",
    "b_cultural": "Stables"
   },
   {
@@ -760,7 +760,7 @@
    "b_development": "Commercial",
    "a_water": "Low",
    "b_water": "High",
-   "a_cultural": NaN,
+   "a_cultural": "None",
    "b_cultural": "Stables & landscape"
   },
   {

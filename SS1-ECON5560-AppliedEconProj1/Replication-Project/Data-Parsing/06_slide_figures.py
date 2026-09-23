@@ -40,7 +40,7 @@ def save(fig, name):
     fig.savefig(SLIDES / name, facecolor="white"); plt.close(fig)
 
 # ---------------------------------------------------------------- slide 1: raw pattern
-rates = pd.read_csv(TAB_OUT / "choice_rates_by_treatment.csv")
+rates = pd.read_csv(TAB_OUT / "choice_rates_by_treatment.csv", keep_default_na=False, na_values=[""])
 fig = slide("Before any model, choices already move with the price tags",
             "Share of choices, by which information the respondent's group was shown (164 respondents, 656 choices)")
 for i, (attr, lev, ttl) in enumerate([("status quo", "Status quo", "Kept things as they are"),

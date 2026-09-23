@@ -18,7 +18,7 @@ desc = json.loads((RES_OUT / "descriptives.json").read_text())
 cl = json.loads((RES_OUT / "cl.json").read_text())
 ml = json.loads((RES_OUT / "ml.json").read_text())
 
-long = pd.read_csv(DATA_OUT / "choice_long.csv")
+long = pd.read_csv(DATA_OUT / "choice_long.csv", keep_default_na=False, na_values=[""])
 example_id = 2   # a treatment-3 respondent, so the "$ shown" columns are switched on
 ex = long[long.id == example_id][["choice_set", "card", "alt_label", "development", "water", "cultural", "chosen",
                                   "res_money", "low_money", "med_money"]]

@@ -18,8 +18,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from common import DATA_OUT, TAB_OUT, FIG_OUT, RES_OUT, PAPER_T1, save_json
 
-resp = pd.read_csv(DATA_OUT / "respondents.csv")
-long = pd.read_csv(DATA_OUT / "choice_long.csv")
+resp = pd.read_csv(DATA_OUT / "respondents.csv", keep_default_na=False, na_values=[""])
+long = pd.read_csv(DATA_OUT / "choice_long.csv", keep_default_na=False, na_values=[""])
 TREAT_NAMES = {1: "T1 · no $ figures", 2: "T2 · $ for development", 3: "T3 · $ for development + water"}
 COLORS = {1: "#2a78d6", 2: "#eb6834", 3: "#1baf7a"}
 plt.rcParams.update({"font.family": "sans-serif", "axes.spines.top": False, "axes.spines.right": False,
@@ -108,7 +108,7 @@ save_json({
     "fig1": {int(c): {int(t): int(v) for t, v in r.items()} for c, r in fig1.iterrows()},
     "rates": rates.to_dict(orient="records"),
     "card_shares": card_sh.to_dict(orient="records"),
-    "cards": pd.read_csv(DATA_OUT / "design_cards.csv").to_dict(orient="records"),
+    "cards": pd.read_csv(DATA_OUT / "design_cards.csv", keep_default_na=False, na_values=[""]).to_dict(orient="records"),
     "flow": json.loads((DATA_OUT / "sample_flow.json").read_text()),
     "sq_by_person": resp[resp.complete == 1].n_status_quo.value_counts().sort_index().to_dict(),
 }, RES_OUT / "descriptives.json")
