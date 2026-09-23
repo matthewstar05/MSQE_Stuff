@@ -326,7 +326,7 @@ footer .wrap{display:grid;gap:8px}
   <div class="tscroll"><table id="coefTable"></table></div>
   <div class="panel">
     <h3>Figure 2, replicated: each councillor's own “$ shown” effect</h3>
-    <p class="cap">The mixed logit gives every respondent their own coefficients. These are the respondent-level estimates from model 4 (Councillors), with dotted lines marking the middle 95% of respondents, drawn the same way as the paper's Figure 2.</p>
+    <p class="cap">The mixed logit gives every respondent their own coefficients. These are the respondent-level estimates from model 4 (Councillors), which the paper's text names as the source of its Figure 2. Dotted lines mark the middle 95% of respondents. The published figure itself matches model 3; a model 3 version in the paper's layout is in output/paper_figures.</p>
     <div class="dens" id="dens"></div>
   </div>
 </div></section>
@@ -364,10 +364,10 @@ footer .wrap{display:grid;gap:8px}
 
 <section class="block" id="reproduce"><div class="wrap">
   <div class="head"><div class="eyebrow">Reproduce</div><h2>Every number comes from a script</h2>
-    <p class="lede">The pipeline is six short Python scripts plus an R cross-check. Running them in order rebuilds every table, figure and this page from the raw data file.</p></div>
+    <p class="lede">The pipeline is seven short Python scripts plus an R cross-check. Running them in order rebuilds every table, figure and this page from the raw data file.</p></div>
   <div class="tscroll"><table id="files"></table></div>
   <pre>pip install -r requirements.txt
-python run_all.py              # steps 1-6, about 5 minutes (the mixed logit is the slow part)
+python run_all.py              # steps 1-7, about 5 minutes (the mixed logit is the slow part)
 Rscript crosscheck_clogit.R    # optional: re-estimates models 1-2 in R</pre>
   <p class="small muted" id="meta"></p>
 </div></section>
@@ -683,6 +683,7 @@ mount($("#chCoef"), () => drawModel());
     {sev: "info", chip: "Description", t: "Some methods are described differently from what the data show",
      li: ["“In each Halton draw, 15 individuals are randomly dropped” most likely describes Stata's burn(15), which discards the first 15 Halton points. No people are dropped.",
           "The design is described as “two blocks”, but each respondent received a random 4 of the 12 cards.",
+          "Figure 2 is described as model 4 (councillors), but its peaks sit at the model 3 (all respondents) coefficients from Table 3.",
           `Table 1 describes all ${FL.raw_respondents} respondents, including the ${FL.incomplete_respondents} who did not finish, and its town-size row does not match the file (39.1 / 29.0 / 20.1 / 11.8% against 36.7 / 30.9 / 21.3 / 11.2%).`]},
     {sev: "info", chip: "Design", t: "Limits worth raising in the appraisal",
      li: ["“No development” only ever appears in the status quo, so the development coefficients also absorb any general tendency to pick a new plan over doing nothing.",
@@ -730,6 +731,7 @@ mount($("#chCoef"), () => drawModel());
     ["04_mixed_logit.py", "Models 3–4 (simulated maximum likelihood), the draw-sensitivity runs, and Figure 2", "output/tables/table3_ml.csv"],
     ["05_build_dashboard.py", "Puts every result into this page", "dashboard/index.html"],
     ["06_slide_figures.py", "Slide-ready 16:9 figures for the presentation", "output/slides/*.png"],
+    ["07_paper_figures.py", "Redraws the paper's five exhibits from the parsed CSVs, numbered to match replication-targets/, with side-by-side comparisons", "output/paper_figures/"],
     ["crosscheck_clogit.R", "Re-estimates models 1–2 in R (survival::clogit) as an independent check", "output/tables/r_crosscheck_clogit.csv"],
     ["replication_walkthrough.ipynb", "The same steps as a narrated notebook, with outputs", "(renders on GitHub)"]];
   $("#files").innerHTML = `<thead><tr><th>File</th><th>What it does</th><th>Writes</th></tr></thead><tbody>${files.map(r => `<tr><td class="mono">${r[0]}</td><td style="white-space:normal;min-width:260px">${r[1]}</td><td class="mono small">${r[2]}</td></tr>`).join("")}</tbody>`;

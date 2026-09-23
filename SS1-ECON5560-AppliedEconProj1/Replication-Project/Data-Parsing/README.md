@@ -14,7 +14,7 @@
 | Table 1 (respondent characteristics) | ✅ 9 of 13 cells exact on all 180 respondents; ❗ the town-size row does not match |
 | Table 3, models 1–2 (conditional logit) | ✅ 20 of 24 coefficient + p-value pairs exact to 3 decimals; the other 4 look like typos in the paper; identical results in R |
 | Table 3, models 3–4 (mixed logit) | ≈ Same signs and similar magnitudes; 21 of 24 published values fall inside our simulation-draw range; model 4 is fragile |
-| Figure 1, Figure 2 | ✅ Rebuilt |
+| Figure 1, Figure 2 | ✅ Figure 1: all 36 bars exact. Figure 2: redrawn from the CSV; 4 of 5 panel peaks close to the published ones. The published figure is model 3, although the text says model 4 |
 
 **Main appraisal finding:** the published conditional logit reproduces *only* if each design card is treated as a single choice pooled across everyone who answered it. The textbook grouping is one person answering one card. The published log likelihood (−852.9) is below the minimum a correctly grouped 3-option model can reach (656 · ln ⅓ = −720.7), which is how we spotted it. Grouping correctly roughly halves the main coefficients. **Every sign survives**, and the "$ shown" effects keep their direction.
 
@@ -42,6 +42,7 @@ The raw data file is read from `../Resources/S1Table.DTA`.
 | 4 | `04_mixed_logit.py` | Models 3–4 by simulated maximum likelihood (own implementation), 20-seed draw-sensitivity, Figure 2 | `output/tables/table3_ml.csv`, `ml_sensitivity.png`, `fig2_individual_effects.png` |
 | 5 | `05_build_dashboard.py` | Injects all results into `dashboard/template.html` | `dashboard/index.html` |
 | 6 | `06_slide_figures.py` | Slide-ready 16:9 figures with headline titles | `output/slides/*.png` |
+| 7 | `07_paper_figures.py` | Redraws all five published exhibits (Tables 1–3, Figures 1–2) in the paper's layout, reading **only** the parsed CSVs in `output/data/` (models are re-estimated from them). Files are numbered to match `replication-targets/`, and each pair is also placed side by side | `output/paper_figures/01_…05_*.png`, `*_comparison.csv`, `side_by_side/*.png` |
 | — | `crosscheck_clogit.R` | Models 1–2 again with `survival::clogit` | `output/tables/r_crosscheck_clogit.csv` |
 | — | `common.py` | Paths, published numbers, estimators (conditional logit wrapper, `MixedLogit`) | — |
 
@@ -55,15 +56,17 @@ The raw data file is read from `../Resources/S1Table.DTA`.
 ## Folder layout
 ```
 Data-Parsing/
-├── 01_parse_data.py … 06_slide_figures.py, run_all.py, common.py
+├── 01_parse_data.py … 07_paper_figures.py, run_all.py, common.py
 ├── crosscheck_clogit.R
 ├── replication_walkthrough.ipynb
 ├── dashboard/        template.html (source) → index.html (built)
+├── replication-targets/  the paper's 5 published exhibits, numbered 01_…05_ to match paper_figures/
 └── output/
     ├── data/         parsed analysis files
     ├── tables/       every replicated table, paper vs ours
     ├── figures/      PNG figures for the memo
     ├── slides/       16:9 slide-ready figures
+    ├── paper_figures/ the paper's 5 exhibits redrawn from the parsed CSVs (01_…05_), plus side_by_side/
     ├── results/      JSON results used by the dashboard
     └── logs/         parsing log
 ```

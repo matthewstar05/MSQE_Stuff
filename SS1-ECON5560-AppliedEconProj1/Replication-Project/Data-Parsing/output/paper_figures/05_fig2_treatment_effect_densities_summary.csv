@@ -1,0 +1,16 @@
+panel,source,mean_coef,peak,p2_5,p97_5
+Development limited treatment,"ours, model 3",1.446,1.39,0.78,2.08
+Development limited treatment,"ours, model 4",1.439,1.43,1.2,1.57
+Development limited treatment,published (read off figure),,1.27,1.14,1.46
+Development residential treatment,"ours, model 3",3.211,3.23,0.96,5.64
+Development residential treatment,"ours, model 4",3.544,3.56,2.35,4.71
+Development residential treatment,published (read off figure),,3.3,1.78,4.7
+Development commercial treatment,"ours, model 3",1.574,1.73,-0.43,3.35
+Development commercial treatment,"ours, model 4",1.065,1.1,0.13,1.35
+Development commercial treatment,published (read off figure),,1.85,-0.4,2.9
+WQ medium treatment,"ours, model 3",-2.227,-2.26,-2.76,-1.47
+WQ medium treatment,"ours, model 4",-1.868,-1.88,-2.11,-1.65
+WQ medium treatment,published (read off figure),,-2.3,-2.65,-1.88
+WQ low treatment,"ours, model 3",-5.894,-5.89,-6.56,-5.35
+WQ low treatment,"ours, model 4",-5.717,-5.7,-6.06,-4.99
+WQ low treatment,published (read off figure),,-4.33,-4.44,-4.15

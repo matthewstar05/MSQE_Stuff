@@ -91,9 +91,20 @@ Scale-free version (the "$ shown" effect as a share of its main effect), correct
 - **Model 4 is fragile:** the headline "Low water × $" effect is −8.65 (p = 0.015) in the paper, and −3.05 (p = 0.38) in our 2,000-draw run.
 - The paper's "in each Halton draw, 15 individuals are randomly dropped" most likely describes Stata's `burn(15)` option, which discards the first 15 Halton points. No individuals are dropped.
 
-## 10. Figures
-- **Figure 1** (responses per choice card by treatment): rebuilt from the complete-respondent sample.
-- **Figure 2** (density of respondent-level "$ shown" coefficients, model 4): rebuilt from posterior means E[βₙ | choicesₙ] with 2.5th/97.5th percentile lines.
+## 10. Published exhibits side by side (`07_paper_figures.py`, reading only the parsed CSVs)
+The paper's five exhibits are saved in `replication-targets/` and numbered in the order they appear in the paper. Our reproductions in `output/paper_figures/` use the same names, and `output/paper_figures/side_by_side/` puts each published/ours pair next to each other:
+
+| # | Exhibit | Result |
+|---|---|---|
+| 01 | Table 1 | 9 of 13 cells exact (town-size row differs) |
+| 02 | Table 2 | Ours shows how each level is coded in the data. Every “$ shown” term follows the treatment rule exactly |
+| 03 | Figure 1 | All 36 bars exact |
+| 04 | Table 3 | CL columns exact apart from 4 apparent typos (shaded); ML columns within simulation noise |
+| 05 | Figure 2 | Shape reproduced; 4 of 5 peaks close (see below) |
+
+- **Figure 1** (responses per choice card by treatment): **all 36 bar heights match** the published figure. It uses the 164 complete respondents: the totals of 228 / 208 / 220 are 4 × 57 / 52 / 55.
+- **Figure 2** (density across respondents of their own "$ shown" coefficients, with dashed 95% lines): we re-estimated the mixed logit from the CSV with the paper's 500 draws and used posterior means E[βₙ | choicesₙ] with Stata-style Epanechnikov densities. The fit statistic is −421.06 (paper −421.92). Four of the five panel peaks land close to the published ones (1.39 / 3.23 / 1.73 / −2.26 vs 1.27 / 3.30 / 1.85 / −2.30). The low-water panel sits at −5.9 vs −4.3, which is the same draw sensitivity seen in Table 3. Our 95% bands are wider than the published ones for the development panels.
+- **The published Figure 2 is from model 3, not model 4.** The text says model 4 (councillors), but the published peaks sit at the model 3 coefficients in Table 3 (1.29, 3.22, 1.75, −2.27, −4.31), not model 4's (2.65, 3.45, 2.23, −2.09, −8.65). We draw it from model 3 and also save a model-4 version (`05c_fig2_model4_variant.png`).
 
 ## 11. Not done yet / open items
 - Hausman–McFadden IIA test (the paper says IIA "could not be confirmed" but reports no test).
