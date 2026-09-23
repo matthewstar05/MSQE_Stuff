@@ -81,7 +81,7 @@ Same regressors, grouped by person × card, with standard errors clustered by re
 | Medium water × $ | −0.473 (0.076) | −0.584 (0.084) | −0.364 (0.346) |
 | Low water × $ | −0.919 (0.082) | −1.023 (0.100) | −0.645 (0.329) |
 
-Scale-free version (the "$ shown" effect as a share of its main effect), corrected model 1: low water becomes **27%** more aversive and residential development **36%** more attractive when priced. The paper's model 1 implies 15% and 15%. **Direction is robust; size and significance depend on specification.**
+Scale-free version (the "$ shown" effect as a share of its main effect), corrected model 1: low water becomes **27%** more aversive and residential development **36%** more attractive when priced. The paper's model 1 implies 15% and 15%. Compared like for like, the paper's own mixed logit (model 3) implies 19–51% (low water 29%, residential 51%), close to our mixed-logit medians (22–52%). Only the card-pooled model 1 is much lower (5–15%), because pooling roughly doubles the main effects (the denominators) while leaving the "$ shown" terms about the same. **Direction is robust; size and significance depend on specification.**
 
 ## 9. Mixed logit (models 3–4)
 - Stata was not available, so we wrote a panel mixed logit estimator in numpy/scipy (`common.MixedLogit`, following Train 2009, chapters 6 and 9–11). All 12 coefficients are independent normals, estimated by simulated maximum likelihood with scrambled Halton draws.

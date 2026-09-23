@@ -140,6 +140,7 @@ select{font:500 .88rem var(--sans);color:var(--ink);background:var(--surface);bo
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.8rem;color:var(--ink-2)}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 .legend .dia{width:10px;height:10px;border:2px solid var(--paper-mk);transform:rotate(45deg);border-radius:1px;background:transparent}
+.legend .dia2{width:10px;height:10px;transform:rotate(45deg);border-radius:1px;background:var(--paper-mk)}
 .legend .circ{border-radius:50%;background:var(--us)}
 .legend .ring{border-radius:50%;border:2px solid var(--us);background:transparent}
 .legend .rng{width:18px;height:6px;border-radius:3px;background:var(--us-soft)}
@@ -183,6 +184,8 @@ details .tscroll{margin-top:8px}
 .chart .mk-us{fill:var(--us);stroke:var(--surface);stroke-width:2}
 .chart .mk-ring{fill:var(--surface);stroke:var(--us);stroke-width:2.2}
 .chart .mk-paper{fill:none;stroke:var(--paper-mk);stroke-width:1.6}
+.chart .mk-paper2{fill:var(--paper-mk);stroke:var(--surface);stroke-width:1.5}
+.chart .lane{fill:var(--muted);font-size:10px;letter-spacing:.04em}
 .chart .hit{fill:transparent}
 .chart .hit:hover{fill:var(--surface-2);fill-opacity:.6}
 .chart .ref{stroke:var(--crit-ink);stroke-dasharray:4 3;stroke-width:1.3}
@@ -333,7 +336,7 @@ footer .wrap{display:grid;gap:8px}
 
 <section class="block" id="size"><div class="wrap">
   <div class="head"><div class="eyebrow">Comparing across models</div><h2>How much stronger does a preference get when a price is shown?</h2>
-    <p class="lede">Raw coefficients can't be compared across models because each model has its own scale. Dividing each “$ shown” effect by its baseline effect cancels the scale, leaving a plain percentage: how much stronger the pull (or push) becomes once a dollar figure is attached.</p></div>
+    <p class="lede">Raw coefficients can't be compared across models because each model has its own scale. Dividing each “$ shown” effect by its baseline effect cancels the scale, leaving a plain percentage: how much stronger the pull (or push) becomes once a dollar figure is attached. Each row has two lanes, one per model family, with the paper's value beside ours.</p></div>
   <div class="panel">
     <div class="legend" id="sLegend" style="margin-bottom:6px"></div>
     <div id="chRel"></div>
@@ -558,11 +561,12 @@ function groupedBars(host, cats, getVal, getTip, opt = {}) {
 
 /* ---------------- dot plot ---------------- */
 function dotPlot(host, rows, opt = {}) {
-  const W = host.clientWidth || 700, narrow = W < 520, lw = narrow ? 132 : 190, rh = narrow ? 30 : 28, gh = 26, pt = 4, pb = 40, pr = 14;
+  const W = host.clientWidth || 700, narrow = W < 520, lw = narrow ? 132 : 190, rh = opt.lanes ? 42 : narrow ? 30 : 28, gh = 26, pt = 4, pb = 40, pr = 14;
+  const up = opt.lanes ? -8 : 0, dn = opt.lanes ? 8 : 0;   // lane offsets: CL markers above, ML markers below
   let y = pt, last = null; const pos = [];
   rows.forEach(r => { if (r.group && r.group !== last) { pos.push({g: r.group, y}); y += gh; last = r.group; } pos.push({r, y: y + rh / 2}); y += rh; });
   const H = y + pb;
-  let vals = rows.flatMap(r => [r.paper, r.ours, r.ring, r.lo, r.hi, ...(r.runs || [])]).filter(v => v != null && isFinite(v));
+  let vals = rows.flatMap(r => [r.paper, r.paper2, r.ours, r.ring, r.lo, r.hi, ...(r.runs || [])]).filter(v => v != null && isFinite(v));
   let [mn, mx] = opt.domain || [Math.min(0, ...vals), Math.max(0, ...vals)];
   if (!opt.domain) { const pd = (mx - mn) * 0.05; mn -= pd; mx += pd; }
   const x0 = lw, x1 = W - pr, sx = v => x0 + (v - mn) / (mx - mn) * (x1 - x0);
@@ -576,11 +580,13 @@ function dotPlot(host, rows, opt = {}) {
     if (p.g) { txt(svg, 0, p.y + 17, p.g, "grp"); el("line", {x1: 0, x2: W - pr, y1: p.y + gh - 1.5, y2: p.y + gh - 1.5, class: "hair"}, svg); return; }
     const r = p.r, cy = p.y;
     txt(svg, lw - 12, cy + 4, r.label, narrow ? "labn" : "", "end");
-    (r.runs || []).forEach((v, i) => el("circle", {cx: sx(v), cy: cy + ((i * 7) % 11 - 5), r: 2.6, class: "run"}, svg));
-    if (r.lo != null) el("line", {x1: sx(r.lo), x2: sx(r.hi), y1: cy, y2: cy, class: "range"}, svg);
-    if (r.ring != null) el("circle", {cx: sx(r.ring), cy, r: 4.8, class: "mk-ring"}, svg);
-    if (r.ours != null) el("circle", {cx: sx(r.ours), cy, r: 4.6, class: "mk-us"}, svg);
-    if (r.paper != null) { const x = sx(r.paper), s = 8; el("path", {d: `M${x},${cy - s}L${x + s},${cy}L${x},${cy + s}L${x - s},${cy}Z`, class: "mk-paper"}, svg); }
+    const dia = (v, yy, s, cls) => { const x = sx(v); el("path", {d: `M${x},${yy - s}L${x + s},${yy}L${x},${yy + s}L${x - s},${yy}Z`, class: cls}, svg); };
+    (r.runs || []).forEach((v, i) => el("circle", {cx: sx(v), cy: cy + dn + ((i * 7) % 11 - 5), r: 2.6, class: "run"}, svg));
+    if (r.lo != null) el("line", {x1: sx(r.lo), x2: sx(r.hi), y1: cy + dn, y2: cy + dn, class: "range"}, svg);
+    if (r.ring != null) el("circle", {cx: sx(r.ring), cy: cy + dn, r: 4.8, class: "mk-ring"}, svg);
+    if (r.paper2 != null) dia(r.paper2, cy + dn, 6.5, "mk-paper2");
+    if (r.ours != null) el("circle", {cx: sx(r.ours), cy: cy + up, r: 4.6, class: "mk-us"}, svg);
+    if (r.paper != null) dia(r.paper, cy + up, 8, "mk-paper");
     const hit = el("rect", {x: 0, y: cy - rh / 2, width: W, height: rh, class: "hit"}, svg);
     svg.insertBefore(hit, svg.firstChild.nextSibling);
     hit.addEventListener("pointermove", e => showTip(e, r.tip)); hit.addEventListener("pointerleave", hideTip);
@@ -657,14 +663,15 @@ mount($("#chCoef"), () => drawModel());
 (function rel() {
   const keys = ["lim_money", "res_money", "com_money", "med_money", "low_money"];
   const base = {lim_money: "Limited development", res_money: "Residential development", com_money: "Commercial development", med_money: "Medium water quality", low_money: "Low water quality"};
-  $("#sLegend").innerHTML = `<span><i class="dia"></i>Paper, model 1 (CL)</span><span><i class="circ"></i>Ours, corrected CL</span><span><i class="ring"></i>Ours, mixed logit (median of 20 runs)</span><span><i class="rng"></i>Range of those runs</span>`;
-  const rows = keys.map(k => { const pc = DATA.cl_relative.m1.paper[k], cc = DATA.cl_relative.m1.corrected[k], ml = DATA.ml.m3.relative;
-    return {group: ["med_money", "low_money"].includes(k) ? "Water quality: extra aversion" : "Development: extra pull", label: SHORT[k].replace(" dev.", ""),
-      paper: pc, ours: cc, ring: ml.median[k], lo: ml.min[k], hi: ml.max[k],
-      tip: `<b>${base[k]}</b>: effect with $ shown, as a share of the effect without<br>Paper CL: <span class="num">${pct(pc)}</span><br>Corrected CL: <span class="num">${pct(cc)}</span><br>Mixed logit: <span class="num">${pct(ml.median[k])}</span> (runs ${pct(ml.min[k])} to ${pct(ml.max[k])})`}; });
-  const h = $("#chRel"); mount(h, () => dotPlot(h, rows, {aria: "Treatment effect as a percent of the baseline effect", tickFmt: t => Math.round(t * 100) + "%", xTitle: "How much stronger the preference is when $ is shown", xShort: "Extra strength when $ shown"}));
-  const c = DATA.cl_relative.m1.corrected;
-  $("#relTake").innerHTML = `In our corrected model, a price tag makes people <b>${pct(c.low_money)}</b> more averse to low water quality and <b>${pct(c.med_money)}</b> more averse to medium water quality. Residential development becomes <b>${pct(c.res_money)}</b> more attractive when its revenue is shown. The paper's own model 1 implies smaller shifts (${pct(DATA.cl_relative.m1.paper.low_money)} and ${pct(DATA.cl_relative.m1.paper.res_money)}). Every version agrees on the direction.`;
+  $("#sLegend").innerHTML = `<span><b>Conditional logit (upper lane):</b></span><span><i class="dia"></i>Paper, model 1 (card-pooled, as published)</span><span><i class="circ"></i>Ours, corrected grouping</span>` +
+    `<span style="flex-basis:100%;height:0"></span><span><b>Mixed logit (lower lane):</b></span><span><i class="dia2"></i>Paper, model 3</span><span><i class="ring"></i>Ours, median of 20 runs</span><span><i class="rng"></i>Range of those runs</span>`;
+  const ml = DATA.ml.m3.relative, p1 = DATA.cl_relative.m1.paper, c = DATA.cl_relative.m1.corrected;
+  const rows = keys.map(k => ({group: ["med_money", "low_money"].includes(k) ? "Water quality: extra aversion" : "Development: extra pull", label: SHORT[k].replace(" dev.", ""),
+      paper: p1[k], ours: c[k], paper2: ml.paper[k], ring: ml.median[k], lo: ml.min[k], hi: ml.max[k],
+      tip: `<b>${base[k]}</b>: effect with $ shown, as a share of the effect without<br><b>Conditional logit</b><br>Paper, model 1 (card-pooled): <span class="num">${pct(p1[k])}</span><br>Ours, corrected grouping: <span class="num">${pct(c[k])}</span><br><b>Mixed logit</b><br>Paper, model 3: <span class="num">${pct(ml.paper[k])}</span><br>Ours: <span class="num">${pct(ml.median[k])}</span> (20 runs: ${pct(ml.min[k])} to ${pct(ml.max[k])})`}));
+  const h = $("#chRel"); mount(h, () => dotPlot(h, rows, {lanes: true, aria: "Treatment effect as a percent of the baseline effect, paper and ours, conditional and mixed logit", tickFmt: t => Math.round(t * 100) + "%", xTitle: "How much stronger the preference is when $ is shown", xShort: "Extra strength when $ shown"}));
+  const rng = o => { const v = keys.map(k => o[k] * 100); return `${Math.round(Math.min(...v))}–${Math.round(Math.max(...v))}%`; };
+  $("#relTake").innerHTML = `Compare like with like. <b>Mixed logit:</b> the paper's model 3 implies a price tag strengthens a preference by <b>${rng(ml.paper)}</b>, and our runs give ${rng(ml.median)} (medians). <b>Conditional logit:</b> the paper's card-pooled model 1 implies only ${rng(p1)}; the same model grouped correctly gives <b>${rng(c)}</b>. So model 1 understates the effect relative to the paper's own mixed logit, and every version agrees on the direction.`;
 })();
 
 /* ---------------- findings ---------------- */

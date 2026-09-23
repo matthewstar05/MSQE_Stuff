@@ -98,20 +98,23 @@ save(fig, "slide3_grouping_issue.png")
 ml = json.loads((RES_OUT / "ml.json").read_text())
 rc = [cl["relative"]["m1"]["corrected"][t] * 100 for t in TREAT]
 fig = slide(f"Priced impacts weigh {min(rc):.0f}–{max(rc):.0f}% more (our corrected model)",
-            "Each “$ shown” effect as a share of the same attribute's effect without prices. Scale-free, so the models can be compared")
-ax = fig.add_axes([0.3, 0.2, 0.66, 0.6])
+            "Each “$ shown” effect as a share of the same attribute's effect without prices. Upper lane: conditional logit; lower lane: mixed logit, each with the paper's value beside ours")
+ax = fig.add_axes([0.3, 0.26, 0.66, 0.55])
 labs = ["Limited development", "Residential development", "Commercial development", "Medium water quality (aversion)", "Low water quality (aversion)"]
 yy = np.arange(5)[::-1]
 rel_p = [cl["relative"]["m1"]["paper"][t] for t in TREAT]
 rel_c = [cl["relative"]["m1"]["corrected"][t] for t in TREAT]
 r = ml["m3"]["relative"]; med = [r["median"][t] for t in TREAT]; lo = [r["min"][t] for t in TREAT]; hi = [r["max"][t] for t in TREAT]
-ax.hlines(yy - 0.2, np.array(lo) * 100, np.array(hi) * 100, color=US, alpha=0.25, lw=9)
-ax.scatter(np.array(med) * 100, yy - 0.2, s=110, facecolor="white", edgecolor=US, lw=2.2, zorder=3, label="Ours, mixed logit (median and range of 20 runs)")
-ax.scatter(np.array(rel_c) * 100, yy + 0.05, s=120, color=US, zorder=3, label="Ours, corrected conditional logit")
-ax.scatter(np.array(rel_p) * 100, yy + 0.25, s=170, marker="D", facecolor="none", edgecolor=PAPER, lw=1.8, zorder=3, label="Paper, model 1")
+rel_p3 = [r["paper"][t] for t in TREAT]                                   # paper's own mixed logit (model 3)
+# two lanes per row: conditional logit pair above, mixed logit pair below
+ax.scatter(np.array(rel_p) * 100, yy + 0.17, s=170, marker="D", facecolor="none", edgecolor=PAPER, lw=1.8, zorder=3, label="Paper, model 1 (card-pooled CL)")
+ax.scatter(np.array(rel_c) * 100, yy + 0.17, s=110, color=US, zorder=4, label="Ours, corrected CL")
+ax.hlines(yy - 0.17, np.array(lo) * 100, np.array(hi) * 100, color=US, alpha=0.25, lw=9)
+ax.scatter(np.array(rel_p3) * 100, yy - 0.17, s=120, marker="D", color=PAPER, edgecolor="white", lw=1, zorder=4, label="Paper, model 3 (mixed logit)")
+ax.scatter(np.array(med) * 100, yy - 0.17, s=110, facecolor="white", edgecolor=US, lw=2.2, zorder=3, label="Ours, mixed logit (median + range of 20 runs)")
 ax.set_yticks(yy); ax.set_yticklabels(labs); ax.axvline(0, color="#bfc6be", lw=1.2)
 ax.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:.0f}%"))
 ax.set_xlabel("How much stronger the preference is when $ is shown", labelpad=2); ax.grid(axis="x", color=HAIR); ax.set_axisbelow(True)
-ax.legend(frameon=False, fontsize=12, loc="upper center", bbox_to_anchor=(0.4, -0.13), ncol=3)
+ax.legend(frameon=False, fontsize=12, loc="upper center", bbox_to_anchor=(0.35, -0.12), ncol=2)
 save(fig, "slide4_effect_size.png")
 print("Wrote", ", ".join(sorted(p.name for p in SLIDES.glob("*.png"))))
