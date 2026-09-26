@@ -188,6 +188,7 @@ x = fredr("CAMARI3URN",
           observation_end = as.Date("2026-07-01")) %>%
   filter(!is.na(value)) %>%
   pull(value)
+
 n = length(x)
 mu = mean(x)
 se = sd(x)/sqrt(n)
@@ -250,11 +251,22 @@ mu + c(-1, 1)*qt(0.995, df = n - 1)*se # A
 #     cost_hat = b1 + b2*days + b3*age.
 # The following code generates one simulated data set:
 #
-# n = 1200
-# days = rpois(n, 4)
-# age = 80 * rbeta(n, 4, 3)
-# err = rnorm(n, mean = 0, sd = sqrt(230))
-# cost = 7 + 4.25*days + 0.05*age + err
+set.seed = 1
+n_sims = 10000
+n = 1200
+b1 = numeric(n_sims)
+r2 = numeric(n_sims)
+
+for (s in 1:n_sims) {
+  days = rpois(n, 4)
+  age = 80 * rbeta(n, 4, 3)
+  err = rnorm(n, mean = 0, sd = sqrt(230))
+  cost = 7 + 4.25*days + 0.05*age + err
+  m = lm(cost ~ days + age)
+  b1[s] = coef(m)[1]
+  r2[s] = summary(m)$r.squared
+}
+
 
 
 
@@ -271,30 +283,25 @@ mu + c(-1, 1)*qt(0.995, df = n - 1)*se # A
 # Estimate the standard error of b1 using the standard deviation of its simulated estimates.
 # What is the estimated standard error?
 # a. 2.338   b. 2.162   c. 2.525   d. 1.733   e. 1.984
-
-
+sd(b1)
 
 
 # 18. Given the information above.
 # Using the simulated regressions, what is the expected value of R^2 under this
 # data-generating process?
 # a. 0.199   b. 0.241   c. 0.104   d. 0.130   e. 0.169
-
-
-
+mean(r2)
 
 # 19. Given the information above.
 # Using the simulated R^2 values, which of the following is the lower bound of the 95%
 # interval for the sampling distribution of R^2 under this data-generating process?
 # a. 0.199   b. 0.074   c. 0.134   d. 0.237   e. 0.163
-
-
-
+quantile(r2, c(0.025, 0.975)) # A
 
 # 20. Given the information above.
 # Using the simulated R^2 values, which of the following is the upper bound of the 95%
 # interval for the sampling distribution of R^2 under this data-generating process?
 # a. 0.351   b. 0.284   c. 0.221   d. 0.256   e. 0.160
-
+# B
 
 

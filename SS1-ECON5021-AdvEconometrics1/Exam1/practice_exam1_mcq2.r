@@ -7,17 +7,17 @@
 # January 01, 2021 and December 31, 2022.
 # The following code creates a vector x containing the daily returns:
 #
-# library(quantmod)
-# library(dplyr)
+library(quantmod)
+library(dplyr)
 #
-# x = getSymbols("KO",
-#                from = "2021-01-01",
-#                to = "2022-12-31",
-#                auto.assign = FALSE) %>%
-#   Ad() %>%
-#   dailyReturn() %>%
-#   as.data.frame() %>%
-#   pull(daily.returns)
+x = getSymbols("KO",
+               from = "2021-01-01",
+               to = "2022-12-31",
+               auto.assign = FALSE) %>%
+  Ad() %>%
+  dailyReturn() %>%
+  as.data.frame() %>%
+  pull(daily.returns)
 
 
 
@@ -31,28 +31,28 @@
 # and stock splits. x should contain 503 daily returns.
 # What was the maximum daily return over this time period?
 # a. 6.96%   b. 10.83%   c. 1.28%   d. 3.87%   e. None of the above
-
+max(x)
 
 
 
 # 2. Given the information above.
 # What was the median daily return over this time period?
 # a. 0.06%   b. 0.68%   c. -0.50%   d. 0.55%   e. None of the above
-
+median(x)
 
 
 
 # 3. Given the information above.
 # What is the 0.05-quantile of the daily returns?
 # a. -1.33%   b. -1.72%   c. -6.96%   d. 1.72%   e. None of the above
-
+quantile(x, 0.05)
 
 
 
 # 4. Given the information above.
 # What is the empirical probability that the daily return is less than or equal to zero?
 # a. 0.5547   b. 0.0020   c. 0.4990   d. 0.5000   e. None of the above
-
+mean(x < 0)
 
 
 
@@ -64,14 +64,14 @@
 # library(quantmod)
 # library(dplyr)
 #
-# x = getSymbols("AAPL",
-#                from = "2010-01-01",
-#                to = "2025-12-31",
-#                auto.assign = FALSE) %>%
-#   Ad() %>%
-#   monthlyReturn() %>%
-#   as.data.frame() %>%
-#   pull(monthly.returns)
+x = getSymbols("AAPL",
+               from = "2010-01-01",
+               to = "2025-12-31",
+               auto.assign = FALSE) %>%
+  Ad() %>%
+  monthlyReturn() %>%
+  as.data.frame() %>%
+  pull(monthly.returns)
 
 
 
@@ -93,7 +93,7 @@
 # c. The empirical 0.90-quantile is 11.45%, and the normal approximation 0.90-quantile is 12.17%
 # d. The empirical 0.90-quantile is 13.93%, and the normal approximation 0.90-quantile is 14.97%
 # e. None of the above
-
+quantile(x, 0.90)
 
 
 
@@ -110,7 +110,6 @@
 
 
 
-
 # 7. This is the start of a multipart question. The information below pertains to question 7 to question 10.
 # A style-tilted portfolio contains a mix of growth stocks, value stocks, and bonds. Suppose
 # you have a three-fund portfolio with target allocation of 40% VUG (Vanguard Growth ETF),
@@ -120,13 +119,14 @@
 # library(quantmod)
 # library(dplyr)
 #
-# getSymbols(c("VUG","VTV","BIV"),
-#            from = "2022-10-02",
-#            to = "2025-09-27")
-#
-# weekly_return = merge(VUG %>% Ad() %>% weeklyReturn(),
-#                       VTV %>% Ad() %>% weeklyReturn(),
-#                       BIV %>% Ad() %>% weeklyReturn())
+getSymbols(c("VUG", "VTV", "BIV"), from = "2022-10-02", to = "2025-09-27")
+weekly_return = merge(VUG %>% Ad() %>% weeklyReturn(),
+                      VTV %>% Ad() %>% weeklyReturn(),
+                      BIV %>% Ad() %>% weeklyReturn())
+
+r = as.data.frame(weekly_return) %>% na.omit()
+names(r) = c("VUG", "VTV", "BIV")
+w = c(0.40, 0.35, 0.25)
 
 
 
@@ -142,14 +142,14 @@
 # Using this approximation of annual returns, what is the expected annual return of VTV in
 # the data?
 # a. 28.5%   b. 13.1%   c. 5.3%   d. 0.3%   e. None of the above
-
+100*52*mean(r$VTV)
 
 
 
 # 8. Given the information above.
 # In the data, what is the annualized standard deviation of returns for BIV?
 # a. 47.40%   b. 0.91%   c. 6.57%   d. 13.09%   e. None of the above
-
+100*sqrt(52*var(r$BIV))
 
 
 
@@ -157,7 +157,7 @@
 # Using the target allocation weights, what is the expected annual return of the three-fund
 # portfolio over these three years?
 # a. 16.6%   b. 18.3%   c. 12.0%   d. 49.8%   e. None of the above
-
+100*52*sum(w*colMeans(r))
 
 
 
@@ -165,9 +165,7 @@
 # Using the target allocation weights, what is the standard deviation of annual returns for
 # the three-fund portfolio over these three years?
 # a. 14.24%   b. 9.38%   c. 86.56%   d. 12.00%   e. None of the above
-
-
-
+100*sqrt(52*t(w) %*% cov(r) %*% w)
 
 # 11. This is the start of a multipart question. The information below pertains to question 11 to question 16.
 # The following code retrieves monthly unemployment rate data for Butte County, California,
@@ -175,13 +173,13 @@
 # available for 2025-10-01 because of a government shutdown. Remove this observation before
 # conducting any analysis.
 #
-# library(fredr)
-# fredr("CABUTT5URN",
-#       observation_start = "2019-01-01",
-#       observation_end = "2026-03-01")
+x = fredr("CABUTT5URN", observation_start = as.Date("2019-01-01"),
+          observation_end = as.Date("2026-03-01")) %>%
+  filter(!is.na(value)) %>% pull(value)
 
-
-
+n = length(x)
+mu = mean(x)
+se = sd(x) / sqrt(n)
 
 
 
@@ -197,14 +195,14 @@
 # that the standardized statistic follows a t distribution with 85 degrees of freedom.
 # What is your point estimate, mu_hat?
 # a. 5.90%   b. 6.23%   c. 2.02%   d. 0.22%   e. None of the above
-
+mu
 
 
 
 # 12. Given the information above.
 # What is your estimated standard error for mu_hat?
 # a. 2.0244   b. 0.0477   c. 0.2170   d. 0.1856   e. None of the above
-
+se
 
 
 
@@ -213,9 +211,7 @@
 # unemployment rate in Butte County was equal to a given value, say v, i.e., H0: mu = v.
 # Using the t distribution, what critical value should we use for a 5% significance test?
 # a. 1.9600   b. 1.6630   c. 2.6349   d. 1.9883   e. None of the above
-
-
-
+qt(1-0.05/2, df = n-1)
 
 # 14. Given the information above.
 # During this same time period, the overall unemployment rate in California was 5.90%. Given
@@ -223,8 +219,8 @@
 # unemployment rate in Butte County was the same as the state, i.e., H0: mu = 5.90.
 # What is the test statistic associated with this test?
 # a. 1.491   b. -1.491   c. 1.500   d. 0.161   e. None of the above
-
-
+tstat = (mu - 5.90) / se
+tstat
 
 
 # 15. Given the information above.
@@ -235,9 +231,7 @@
 # c. Reject the null at the 5% level
 # d. Reject the null at the 10% level
 # e. Fail to reject the null at the 10% level
-
-
-
+qt()
 
 # 16. Given the information above.
 # Which of the following is the correct 90% confidence interval for your estimate?
