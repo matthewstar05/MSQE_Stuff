@@ -15,7 +15,7 @@ Folders are named `{term}-{course}`.
 
 **Summer 2026**
 - `SU26-GSE510-MathEcon` — Math for economists (syllabus, notes, homeworks, exams)
-- `SU26-GSE518-StatsForEconometrics`
+- `SU26-GSE518-StatsForEconometrics` — Probability & Statistics for Econometrics (Prof. Carlos A. Flores; Lecture Notes 1-14, Problem Sets 1-10 with solutions, Midterm & Final survival guides)
 
 **Semester 1 (Fall 2026)**
 - `SS1-ECON5015-ComputingMLEcon` — Computing & ML for Economics (Canvas `Modules/`, `In_Class_Notebooks/`, `Homeworks/`, `Scripts/`)
