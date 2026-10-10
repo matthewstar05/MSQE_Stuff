@@ -21,6 +21,7 @@
 | [Homework3/](Homeworks/Homework3/) | NumPy and Pandas. |
 | [Homework4/](Homeworks/Homework4/) | London crime regression. |
 | [Homework5/](Homeworks/Homework5/) | Numerical optimization; the existing [Algorithmic_Efficiency/](Homeworks/Homework5/Algorithmic_Efficiency/) workspace stays together here. |
+| [Homework6/](Homeworks/Homework6/) | Graph implementation ([handout](Homeworks/Homework6/a_graph_2026.docx), [solution](Homeworks/Homework6/Graph.py)). |
 | [Shortest_Path/](Homeworks/Shortest_Path/) | Shortest-path assignment, filed by topic because its homework number is not specified in the prompt. |
 
 Notebooks labeled `(Instructor Original)` differ from the existing working copy; both versions are retained. Run notebooks from their containing folder so local CSV paths resolve.
