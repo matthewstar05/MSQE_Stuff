@@ -17,12 +17,12 @@ Folders are named `{term}-{course}`.
 - `SU26-GSE510-MathEcon` — Math for economists (syllabus, notes, homeworks, exams)
 - `SU26-GSE518-StatsForEconometrics`
 
-**Semester 1**
-- `SS1-ECON5015-ComputingMLEcon`
-- `SS1-ECON5021-AdvEconometrics1`
-- `SS1-ECON5030-MicroeconomicAnalysis`
-- `SS1-ECON5040-DynamicStochasticModeling`
-- `SS1-ECON5560-AppliedEconProj1`
+**Semester 1 (Fall 2026)**
+- `SS1-ECON5015-ComputingMLEcon` — Computing & ML for Economics (Canvas `Modules/`, `In_Class_Notebooks/`, `Homeworks/`, `Scripts/`)
+- `SS1-ECON5021-AdvEconometrics1` — Advanced Econometrics I (Canvas `Modules/`, `Scripts/`, `Exam1/`)
+- `SS1-ECON5030-MicroeconomicAnalysis` — Microeconomic Analysis (Canvas `Modules/`, `ProblemSets/`)
+- `SS1-ECON5040-DynamicStochasticModeling` — Dynamic Stochastic Modeling (Canvas `Modules/` Weeks 1-14, `Week2`-`Week6` coursework)
+- `SS1-ECON5560-AppliedEconProj1` — Applied Economics Project (Canvas `Modules/`, `Replication-Project/`, `Deliverables/`)
 
 **Semester 2**
 - `SS2-ECON5022-AdvEconometrics2`

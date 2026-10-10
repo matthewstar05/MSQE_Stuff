@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Pandas (2026)</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>Functions (2025)</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7480,7 +7480,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShell</span>
@@ -7497,7 +7497,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Introduction-to-Pandas-(Data-Frames)">Introduction to Pandas (Data Frames)<a class="anchor-link" href="#Introduction-to-Pandas-(Data-Frames)">¶</a></h1><h2 id="Econ-5015">Econ 5015<a class="anchor-link" href="#Econ-5015">¶</a></h2>
+<h1 id="Functions">Functions<a class="anchor-link" href="#Functions">¶</a></h1><h2 id="Econ-524">Econ 524<a class="anchor-link" href="#Econ-524">¶</a></h2>
 </div>
 </div>
 </div>
@@ -7508,9 +7508,10 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>These slides present an introduction to some key data structures available in the Pandas module.</p>
-<p>In particular, the DataFrame structure is a key data type for storing structured data for the purpose of data analysis.</p>
-<p>At first, we will not explore all the features available, in order to keep things simple.</p>
+<h3 id="Functions">Functions<a class="anchor-link" href="#Functions">¶</a></h3><p>We have already discussed many built-in functions like max, round, type, etc., plus the math functions in math module.</p>
+<p>You can also write your own using the def keyword to define a new function.</p>
+<p>Functions take inputs, called “arguments”, and have an output, the return value.</p>
+<p>Functions have a name which is how you use the function.</p>
 </div>
 </div>
 </div>
@@ -7521,10 +7522,150 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Series">Series<a class="anchor-link" href="#Series">¶</a></h3><p>Series is an object in Pandas that is an indexed, one-dimensional array.</p>
-<p>The difference between a Series and the arrays from NumPy is that there is an explicit Index.</p>
-<p>The default Index, however, is the same as what we used to index arrays: a sequence of integers starting at 0.</p>
-<p>In the example on the next slide, note that I am using the alias pd for pandas (for convenience).</p>
+<h3 id="A-simple-example">A simple example<a class="anchor-link" href="#A-simple-example">¶</a></h3>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">absolutev</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="n">absolutev</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>3</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Calling-a-function">Calling a function<a class="anchor-link" href="#Calling-a-function">¶</a></h3><p>The body of a function (the indented code below the "def" line) is NOT executed when you define a function.  It is executed whenever you call a function.  In the example above, the function is called on the last line "absolutev(-3)".  If that line is removed, the body of the function is never executed.</p>
+<p>When you call a function (for example, absolutev(-3) above), the variable n (the first argument) is set equal to -3, the value supplied.</p>
+<p>Then, the sequence of code in the body of the function is executed in order from top to bottom until EITHER the end is reached, OR until a return value is provided using return.</p>
+<p>If the code reaches a line with the keyword return, the function ends at that point and the value provided after return is the return value of the function.  No other lines of code in the body of the function are executed after return is reached.</p>
+<p>If the end of the body of the function is reached prior to executing a statement with the return keyword, then the function does not have a return value.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Commenting-a-function">Commenting a function<a class="anchor-link" href="#Commenting-a-function">¶</a></h3>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># absolutev(n):  calculate the absolute value of a number</span>
+<span class="c1"># n:  the number to calculate the absolute value of</span>
+<span class="c1"># return value:  the absolute value of n</span>
+<span class="k">def</span> <span class="nf">absolutev</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Calling-a-function-(named-arguments)">Calling a function (named arguments)<a class="anchor-link" href="#Calling-a-function-(named-arguments)">¶</a></h3>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">def</span> <span class="nf">myvariance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">sample</span><span class="p">):</span>
+  <span class="n">l</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> 
+  <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">sample</span><span class="p">:</span>  
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">values</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">values</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">l</span>
+
+<span class="n">myvariance</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]),</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">myvariance</span><span class="p">(</span><span class="n">sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1.0</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1.0</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Default-Values">Default Values<a class="anchor-link" href="#Default-Values">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7536,10 +7677,16 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">])</span>
-<span class="n">s</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">myvariance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">sample</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+  <span class="n">l</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> 
+  <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">sample</span><span class="p">:</span>  
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">values</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">values</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">l</span>
+
+<span class="n">myvariance</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]))</span>
+<span class="n">myvariance</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]),</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7552,12 +7699,13 @@ a.anchor-link {
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>0    1
-1    3
-2    5
-3    7
-4    9
-dtype: int64</pre>
+<pre>1.0</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>0.6666666666666666</pre>
 </div>
 </div>
 </div>
@@ -7569,7 +7717,8 @@ dtype: int64</pre>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Compared to an array, note that there are two columns.  The first column is the Index column.  The second column is the actual data (i.e. the array).</p>
+<h3 id="Returning-Multiple-Values">Returning Multiple Values<a class="anchor-link" href="#Returning-Multiple-Values">¶</a></h3><p>There are a few ways to return multiple values from a function.</p>
+<p>One simple way is to combine all values into a tuple or list and return the tuple/list.</p>
 </div>
 </div>
 </div>
@@ -7580,8 +7729,139 @@ dtype: int64</pre>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In general, the explicit Index associated with a Series can complicate the syntax for selecting specific elements from a Series.</p>
-<p>For now, though, since we are using the default Index, everything is roughly the same as with an array (except for the negative index case).</p>
+<h3 id="Scope">Scope<a class="anchor-link" href="#Scope">¶</a></h3><p>An important concept related to functions is variable "scope" which roughly refers to “where” a variable is defined.</p>
+<p>When you pass a value into a function, the argument defines a variable but only for use within that function.</p>
+<p>For example, consider the function call:
+absolutev(-3)</p>
+<p>While executing the function, the variable n (the first argument of the function) is set equal to -3.</p>
+<p>When the function is complete, n is no longer defined.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">absolutev</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">n</span><span class="o">+</span><span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>3</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-6-1d792dab0a9a&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">      1</span> absolutev<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">-</span><span class="ansi-cyan-intense-fg ansi-bold">3</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>n<span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-cyan-intense-fg ansi-bold">1</span>
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name 'n' is not defined</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Global-vs.-Local-Variables">Global vs. Local Variables<a class="anchor-link" href="#Global-vs.-Local-Variables">¶</a></h3><p>Global variables:  when you define a variable at the console or in a script (but not within a function), it is a global variable.</p>
+<ul>
+<li>Global variables can be accessed from within functions as long as they have not been over-ridden.</li>
+</ul>
+<p>Local variables: when you define a variable within a function (and also function arguments that are passed in), it is a local variable.</p>
+<ul>
+<li>Local variables can be accessed from within that function as well as any functions called by that function.</li>
+<li>Once the function completes, local variables are no longer defined.</li>
+</ul>
+<p>If a local variable defined in a function has the same name as a global variable, the locally defined value will be used within the function.  When the function completes, the globally defined value will persist.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Example">Example<a class="anchor-link" href="#Example">¶</a></h3>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">sample</span><span class="o">=</span><span class="kc">False</span>
+<span class="n">myvariance</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]))</span>
+<span class="n">sample</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1.0</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>False</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Note that sample is a global variable equal to False.  Within myvariance, sample takes on the default value of the argument sample (True) which overrides the global defined value.  So, the result of the function call is 1, not 0.667.  When the function completes, the global value of sample (False) still holds.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Example-2">Example 2<a class="anchor-link" href="#Example-2">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7593,11 +7873,10 @@ dtype: int64</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">s</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-<span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
-<span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">s</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">example2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">example2</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7607,42 +7886,26 @@ dtype: int64</pre>
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>1</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>9</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>1    3
-2    5
-dtype: int64</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>0    1
-2    5
-4    9
-dtype: int64</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>0    1
-1    3
-2    5
-dtype: int64</pre>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-8-142dced260c0&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">      2</span>   <span class="ansi-green-intense-fg ansi-bold">return</span> <span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">*</span>y<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">      3</span> 
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 4</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>example2<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">      5</span> 
+
+<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-8-142dced260c0&gt;</span> in <span class="ansi-cyan-fg">example2</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
+<span class="ansi-green-fg">      1</span> <span class="ansi-green-intense-fg ansi-bold">def</span> example2<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span><span class="ansi-yellow-intense-fg ansi-bold">   </span><span class="ansi-green-intense-fg ansi-bold">return</span> <span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">*</span>y<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">      3</span> 
+<span class="ansi-green-fg">      4</span> example2<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">      5</span> 
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name 'y' is not defined</pre>
 </div>
 </div>
 </div>
@@ -7655,10 +7918,8 @@ dtype: int64</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
-<span class="n">s</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]]</span>
-<span class="n">s</span><span class="p">[[</span><span class="kc">True</span><span class="p">,</span><span class="kc">False</span><span class="p">,</span><span class="kc">True</span><span class="p">,</span><span class="kc">True</span><span class="p">,</span><span class="kc">False</span><span class="p">]]</span>
-<span class="c1"># s[-1]  does not work </span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">y</span><span class="o">=</span><span class="mi">3</span>
+<span class="n">example2</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7671,27 +7932,7 @@ dtype: int64</pre>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>2    5
-3    7
-4    9
-dtype: int64</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>1    3
-3    7
-dtype: int64</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>0    1
-2    5
-3    7
-dtype: int64</pre>
+<pre>6</pre>
 </div>
 </div>
 </div>
@@ -7703,7 +7944,102 @@ dtype: int64</pre>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Now let's create some Series with other indexes.  In pd.Series below, the first argument is the data and the second argument is the index.</p>
+<p>Here the global variable y is being used in the function example.  If y is not defined globally, the functions throws an error.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Example-3">Example 3<a class="anchor-link" href="#Example-3">¶</a></h3>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">example3</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="o">+</span><span class="mi">1</span>
+  <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">z</span><span class="p">)</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">example3</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">UnboundLocalError</span>                         Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-10-760d67750094&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">      4</span> 
+<span class="ansi-green-fg">      5</span> z <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-cyan-intense-fg ansi-bold">3</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 6</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>example3<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-cyan-intense-fg ansi-bold">2</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-10-760d67750094&gt;</span> in <span class="ansi-cyan-fg">example3</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
+<span class="ansi-green-fg">      1</span> <span class="ansi-green-intense-fg ansi-bold">def</span> example3<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span><span class="ansi-yellow-intense-fg ansi-bold">   </span>z <span class="ansi-yellow-intense-fg ansi-bold">=</span> z<span class="ansi-yellow-intense-fg ansi-bold">+</span><span class="ansi-cyan-intense-fg ansi-bold">1</span>
+<span class="ansi-green-fg">      3</span>   <span class="ansi-green-intense-fg ansi-bold">return</span> <span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">*</span>z<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">      4</span> 
+<span class="ansi-green-fg">      5</span> z <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-cyan-intense-fg ansi-bold">3</span>
+
+<span class="ansi-red-intense-fg ansi-bold">UnboundLocalError</span>: local variable 'z' referenced before assignment</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Here we get an error because z is a local variable defined within the function.  But we use z before defining it.  Even though there is a global variable called z, that value is not used because the local z overrides the global z.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>What if an argument to a function is a mutable data type, like a list?</p>
+<p>As described above, the argument name is a locally defined variable that ceases to be defined after the function completes.</p>
+<p>However, since the object that is passed in is mutable, any changes to the object in the function will persist after the function completes.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Note:  if you have studied other programming languages, you may recall "pass by value" and "pass by reference".</p>
+<p>"Pass by value" means the arguments to a function are copies of the values and changes do not persist when the function completes.</p>
+<p>"Pass by reference" means the arguments are pointers to a location in memory that stores the values - thus, changes to the values do persist when the function completes.</p>
+<p>In Python, essentially all immutable objects are passed by value.  Mutable objects are passed by reference.</p>
 </div>
 </div>
 </div>
@@ -7715,11 +8051,13 @@ dtype: int64</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">uptolow</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">"a"</span><span class="p">,</span><span class="s2">"b"</span><span class="p">,</span><span class="s2">"c"</span><span class="p">,</span><span class="s2">"d"</span><span class="p">],[</span><span class="s2">"A"</span><span class="p">,</span><span class="s2">"B"</span><span class="p">,</span><span class="s2">"C"</span><span class="p">,</span><span class="s2">"D"</span><span class="p">])</span>
-<span class="n">uptolow</span>
-<span class="n">uptolow</span><span class="p">[</span><span class="s2">"C"</span><span class="p">]</span>
-<span class="n">uptolow</span><span class="p">[</span><span class="s2">"A"</span><span class="p">:</span><span class="s2">"C"</span><span class="p">]</span>   <span class="c1">#note that final index "C" is included</span>
-<span class="n">uptolow</span><span class="p">[[</span><span class="s2">"A"</span><span class="p">,</span><span class="s2">"C"</span><span class="p">]]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">myfunction</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="n">r</span><span class="o">=</span><span class="n">l</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">r</span>
+
+<span class="n">l</span><span class="o">=</span><span class="mi">4</span>
+<span class="n">myfunction</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">l</span>
 </pre></div>
 </div>
 </div>
@@ -7732,47 +8070,60 @@ dtype: int64</pre>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>A    a
-B    b
-C    c
-D    d
-dtype: object</pre>
+<pre>[3, 2, 1]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>'c'</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>A    a
-B    b
-C    c
-dtype: object</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>A    a
-C    c
-dtype: object</pre>
+<pre>4</pre>
 </div>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>What if a Series has integer indexes but not the default (implicit) indexes?</p>
-<p>Some confusing things. If you provide a single index, the explicit index is used. If you provide a slice (using :) then implicit indexes are used.</p>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">listfun</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">4</span>
+
+<span class="n">l</span><span class="o">=</span><span class="mi">4</span>
+<span class="n">li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">listfun</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+<span class="n">l</span>
+<span class="n">li</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>4</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>4</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 3, 5, 7]</pre>
+</div>
 </div>
 </div>
 </div>
@@ -7784,10 +8135,13 @@ dtype: object</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
-<span class="n">s</span>
-<span class="n">s</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1">#explicit index 3</span>
-<span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>  <span class="c1">#implicit index 1 and 2 (3 excluded)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">listfun</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="n">l</span><span class="o">=</span><span class="mi">3</span>
+    <span class="k">return</span> <span class="mi">4</span>
+
+<span class="n">li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">listfun</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+<span class="n">li</span>
 </pre></div>
 </div>
 </div>
@@ -7800,26 +8154,13 @@ dtype: object</pre>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>1    1
-2    3
-3    5
-4    7
-5    9
-dtype: int64</pre>
+<pre>4</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>5</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>2    3
-3    5
-dtype: int64</pre>
+<pre>[1, 3, 5]</pre>
 </div>
 </div>
 </div>
@@ -7831,104 +8172,8 @@ dtype: int64</pre>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>This is certainly very confusing, so it is best practice not to index Series in the ways shown above.</p>
-<p>To alleviate this confusion, use loc[] to use explicit index and iloc[] to use implicit index.</p>
-<p>By using loc and iloc, you clearly indicate which type of indexing you are intending to use, which makes your code much clearer.  I recommend using loc or iloc even in the case where the index is not integers (like the uptolow example above).</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">s</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-<span class="n">s</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1">#explicit index 3</span>
-<span class="n">s</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="c1">#implicit index 3</span>
-<span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
-<span class="n">s</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>  <span class="c1">#explicit index 1 2 and 3</span>
-<span class="n">s</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="c1">#implicit index 1 and 2</span>
-<span class="n">s</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]]</span>
-<span class="n">s</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]]</span>
-<span class="n">s</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]]</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>5</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>5</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>7</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>2    3
-3    5
-dtype: int64</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>1    1
-2    3
-3    5
-dtype: int64</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>2    3
-3    5
-dtype: int64</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>2    3
-4    7
-dtype: int64</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>2    3
-4    7
-dtype: int64</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>3    5
-5    9
-dtype: int64</pre>
-</div>
+<h3 id="Best-practices:--don't-use-global-variables-in-functions">Best practices:  don't use global variables in functions<a class="anchor-link" href="#Best-practices:--don't-use-global-variables-in-functions">¶</a></h3><p>You never need to access a global variable in a function.</p>
+<p>Alternatively, you can pass the variable in as an argument.</p>
 </div>
 </div>
 </div>
@@ -7939,21 +8184,8 @@ dtype: int64</pre>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="DataFrames">DataFrames<a class="anchor-link" href="#DataFrames">¶</a></h3><p>DataFrames are like spreadsheets.  They have rows and (named) columns.  Each column is a Series.  Each Series (column) shares the same Index.</p>
-<p>All elements in a column are of the same data type (since columns are a Series).</p>
-<p>Different columns can have different data types.  Every column has the same length.</p>
-<p>This format is helpful for standard data anaysis and econometrics.  You can think of the rows as the observations and the columns as the variables.  For example, if we have daily weather data for a year, then a DataFrame may have columns for hightemp, lowtemp, precip, and wind and 365 rows (one for each day in the year).</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In the example below, we will create a DataFrame with 2 columns:  the first 26 positive integers and the 26 lower case letters.</p>
+<h2 id="An-Example-with-Mutable-Argument-to-a-function">An Example with Mutable Argument to a function<a class="anchor-link" href="#An-Example-with-Mutable-Argument-to-a-function">¶</a></h2><p>Let's write a function that takes a list as the only argument and returns a new list which has the first and last elements swapped.  The input list should not be modified.</p>
+<p>Attempt 1:</p>
 </div>
 </div>
 </div>
@@ -7962,217 +8194,37 @@ dtype: int64</pre>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">num</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">num</span>
-<span class="n">let</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s2">"abcdefghijklmnopqrstuvwxyz"</span><span class="p">))</span>
-<span class="n">let</span>
-<span class="n">df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"numbers"</span><span class="p">:</span> <span class="n">num</span><span class="p">,</span><span class="s2">"letters"</span><span class="p">:</span> <span class="n">let</span><span class="p">})</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[18]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
-       18, 19, 20, 21, 22, 23, 24, 25, 26])</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[18]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
-      dtype='&lt;U1')</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[19]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">l</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">l</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">temp</span>
+    <span class="k">return</span> <span class="n">l</span>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>numbers</th>
-<th>letters</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>1</td>
-<td>a</td>
-</tr>
-<tr>
-<th>1</th>
-<td>2</td>
-<td>b</td>
-</tr>
-<tr>
-<th>2</th>
-<td>3</td>
-<td>c</td>
-</tr>
-<tr>
-<th>3</th>
-<td>4</td>
-<td>d</td>
-</tr>
-<tr>
-<th>4</th>
-<td>5</td>
-<td>e</td>
-</tr>
-<tr>
-<th>5</th>
-<td>6</td>
-<td>f</td>
-</tr>
-<tr>
-<th>6</th>
-<td>7</td>
-<td>g</td>
-</tr>
-<tr>
-<th>7</th>
-<td>8</td>
-<td>h</td>
-</tr>
-<tr>
-<th>8</th>
-<td>9</td>
-<td>i</td>
-</tr>
-<tr>
-<th>9</th>
-<td>10</td>
-<td>j</td>
-</tr>
-<tr>
-<th>10</th>
-<td>11</td>
-<td>k</td>
-</tr>
-<tr>
-<th>11</th>
-<td>12</td>
-<td>l</td>
-</tr>
-<tr>
-<th>12</th>
-<td>13</td>
-<td>m</td>
-</tr>
-<tr>
-<th>13</th>
-<td>14</td>
-<td>n</td>
-</tr>
-<tr>
-<th>14</th>
-<td>15</td>
-<td>o</td>
-</tr>
-<tr>
-<th>15</th>
-<td>16</td>
-<td>p</td>
-</tr>
-<tr>
-<th>16</th>
-<td>17</td>
-<td>q</td>
-</tr>
-<tr>
-<th>17</th>
-<td>18</td>
-<td>r</td>
-</tr>
-<tr>
-<th>18</th>
-<td>19</td>
-<td>s</td>
-</tr>
-<tr>
-<th>19</th>
-<td>20</td>
-<td>t</td>
-</tr>
-<tr>
-<th>20</th>
-<td>21</td>
-<td>u</td>
-</tr>
-<tr>
-<th>21</th>
-<td>22</td>
-<td>v</td>
-</tr>
-<tr>
-<th>22</th>
-<td>23</td>
-<td>w</td>
-</tr>
-<tr>
-<th>23</th>
-<td>24</td>
-<td>x</td>
-</tr>
-<tr>
-<th>24</th>
-<td>25</td>
-<td>y</td>
-</tr>
-<tr>
-<th>25</th>
-<td>26</td>
-<td>z</td>
-</tr>
-</tbody>
-</table>
+<span class="n">l</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">f</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="n">l</span>
+</pre></div>
 </div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[4, 2, 3, 1]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[4, 2, 3, 1]</pre>
 </div>
 </div>
 </div>
@@ -8184,9 +8236,8 @@ dtype: int64</pre>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Note that I created the data frame from two arrays, although I could have created num and let as Series instead of arrays.</p>
-<p>Python automatically converts the array to a Series (using default Index), and if I reference one column of the data frame, it is of type Series.</p>
-<p>You can reference a column of a data frame in two ways, shown below.</p>
+<p>The return value is correct but it also modified the original list because the input list is mutable and so the changes that we made in the function affect the object even after function terminates.</p>
+<p>Attempt 2:  create a local variable to modify</p>
 </div>
 </div>
 </div>
@@ -8195,11 +8246,19 @@ dtype: int64</pre>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">letters</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">f2</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="n">r</span><span class="o">=</span><span class="n">l</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">r</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">temp</span>
+    <span class="k">return</span> <span class="n">r</span>
+
+<span class="n">l</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">f2</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="n">l</span>
 </pre></div>
 </div>
 </div>
@@ -8210,196 +8269,15 @@ dtype: int64</pre>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>pandas.core.frame.DataFrame</pre>
+<pre>[4, 2, 3, 1]</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>pandas.core.series.Series</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">letters</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>0     a
-1     b
-2     c
-3     d
-4     e
-5     f
-6     g
-7     h
-8     i
-9     j
-10    k
-11    l
-12    m
-13    n
-14    o
-15    p
-16    q
-17    r
-18    s
-19    t
-20    u
-21    v
-22    w
-23    x
-24    y
-25    z
-Name: letters, dtype: object</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'letters'</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[23]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>0     a
-1     b
-2     c
-3     d
-4     e
-5     f
-6     g
-7     h
-8     i
-9     j
-10    k
-11    l
-12    m
-13    n
-14    o
-15    p
-16    q
-17    r
-18    s
-19    t
-20    u
-21    v
-22    w
-23    x
-24    y
-25    z
-Name: letters, dtype: object</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [24]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">letters</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">letters</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">numbers</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">numbers</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">25</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">numbers</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">letters</span><span class="o">.</span><span class="n">iloc</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>'a'</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>'k'</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>1</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>26</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>1    2
-2    3
-3    4
-Name: numbers, dtype: int32</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>0     a
-2     c
-4     e
-6     g
-8     i
-10    k
-12    m
-14    o
-16    q
-18    s
-20    u
-22    w
-24    y
-Name: letters, dtype: object</pre>
+<pre>[4, 2, 3, 1]</pre>
 </div>
 </div>
 </div>
@@ -8411,7 +8289,8 @@ Name: letters, dtype: object</pre>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>To select multiple rows of a data frame, we can index in the normal way.</p>
+<p>It still didn't work.  Why not?  Because the line "r=l" creates a local variable named r that refers to the same list object as l which is the input list.  Therefore, modifying r is modifying the input list.  So we didn't really address the problem at all with the r=l line.</p>
+<p>So what do we do?  We need to explicitly create a new list.  In my correct solution below, I will use the copy method to create a new list with the same values as the input list.</p>
 </div>
 </div>
 </div>
@@ -8420,10 +8299,20 @@ Name: letters, dtype: object</pre>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [26]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span>  <span class="c1">#selects rows 1-10</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">f3</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="n">r</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">temp</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">r</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">temp</span>
+    <span class="k">return</span> <span class="n">r</span>
+
+<span class="n">l</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">f3</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="n">l</span>
+    
 </pre></div>
 </div>
 </div>
@@ -8434,84 +8323,15 @@ Name: letters, dtype: object</pre>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[26]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>numbers</th>
-<th>letters</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>1</th>
-<td>2</td>
-<td>b</td>
-</tr>
-<tr>
-<th>2</th>
-<td>3</td>
-<td>c</td>
-</tr>
-<tr>
-<th>3</th>
-<td>4</td>
-<td>d</td>
-</tr>
-<tr>
-<th>4</th>
-<td>5</td>
-<td>e</td>
-</tr>
-<tr>
-<th>5</th>
-<td>6</td>
-<td>f</td>
-</tr>
-<tr>
-<th>6</th>
-<td>7</td>
-<td>g</td>
-</tr>
-<tr>
-<th>7</th>
-<td>8</td>
-<td>h</td>
-</tr>
-<tr>
-<th>8</th>
-<td>9</td>
-<td>i</td>
-</tr>
-<tr>
-<th>9</th>
-<td>10</td>
-<td>j</td>
-</tr>
-<tr>
-<th>10</th>
-<td>11</td>
-<td>k</td>
-</tr>
-</tbody>
-</table>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[4, 2, 3, 1]</pre>
 </div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 2, 3, 4]</pre>
 </div>
 </div>
 </div>
@@ -8523,8 +8343,8 @@ Name: letters, dtype: object</pre>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>To select a single row from data frame, follow above example but select a single row.  This evaluates to a DataFrame with only one row.</p>
-<p>If you want to select a single row as an array (rather than as a DataFrame), see next slide.</p>
+<p>Now consider the following function that takes a list as argument and returns a new list with the list order reversed.</p>
+<p>Note that I didn't have to use copy because the first line is already creating a new object, NOT modifying the input list.</p>
 </div>
 </div>
 </div>
@@ -8536,7 +8356,13 @@ Name: letters, dtype: object</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [28]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>  <span class="c1">#second row as DataFrame</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">f4</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="n">l</span><span class="o">=</span><span class="n">l</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">l</span>
+
+<span class="n">l</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">f4</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="n">l</span>
 </pre></div>
 </div>
 </div>
@@ -8548,1919 +8374,28 @@ Name: letters, dtype: object</pre>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[28]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>numbers</th>
-<th>letters</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>2</th>
-<td>3</td>
-<td>c</td>
-</tr>
-</tbody>
-</table>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[4, 3, 2, 1]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[28]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 2, 3, 4]</pre>
 </div>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Other-attributes-of-DataFrames">Other attributes of DataFrames<a class="anchor-link" href="#Other-attributes-of-DataFrames">¶</a></h3><p>You can think of a DataFrame as 2-dimensional array where the columns have names and the rows have names (or indices).  So, a DataFrame can be deconstructed into the values (the 2-dimensional array), the columns names, and the row indices.</p>
-<p>The "values" attribute gets a representation of the data frame as a 2-dimensional array (omitting columns names and row indices).</p>
-<p>A single entry in a 2-dimensional array can be indexed as [r,c] where r is the row and c the column.</p>
-<p>[r] yields the r-th row</p>
-<p>[:,c] yields the c-th column</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [30]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>  <span class="c1">#second row, first column</span>
-<span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1">#second row</span>
-<span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>  <span class="c1">#first column</span>
+<div class="highlight hl-ipython3"><pre><span></span> 
 </pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[30]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>numpy.ndarray</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[30]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>'c'</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[30]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([3, 'c'], dtype=object)</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[30]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
-      dtype=object)</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The "columns" attribute is of type Index and has all the column names.</p>
-<p>You can reference specific elements of this Index (i.e. specific column names) in the same way as an array.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [32]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
-<span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>  <span class="c1">#change type to be array</span>
-<span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[32]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>Index(['numbers', 'letters'], dtype='object')</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[32]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array(['numbers', 'letters'], dtype=object)</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[32]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>'letters'</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The "index" attribute is of type Index and has all the row indices.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [34]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">index</span>
-<span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
-<span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[34]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>RangeIndex(start=0, stop=26, step=1)</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[34]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>2</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[34]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>RangeIndex(start=0, stop=5, step=1)</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[34]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([0, 1, 2, 3, 4], dtype=int64)</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Adding-and-removing-a-column-to-a-DataFrame">Adding and removing a column to a DataFrame<a class="anchor-link" href="#Adding-and-removing-a-column-to-a-DataFrame">¶</a></h3>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [36]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">"negative"</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">27</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">df</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[36]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>numbers</th>
-<th>letters</th>
-<th>negative</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>1</td>
-<td>a</td>
-<td>-1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>2</td>
-<td>b</td>
-<td>-2</td>
-</tr>
-<tr>
-<th>2</th>
-<td>3</td>
-<td>c</td>
-<td>-3</td>
-</tr>
-<tr>
-<th>3</th>
-<td>4</td>
-<td>d</td>
-<td>-4</td>
-</tr>
-<tr>
-<th>4</th>
-<td>5</td>
-<td>e</td>
-<td>-5</td>
-</tr>
-<tr>
-<th>5</th>
-<td>6</td>
-<td>f</td>
-<td>-6</td>
-</tr>
-<tr>
-<th>6</th>
-<td>7</td>
-<td>g</td>
-<td>-7</td>
-</tr>
-<tr>
-<th>7</th>
-<td>8</td>
-<td>h</td>
-<td>-8</td>
-</tr>
-<tr>
-<th>8</th>
-<td>9</td>
-<td>i</td>
-<td>-9</td>
-</tr>
-<tr>
-<th>9</th>
-<td>10</td>
-<td>j</td>
-<td>-10</td>
-</tr>
-<tr>
-<th>10</th>
-<td>11</td>
-<td>k</td>
-<td>-11</td>
-</tr>
-<tr>
-<th>11</th>
-<td>12</td>
-<td>l</td>
-<td>-12</td>
-</tr>
-<tr>
-<th>12</th>
-<td>13</td>
-<td>m</td>
-<td>-13</td>
-</tr>
-<tr>
-<th>13</th>
-<td>14</td>
-<td>n</td>
-<td>-14</td>
-</tr>
-<tr>
-<th>14</th>
-<td>15</td>
-<td>o</td>
-<td>-15</td>
-</tr>
-<tr>
-<th>15</th>
-<td>16</td>
-<td>p</td>
-<td>-16</td>
-</tr>
-<tr>
-<th>16</th>
-<td>17</td>
-<td>q</td>
-<td>-17</td>
-</tr>
-<tr>
-<th>17</th>
-<td>18</td>
-<td>r</td>
-<td>-18</td>
-</tr>
-<tr>
-<th>18</th>
-<td>19</td>
-<td>s</td>
-<td>-19</td>
-</tr>
-<tr>
-<th>19</th>
-<td>20</td>
-<td>t</td>
-<td>-20</td>
-</tr>
-<tr>
-<th>20</th>
-<td>21</td>
-<td>u</td>
-<td>-21</td>
-</tr>
-<tr>
-<th>21</th>
-<td>22</td>
-<td>v</td>
-<td>-22</td>
-</tr>
-<tr>
-<th>22</th>
-<td>23</td>
-<td>w</td>
-<td>-23</td>
-</tr>
-<tr>
-<th>23</th>
-<td>24</td>
-<td>x</td>
-<td>-24</td>
-</tr>
-<tr>
-<th>24</th>
-<td>25</td>
-<td>y</td>
-<td>-25</td>
-</tr>
-<tr>
-<th>25</th>
-<td>26</td>
-<td>z</td>
-<td>-26</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [37]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">"mult"</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">numbers</span><span class="o">*</span><span class="n">df</span><span class="o">.</span><span class="n">negative</span>
-<span class="n">df</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[37]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>numbers</th>
-<th>letters</th>
-<th>negative</th>
-<th>mult</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>1</td>
-<td>a</td>
-<td>-1</td>
-<td>-1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>2</td>
-<td>b</td>
-<td>-2</td>
-<td>-4</td>
-</tr>
-<tr>
-<th>2</th>
-<td>3</td>
-<td>c</td>
-<td>-3</td>
-<td>-9</td>
-</tr>
-<tr>
-<th>3</th>
-<td>4</td>
-<td>d</td>
-<td>-4</td>
-<td>-16</td>
-</tr>
-<tr>
-<th>4</th>
-<td>5</td>
-<td>e</td>
-<td>-5</td>
-<td>-25</td>
-</tr>
-<tr>
-<th>5</th>
-<td>6</td>
-<td>f</td>
-<td>-6</td>
-<td>-36</td>
-</tr>
-<tr>
-<th>6</th>
-<td>7</td>
-<td>g</td>
-<td>-7</td>
-<td>-49</td>
-</tr>
-<tr>
-<th>7</th>
-<td>8</td>
-<td>h</td>
-<td>-8</td>
-<td>-64</td>
-</tr>
-<tr>
-<th>8</th>
-<td>9</td>
-<td>i</td>
-<td>-9</td>
-<td>-81</td>
-</tr>
-<tr>
-<th>9</th>
-<td>10</td>
-<td>j</td>
-<td>-10</td>
-<td>-100</td>
-</tr>
-<tr>
-<th>10</th>
-<td>11</td>
-<td>k</td>
-<td>-11</td>
-<td>-121</td>
-</tr>
-<tr>
-<th>11</th>
-<td>12</td>
-<td>l</td>
-<td>-12</td>
-<td>-144</td>
-</tr>
-<tr>
-<th>12</th>
-<td>13</td>
-<td>m</td>
-<td>-13</td>
-<td>-169</td>
-</tr>
-<tr>
-<th>13</th>
-<td>14</td>
-<td>n</td>
-<td>-14</td>
-<td>-196</td>
-</tr>
-<tr>
-<th>14</th>
-<td>15</td>
-<td>o</td>
-<td>-15</td>
-<td>-225</td>
-</tr>
-<tr>
-<th>15</th>
-<td>16</td>
-<td>p</td>
-<td>-16</td>
-<td>-256</td>
-</tr>
-<tr>
-<th>16</th>
-<td>17</td>
-<td>q</td>
-<td>-17</td>
-<td>-289</td>
-</tr>
-<tr>
-<th>17</th>
-<td>18</td>
-<td>r</td>
-<td>-18</td>
-<td>-324</td>
-</tr>
-<tr>
-<th>18</th>
-<td>19</td>
-<td>s</td>
-<td>-19</td>
-<td>-361</td>
-</tr>
-<tr>
-<th>19</th>
-<td>20</td>
-<td>t</td>
-<td>-20</td>
-<td>-400</td>
-</tr>
-<tr>
-<th>20</th>
-<td>21</td>
-<td>u</td>
-<td>-21</td>
-<td>-441</td>
-</tr>
-<tr>
-<th>21</th>
-<td>22</td>
-<td>v</td>
-<td>-22</td>
-<td>-484</td>
-</tr>
-<tr>
-<th>22</th>
-<td>23</td>
-<td>w</td>
-<td>-23</td>
-<td>-529</td>
-</tr>
-<tr>
-<th>23</th>
-<td>24</td>
-<td>x</td>
-<td>-24</td>
-<td>-576</td>
-</tr>
-<tr>
-<th>24</th>
-<td>25</td>
-<td>y</td>
-<td>-25</td>
-<td>-625</td>
-</tr>
-<tr>
-<th>25</th>
-<td>26</td>
-<td>z</td>
-<td>-26</td>
-<td>-676</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [38]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">"mult"</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="s2">"columns"</span><span class="p">)</span>  <span class="c1">#df.drop is creating a new dataframe which is then saved under the same variable name</span>
-<span class="n">df</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[38]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>numbers</th>
-<th>letters</th>
-<th>negative</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>1</td>
-<td>a</td>
-<td>-1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>2</td>
-<td>b</td>
-<td>-2</td>
-</tr>
-<tr>
-<th>2</th>
-<td>3</td>
-<td>c</td>
-<td>-3</td>
-</tr>
-<tr>
-<th>3</th>
-<td>4</td>
-<td>d</td>
-<td>-4</td>
-</tr>
-<tr>
-<th>4</th>
-<td>5</td>
-<td>e</td>
-<td>-5</td>
-</tr>
-<tr>
-<th>5</th>
-<td>6</td>
-<td>f</td>
-<td>-6</td>
-</tr>
-<tr>
-<th>6</th>
-<td>7</td>
-<td>g</td>
-<td>-7</td>
-</tr>
-<tr>
-<th>7</th>
-<td>8</td>
-<td>h</td>
-<td>-8</td>
-</tr>
-<tr>
-<th>8</th>
-<td>9</td>
-<td>i</td>
-<td>-9</td>
-</tr>
-<tr>
-<th>9</th>
-<td>10</td>
-<td>j</td>
-<td>-10</td>
-</tr>
-<tr>
-<th>10</th>
-<td>11</td>
-<td>k</td>
-<td>-11</td>
-</tr>
-<tr>
-<th>11</th>
-<td>12</td>
-<td>l</td>
-<td>-12</td>
-</tr>
-<tr>
-<th>12</th>
-<td>13</td>
-<td>m</td>
-<td>-13</td>
-</tr>
-<tr>
-<th>13</th>
-<td>14</td>
-<td>n</td>
-<td>-14</td>
-</tr>
-<tr>
-<th>14</th>
-<td>15</td>
-<td>o</td>
-<td>-15</td>
-</tr>
-<tr>
-<th>15</th>
-<td>16</td>
-<td>p</td>
-<td>-16</td>
-</tr>
-<tr>
-<th>16</th>
-<td>17</td>
-<td>q</td>
-<td>-17</td>
-</tr>
-<tr>
-<th>17</th>
-<td>18</td>
-<td>r</td>
-<td>-18</td>
-</tr>
-<tr>
-<th>18</th>
-<td>19</td>
-<td>s</td>
-<td>-19</td>
-</tr>
-<tr>
-<th>19</th>
-<td>20</td>
-<td>t</td>
-<td>-20</td>
-</tr>
-<tr>
-<th>20</th>
-<td>21</td>
-<td>u</td>
-<td>-21</td>
-</tr>
-<tr>
-<th>21</th>
-<td>22</td>
-<td>v</td>
-<td>-22</td>
-</tr>
-<tr>
-<th>22</th>
-<td>23</td>
-<td>w</td>
-<td>-23</td>
-</tr>
-<tr>
-<th>23</th>
-<td>24</td>
-<td>x</td>
-<td>-24</td>
-</tr>
-<tr>
-<th>24</th>
-<td>25</td>
-<td>y</td>
-<td>-25</td>
-</tr>
-<tr>
-<th>25</th>
-<td>26</td>
-<td>z</td>
-<td>-26</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Adding-and-removing-rows">Adding and removing rows<a class="anchor-link" href="#Adding-and-removing-rows">¶</a></h3><p>To add rows, we will use the concat function in pandas.  We create a new dataframe with the new rows using pd.DataFrame and then concat the old dataframe and new dataframe.</p>
-<p>The concat function creates a new data frame (i.e. does not modify the input dataframes).</p>
-<p>Use ignore_index=True if using concat as shown below.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [40]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"numbers"</span><span class="p">:[</span><span class="mi">27</span><span class="p">],</span><span class="s2">"letters"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"aa"</span><span class="p">],</span><span class="s2">"negative"</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">27</span><span class="p">]})],</span><span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">df</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[40]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>numbers</th>
-<th>letters</th>
-<th>negative</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>1</td>
-<td>a</td>
-<td>-1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>2</td>
-<td>b</td>
-<td>-2</td>
-</tr>
-<tr>
-<th>2</th>
-<td>3</td>
-<td>c</td>
-<td>-3</td>
-</tr>
-<tr>
-<th>3</th>
-<td>4</td>
-<td>d</td>
-<td>-4</td>
-</tr>
-<tr>
-<th>4</th>
-<td>5</td>
-<td>e</td>
-<td>-5</td>
-</tr>
-<tr>
-<th>5</th>
-<td>6</td>
-<td>f</td>
-<td>-6</td>
-</tr>
-<tr>
-<th>6</th>
-<td>7</td>
-<td>g</td>
-<td>-7</td>
-</tr>
-<tr>
-<th>7</th>
-<td>8</td>
-<td>h</td>
-<td>-8</td>
-</tr>
-<tr>
-<th>8</th>
-<td>9</td>
-<td>i</td>
-<td>-9</td>
-</tr>
-<tr>
-<th>9</th>
-<td>10</td>
-<td>j</td>
-<td>-10</td>
-</tr>
-<tr>
-<th>10</th>
-<td>11</td>
-<td>k</td>
-<td>-11</td>
-</tr>
-<tr>
-<th>11</th>
-<td>12</td>
-<td>l</td>
-<td>-12</td>
-</tr>
-<tr>
-<th>12</th>
-<td>13</td>
-<td>m</td>
-<td>-13</td>
-</tr>
-<tr>
-<th>13</th>
-<td>14</td>
-<td>n</td>
-<td>-14</td>
-</tr>
-<tr>
-<th>14</th>
-<td>15</td>
-<td>o</td>
-<td>-15</td>
-</tr>
-<tr>
-<th>15</th>
-<td>16</td>
-<td>p</td>
-<td>-16</td>
-</tr>
-<tr>
-<th>16</th>
-<td>17</td>
-<td>q</td>
-<td>-17</td>
-</tr>
-<tr>
-<th>17</th>
-<td>18</td>
-<td>r</td>
-<td>-18</td>
-</tr>
-<tr>
-<th>18</th>
-<td>19</td>
-<td>s</td>
-<td>-19</td>
-</tr>
-<tr>
-<th>19</th>
-<td>20</td>
-<td>t</td>
-<td>-20</td>
-</tr>
-<tr>
-<th>20</th>
-<td>21</td>
-<td>u</td>
-<td>-21</td>
-</tr>
-<tr>
-<th>21</th>
-<td>22</td>
-<td>v</td>
-<td>-22</td>
-</tr>
-<tr>
-<th>22</th>
-<td>23</td>
-<td>w</td>
-<td>-23</td>
-</tr>
-<tr>
-<th>23</th>
-<td>24</td>
-<td>x</td>
-<td>-24</td>
-</tr>
-<tr>
-<th>24</th>
-<td>25</td>
-<td>y</td>
-<td>-25</td>
-</tr>
-<tr>
-<th>25</th>
-<td>26</td>
-<td>z</td>
-<td>-26</td>
-</tr>
-<tr>
-<th>26</th>
-<td>27</td>
-<td>aa</td>
-<td>-27</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [41]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">df</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[41]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>numbers</th>
-<th>letters</th>
-<th>negative</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>1</td>
-<td>a</td>
-<td>-1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>2</td>
-<td>b</td>
-<td>-2</td>
-</tr>
-<tr>
-<th>2</th>
-<td>3</td>
-<td>c</td>
-<td>-3</td>
-</tr>
-<tr>
-<th>4</th>
-<td>5</td>
-<td>e</td>
-<td>-5</td>
-</tr>
-<tr>
-<th>5</th>
-<td>6</td>
-<td>f</td>
-<td>-6</td>
-</tr>
-<tr>
-<th>6</th>
-<td>7</td>
-<td>g</td>
-<td>-7</td>
-</tr>
-<tr>
-<th>7</th>
-<td>8</td>
-<td>h</td>
-<td>-8</td>
-</tr>
-<tr>
-<th>8</th>
-<td>9</td>
-<td>i</td>
-<td>-9</td>
-</tr>
-<tr>
-<th>9</th>
-<td>10</td>
-<td>j</td>
-<td>-10</td>
-</tr>
-<tr>
-<th>10</th>
-<td>11</td>
-<td>k</td>
-<td>-11</td>
-</tr>
-<tr>
-<th>11</th>
-<td>12</td>
-<td>l</td>
-<td>-12</td>
-</tr>
-<tr>
-<th>12</th>
-<td>13</td>
-<td>m</td>
-<td>-13</td>
-</tr>
-<tr>
-<th>13</th>
-<td>14</td>
-<td>n</td>
-<td>-14</td>
-</tr>
-<tr>
-<th>14</th>
-<td>15</td>
-<td>o</td>
-<td>-15</td>
-</tr>
-<tr>
-<th>15</th>
-<td>16</td>
-<td>p</td>
-<td>-16</td>
-</tr>
-<tr>
-<th>16</th>
-<td>17</td>
-<td>q</td>
-<td>-17</td>
-</tr>
-<tr>
-<th>17</th>
-<td>18</td>
-<td>r</td>
-<td>-18</td>
-</tr>
-<tr>
-<th>18</th>
-<td>19</td>
-<td>s</td>
-<td>-19</td>
-</tr>
-<tr>
-<th>19</th>
-<td>20</td>
-<td>t</td>
-<td>-20</td>
-</tr>
-<tr>
-<th>20</th>
-<td>21</td>
-<td>u</td>
-<td>-21</td>
-</tr>
-<tr>
-<th>21</th>
-<td>22</td>
-<td>v</td>
-<td>-22</td>
-</tr>
-<tr>
-<th>22</th>
-<td>23</td>
-<td>w</td>
-<td>-23</td>
-</tr>
-<tr>
-<th>23</th>
-<td>24</td>
-<td>x</td>
-<td>-24</td>
-</tr>
-<tr>
-<th>24</th>
-<td>25</td>
-<td>y</td>
-<td>-25</td>
-</tr>
-<tr>
-<th>25</th>
-<td>26</td>
-<td>z</td>
-<td>-26</td>
-</tr>
-<tr>
-<th>26</th>
-<td>27</td>
-<td>aa</td>
-<td>-27</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [42]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">df</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[42]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>numbers</th>
-<th>letters</th>
-<th>negative</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>1</td>
-<td>a</td>
-<td>-1</td>
-</tr>
-<tr>
-<th>1</th>
-<td>2</td>
-<td>b</td>
-<td>-2</td>
-</tr>
-<tr>
-<th>2</th>
-<td>3</td>
-<td>c</td>
-<td>-3</td>
-</tr>
-<tr>
-<th>3</th>
-<td>5</td>
-<td>e</td>
-<td>-5</td>
-</tr>
-<tr>
-<th>4</th>
-<td>6</td>
-<td>f</td>
-<td>-6</td>
-</tr>
-<tr>
-<th>5</th>
-<td>7</td>
-<td>g</td>
-<td>-7</td>
-</tr>
-<tr>
-<th>6</th>
-<td>8</td>
-<td>h</td>
-<td>-8</td>
-</tr>
-<tr>
-<th>7</th>
-<td>9</td>
-<td>i</td>
-<td>-9</td>
-</tr>
-<tr>
-<th>8</th>
-<td>10</td>
-<td>j</td>
-<td>-10</td>
-</tr>
-<tr>
-<th>9</th>
-<td>11</td>
-<td>k</td>
-<td>-11</td>
-</tr>
-<tr>
-<th>10</th>
-<td>12</td>
-<td>l</td>
-<td>-12</td>
-</tr>
-<tr>
-<th>11</th>
-<td>13</td>
-<td>m</td>
-<td>-13</td>
-</tr>
-<tr>
-<th>12</th>
-<td>14</td>
-<td>n</td>
-<td>-14</td>
-</tr>
-<tr>
-<th>13</th>
-<td>15</td>
-<td>o</td>
-<td>-15</td>
-</tr>
-<tr>
-<th>14</th>
-<td>16</td>
-<td>p</td>
-<td>-16</td>
-</tr>
-<tr>
-<th>15</th>
-<td>17</td>
-<td>q</td>
-<td>-17</td>
-</tr>
-<tr>
-<th>16</th>
-<td>18</td>
-<td>r</td>
-<td>-18</td>
-</tr>
-<tr>
-<th>17</th>
-<td>19</td>
-<td>s</td>
-<td>-19</td>
-</tr>
-<tr>
-<th>18</th>
-<td>20</td>
-<td>t</td>
-<td>-20</td>
-</tr>
-<tr>
-<th>19</th>
-<td>21</td>
-<td>u</td>
-<td>-21</td>
-</tr>
-<tr>
-<th>20</th>
-<td>22</td>
-<td>v</td>
-<td>-22</td>
-</tr>
-<tr>
-<th>21</th>
-<td>23</td>
-<td>w</td>
-<td>-23</td>
-</tr>
-<tr>
-<th>22</th>
-<td>24</td>
-<td>x</td>
-<td>-24</td>
-</tr>
-<tr>
-<th>23</th>
-<td>25</td>
-<td>y</td>
-<td>-25</td>
-</tr>
-<tr>
-<th>24</th>
-<td>26</td>
-<td>z</td>
-<td>-26</td>
-</tr>
-<tr>
-<th>25</th>
-<td>27</td>
-<td>aa</td>
-<td>-27</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Importing-Data">Importing Data<a class="anchor-link" href="#Importing-Data">¶</a></h3><p>Typically, we don’t create a data frame directly, but import data from another source.</p>
-<p>For example:  CSV files (comma separated values)</p>
-<p>CSV is a text-based representation of spreadsheet data.</p>
-<p>Each row of a spreadsheet is one line of a csv file.</p>
-<p>Each cell in a row is separated by a comma.</p>
-<p>Often the first row has the column names.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="CSV-Example">CSV Example<a class="anchor-link" href="#CSV-Example">¶</a></h3><p>id,year,income</p>
-<p>1,1993, 55000</p>
-<p>2,1994, 60000</p>
-<p>3,1995, 62000</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Importing-CSV">Importing CSV<a class="anchor-link" href="#Importing-CSV">¶</a></h3>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [46]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">yhoo</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"yhoo.csv"</span><span class="p">)</span>
-<span class="n">yhoo</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">,]</span>
-<span class="n">yhoo</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[46]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array(['8-Oct-14', 41.0, 41.29, 40.1, 41.08, '26,571,400', 41.08],
-      dtype=object)</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[46]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>Date</th>
-<th>Open</th>
-<th>High</th>
-<th>Low</th>
-<th>Close</th>
-<th>Volume</th>
-<th>Adj Close*</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>8-Oct-14</td>
-<td>41.00</td>
-<td>41.29</td>
-<td>40.10</td>
-<td>41.08</td>
-<td>26,571,400</td>
-<td>41.08</td>
-</tr>
-<tr>
-<th>1</th>
-<td>7-Oct-14</td>
-<td>41.06</td>
-<td>41.29</td>
-<td>40.78</td>
-<td>40.93</td>
-<td>22,519,300</td>
-<td>40.93</td>
-</tr>
-<tr>
-<th>2</th>
-<td>6-Oct-14</td>
-<td>41.20</td>
-<td>41.73</td>
-<td>41.04</td>
-<td>41.52</td>
-<td>23,552,300</td>
-<td>41.52</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3-Oct-14</td>
-<td>40.79</td>
-<td>41.69</td>
-<td>40.65</td>
-<td>41.03</td>
-<td>38,173,300</td>
-<td>41.03</td>
-</tr>
-<tr>
-<th>4</th>
-<td>2-Oct-14</td>
-<td>40.24</td>
-<td>40.64</td>
-<td>39.69</td>
-<td>40.50</td>
-<td>24,584,400</td>
-<td>40.50</td>
-</tr>
-<tr>
-<th>...</th>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr>
-<th>62</th>
-<td>11-Jul-14</td>
-<td>34.95</td>
-<td>35.56</td>
-<td>34.78</td>
-<td>35.43</td>
-<td>18,379,500</td>
-<td>35.43</td>
-</tr>
-<tr>
-<th>63</th>
-<td>10-Jul-14</td>
-<td>34.33</td>
-<td>34.97</td>
-<td>34.10</td>
-<td>34.93</td>
-<td>18,064,800</td>
-<td>34.93</td>
-</tr>
-<tr>
-<th>64</th>
-<td>9-Jul-14</td>
-<td>34.68</td>
-<td>35.07</td>
-<td>34.68</td>
-<td>34.85</td>
-<td>12,626,900</td>
-<td>34.85</td>
-</tr>
-<tr>
-<th>65</th>
-<td>8-Jul-14</td>
-<td>35.64</td>
-<td>35.66</td>
-<td>34.28</td>
-<td>34.53</td>
-<td>23,096,900</td>
-<td>34.53</td>
-</tr>
-<tr>
-<th>66</th>
-<td>* Close price adjusted for dividends and splits.</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-</tbody>
-</table>
-<p>67 rows × 7 columns</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Note that the last row is not data, it's a footnote.  We want to delete it before we use the DataFrame for data analysis.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [48]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">yhoo</span><span class="o">=</span><span class="n">yhoo</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">66</span><span class="p">)</span>
-<span class="n">yhoo</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[48]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th></th>
-<th>Date</th>
-<th>Open</th>
-<th>High</th>
-<th>Low</th>
-<th>Close</th>
-<th>Volume</th>
-<th>Adj Close*</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>0</th>
-<td>8-Oct-14</td>
-<td>41.00</td>
-<td>41.29</td>
-<td>40.10</td>
-<td>41.08</td>
-<td>26,571,400</td>
-<td>41.08</td>
-</tr>
-<tr>
-<th>1</th>
-<td>7-Oct-14</td>
-<td>41.06</td>
-<td>41.29</td>
-<td>40.78</td>
-<td>40.93</td>
-<td>22,519,300</td>
-<td>40.93</td>
-</tr>
-<tr>
-<th>2</th>
-<td>6-Oct-14</td>
-<td>41.20</td>
-<td>41.73</td>
-<td>41.04</td>
-<td>41.52</td>
-<td>23,552,300</td>
-<td>41.52</td>
-</tr>
-<tr>
-<th>3</th>
-<td>3-Oct-14</td>
-<td>40.79</td>
-<td>41.69</td>
-<td>40.65</td>
-<td>41.03</td>
-<td>38,173,300</td>
-<td>41.03</td>
-</tr>
-<tr>
-<th>4</th>
-<td>2-Oct-14</td>
-<td>40.24</td>
-<td>40.64</td>
-<td>39.69</td>
-<td>40.50</td>
-<td>24,584,400</td>
-<td>40.50</td>
-</tr>
-<tr>
-<th>...</th>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr>
-<th>61</th>
-<td>14-Jul-14</td>
-<td>35.80</td>
-<td>35.95</td>
-<td>35.45</td>
-<td>35.70</td>
-<td>18,680,500</td>
-<td>35.70</td>
-</tr>
-<tr>
-<th>62</th>
-<td>11-Jul-14</td>
-<td>34.95</td>
-<td>35.56</td>
-<td>34.78</td>
-<td>35.43</td>
-<td>18,379,500</td>
-<td>35.43</td>
-</tr>
-<tr>
-<th>63</th>
-<td>10-Jul-14</td>
-<td>34.33</td>
-<td>34.97</td>
-<td>34.10</td>
-<td>34.93</td>
-<td>18,064,800</td>
-<td>34.93</td>
-</tr>
-<tr>
-<th>64</th>
-<td>9-Jul-14</td>
-<td>34.68</td>
-<td>35.07</td>
-<td>34.68</td>
-<td>34.85</td>
-<td>12,626,900</td>
-<td>34.85</td>
-</tr>
-<tr>
-<th>65</th>
-<td>8-Jul-14</td>
-<td>35.64</td>
-<td>35.66</td>
-<td>34.28</td>
-<td>34.53</td>
-<td>23,096,900</td>
-<td>34.53</td>
-</tr>
-</tbody>
-</table>
-<p>66 rows × 7 columns</p>
-</div>
 </div>
 </div>
 </div>

@@ -17,7 +17,7 @@ def n1_arithmetic_mean(x):
         if (j == 0 and skip == False):
             skip = True
         else:
-            sum1 = sum1 + j
+               sum1 = sum1 + j
     m1 = sum1 / (len(x)-1)
     return m1
     

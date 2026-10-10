@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Looping (2024)</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>Mutability (2025)</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7497,7 +7497,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Looping">Looping<a class="anchor-link" href="#Looping">¶</a></h1><h2 id="Econ-524">Econ 524<a class="anchor-link" href="#Econ-524">¶</a></h2>
+<h1 id="Mutability">Mutability<a class="anchor-link" href="#Mutability">¶</a></h1><h2 id="Econ-524">Econ 524<a class="anchor-link" href="#Econ-524">¶</a></h2>
 </div>
 </div>
 </div>
@@ -7508,12 +7508,9 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>It is very common when writing computer programs to need to do something repeatedly.</p>
-<p>Here we will discuss:  for loops, list comprehension, and while loops</p>
-<p>Use for loops when you know in advance how many times you want to loop.</p>
-<p>Use while loops when you want to loop until some condition is met (and you are not sure how many times that will be).</p>
-<p>In general, anything you can do with a for loop could also be done with a while loop, and vice versa.  But for most tasks, one of the two types of loops will be more natural (following the guidelines above).</p>
-<p>A list comprehension is used instead of a for loop if the task is to create a list.  List comprehension offers simpler syntax than a for loop for this specific case.</p>
+<h3 id="Mutability">Mutability<a class="anchor-link" href="#Mutability">¶</a></h3><p>All variables in Python represent an object.  An object can be of type int, str, float, list, other built-in types, or user-defined types.</p>
+<p>Objects of some built-in types are immutable.  This means that, once created, they cannot be changed/modified.</p>
+<p>Objects of other built-in types are mutable.  This means that the value(s) of the object can change.</p>
 </div>
 </div>
 </div>
@@ -7524,8 +7521,12 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="range">range<a class="anchor-link" href="#range">¶</a></h3><p>The range data type is frequently used in conjunction with for loops, specifcally for "counter" loops.</p>
-<h3 id="for-loops">for loops<a class="anchor-link" href="#for-loops">¶</a></h3><p>Example:</p>
+<h3 id="Immutable-objects">Immutable objects<a class="anchor-link" href="#Immutable-objects">¶</a></h3><p>The following built-in types are immutable:  int, bool, float, str (and some others like range, tuple)</p>
+<p>When you create an integer object with the value 2, that object can never have another value.</p>
+<p>Any attempt to modify the value of that object leads to a new object being created.</p>
+<p>To illustrate this, we will use a few functions:</p>
+<p>id() shows the location in memory where an object is stored</p>
+<p>is:  a built-in function that checks if two expressions refer to the same object (similar but not the same as == which checks if two expressions have the same value)</p>
 </div>
 </div>
 </div>
@@ -7537,12 +7538,11 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
- <span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>   <span class="c1">#body of loop</span>
-
-<span class="n">l</span>
-<span class="n">i</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">a</span><span class="o">=</span><span class="mi">3</span>
+<span class="n">b</span><span class="o">=</span><span class="n">a</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
 </pre></div>
 </div>
 </div>
@@ -7555,13 +7555,60 @@ a.anchor-link {
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</pre>
+<pre>140725843772264</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>9</pre>
+<pre>140725843772264</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>True</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">a</span><span class="o">=</span><span class="mi">2</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>140725843772232</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>140725843772264</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>False</pre>
 </div>
 </div>
 </div>
@@ -7573,23 +7620,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The indented lines after the for statement are the body of the loop.</p>
-<p>In this example, there is only one line of code in the body of the loop.</p>
-<p>The body is executed 10 times in this example.</p>
-<p>Before executing the first time, there is an implicit assignment i = 0 (since 0 is the first value in the range object).</p>
-<p>Before the second execution, there is an implicit i=1, and so forth.  Each time, i is set equal to the next value in the range object.  At the end of the loop i is equal to 9, the last value in the range object.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="List-Comprehension">List Comprehension<a class="anchor-link" href="#List-Comprehension">¶</a></h2><p>The previous example creates a list with first 10 perfect squares (starting at 0).  An alternative way is to use list comprehensions.  The two approaches are basically the same except the syntax is a bit simpler for list comprehensions and list comprehensions should be slightly faster.</p>
-<p>List comprehensions are a useful alternative to a for loop for situations where the purpose of the for loop is to create a list with a set of elements according to some formula.</p>
+<p>The a=2 statement creates a new object with the value 2 and saves that as a.  The b object remains unchanged (with value 3).  You can see that the object id's are no longer the same and that "is" now yields False instead of True.</p>
 </div>
 </div>
 </div>
@@ -7601,8 +7632,14 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">l2</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
-<span class="n">l2</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">c</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">d</span><span class="o">=</span><span class="n">c</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="n">c</span> <span class="ow">is</span> <span class="n">d</span>
 </pre></div>
 </div>
 </div>
@@ -7615,7 +7652,31 @@ a.anchor-link {
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</pre>
+<pre>140725843772328</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>140725843772328</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>140725843772360</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>140725843772328</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>False</pre>
 </div>
 </div>
 </div>
@@ -7627,7 +7688,21 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>You can add a conditional to a list comprehension.  In the following example, we create a list with perfect squares for only even integers.</p>
+<p>Similar to the first example, the c=c+1 statment creates a new object with value 6 (which is what the expression c+1 evaluates to) and saves that as c.  The d object is unchanged with value 5.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="Mutable-Objects">Mutable Objects<a class="anchor-link" href="#Mutable-Objects">¶</a></h3><p>The following types are mutable:  list, dictionary, NumPy array, Pandas DataFrame/Series, user-defined objects</p>
+<p>When you create a list with elements [1,3,5], that list object can be changed.  The values of any element can be changed without creating a new object and the list can have elements added or deleted without creating a new object.</p>
+<p>If lists were immutable, then any time you changed/added a value, an entire new list would have to be created.  Therefore, mutability increases speed and reduces storage needs.</p>
+<p>Although mutability has the advantages described above, it can also create problems with your code if you don't understand all the consqeuences.  We will provide some examples to make this clear.</p>
 </div>
 </div>
 </div>
@@ -7636,11 +7711,14 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">l3</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span><span class="o">%</span><span class="k">2</span>==0]
-<span class="n">l3</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">m</span><span class="o">=</span><span class="n">l</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">m</span> <span class="ow">is</span> <span class="n">l</span>
 </pre></div>
 </div>
 </div>
@@ -7651,9 +7729,131 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>[0, 4, 16, 36, 64]</pre>
+<pre>1409680855808</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409680855808</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>True</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span>  <span class="c1">#Modifying l also modifies m since they refer to same object</span>
+<span class="n">l</span>
+<span class="n">m</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">m</span> <span class="ow">is</span> <span class="n">l</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[2, 3, 5]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[2, 3, 5]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409680855808</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409680855808</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>True</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="c1">#Modifying l also modifies m since they refer to same object</span>
+<span class="n">l</span>
+<span class="n">m</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">m</span> <span class="ow">is</span> <span class="n">l</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[2, 3, 5, 7]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[2, 3, 5, 7]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409680855808</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409680855808</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>True</pre>
 </div>
 </div>
 </div>
@@ -7665,7 +7865,9 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Although the “counter” loop from the previous examples is common (i.e. for i in range(10)), you can also loop over other iterables (like lists or strings) instead of a range object:</p>
+<p>The expression on the right side of the assignment statement (below) creates a new list object that contains the first 2 elements of the list l.</p>
+<p>Since it creates a new object, which is then assigned to the variable l, the variable l now refers to a different object than above.</p>
+<p>But the variable m was not changed, so it still refers to the original list.</p>
 </div>
 </div>
 </div>
@@ -7674,765 +7876,87 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [74]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"Albert"</span><span class="p">,</span><span class="s2">"Bob"</span><span class="p">,</span><span class="s2">"Carol"</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">l</span><span class="o">=</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> 
+<span class="n">l</span>
+<span class="n">m</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">m</span> <span class="ow">is</span> <span class="n">l</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[2, 3]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[2, 3, 5, 7]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409680868864</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409680855808</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>False</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Sometimes you want to create a copy of a mutable object (such as a list) but as we just saw, a simple assignment will not work for mutable object.</p>
+<p>Example:  revisting cumulative sum</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [44]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
 
-<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="s2">"Hello World"</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Albert
-Bob
-Carol
-H
-e
-l
-l
-o
- 
-W
-o
-r
-l
-d
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In the first loops above, c is set equal to “Albert” the first time through the loop, c is set to “Bob” the second time, etc.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Example">Example<a class="anchor-link" href="#Example">¶</a></h3><p>Suppose we want to find the minimum value (and its index) of a list l and we don’t know about the min function.</p>
-<p>Algorithm:</p>
-<ol>
-<li>Set our “working” minimum to be a very high number. (i.e. infinity)</li>
-<li>For each element in list:<ul>
-<li>If less than working min, save it’s value as new working min and save index</li>
-</ul>
-</li>
-</ol>
-<p>Basic idea:  first element automatically becomes working min since any finite number &lt; infinity.</p>
-<p>After that, only an element that is smaller than current working min will become new working min.</p>
-<p>After all elements inspected, working min will be actual min.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [77]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#l: list of  float or int values</span>
-<span class="n">l</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
-<span class="n">currentmin</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"inf"</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)):</span>
-    <span class="k">if</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;</span><span class="n">currentmin</span><span class="p">:</span>
-        <span class="n">currentmin</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">index</span> <span class="o">=</span> <span class="n">i</span>
-        
-<span class="nb">print</span><span class="p">(</span><span class="n">currentmin</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>-5
-1
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="How-do-you-decide-whether-to-loop-over-indices-(as-in-previous-example)-or-loop-over-values?">How do you decide whether to loop over indices (as in previous example) or loop over values?<a class="anchor-link" href="#How-do-you-decide-whether-to-loop-over-indices-(as-in-previous-example)-or-loop-over-values?">¶</a></h3><p>Loop over indices if you need the index in what you're doing.  In the min example, we need to find both the min value and the min index so we loop over indices.</p>
-<p>In next example below, we will find the minimum value in a list (just the minimum value, not the associated index).  Since we don't need the index, we can loop over values instread of over indices.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">currentmin</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"infinity"</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">l</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">v</span><span class="o">&lt;</span><span class="n">currentmin</span><span class="p">:</span>
-        <span class="n">currentmin</span> <span class="o">=</span> <span class="n">v</span>
+<span class="c1">#create new list r that is cumulative sum of elements of x</span>
+<span class="n">r</span><span class="o">=</span><span class="n">x</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)):</span>
+    <span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">currentmin</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>-5
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Question">Question<a class="anchor-link" href="#Question">¶</a></h3><p>What does the first min example above find for the index if there are two indices with the same minimum value?</p>
-<p>For example, if l is [0,1,0,2,3,4,7]</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="In-class-problem">In-class problem<a class="anchor-link" href="#In-class-problem">¶</a></h3><p>Write a code fragment that creates a new list that is the cumulative sum of values in the list l.</p>
-<p>i.e. the first element of the new list is the first element of l, the second element of the new list is the sum of the first 2 elements in l, the 3rd element of the new list is the sum of the first 3 elements in l.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Algorithm:</p>
-<p>Create a new empty list</p>
-<p>Append 0th element of l to new list</p>
-<p>For i from 1 to length of l:</p>
-<ul>
-<li>Append the sum of i-th element of l and (i-1)th element of new list to new list</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="while">while<a class="anchor-link" href="#while">¶</a></h3><p>Sometimes you want to loop an unknown number of times, until a condition is met.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="mi">1</span>
-<span class="k">while</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">:</span>
-   <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-   <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="o">*</span><span class="mi">2</span>
+<span class="n">r</span>
 <span class="n">x</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>1
-2
-4
-8
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>16</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>First, the condition will be checked.  If True, then the indented code (body of loop) will be executed.  Then the condition is checked again.  If True, the body of the loop will be executed again.  Repeats until the condition is False.</p>
-<p>Note:  This loop may never execute, depending on the initial value of x.</p>
-<p>Note:  This loop could run forever. It's important that something in the body of loop will eventually cause the loop to finish.  For example, imagine if x=0 before the loop.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="break-and-continue">break and continue<a class="anchor-link" href="#break-and-continue">¶</a></h3><p>break ends the loop</p>
-<p>continue skips immediately to the next iteration of the loop</p>
-<p>Both can be used in both for loops and while loops.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Nested-Loops">Nested Loops<a class="anchor-link" href="#Nested-Loops">¶</a></h3><p>The inner loop (j loop below)executes in full every time through the outer loop (i loop below)</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [26]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
-     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">97</span><span class="p">,</span><span class="mi">100</span><span class="p">):</span>
-          <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
-     
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>0 97
-0 98
-0 99
-1 97
-1 98
-1 99
-2 97
-2 98
-2 99
-3 97
-3 98
-3 99
-4 97
-4 98
-4 99
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Algorithms">Algorithms<a class="anchor-link" href="#Algorithms">¶</a></h2><p>An algorithm is a programmatic approach to solving a specific problem that a programmer faces.</p>
-<p>We often express algorithms in "pseudocode".  This means we don't use the exact syntax of any specific programming language but we write in a way such that other programmers could implement in the programming language of their choice.</p>
-<p>Consider the problem of finding the integer square root of an integer (or determining if the square root is not an integer).  For example, for 25, we would find 5.  For 26, we would find that square root is not an integer.</p>
-<p>One possible algorithm is called "exhaustive search" and the idea is try every possible answer until we get a "hit".  i.e. to start at 0 and try every integer between 0 and n, where n is the number we are finding the square root of.</p>
-<p>Algorithm:</p>
-<p>Set i to 0.</p>
-<p>repeat until either i^2==n or i==n:</p>
-<pre><code>i=i+1
-
-</code></pre>
-<p>After running through this algorithm, if i^2==n then i is the square root of n.  Otherwise, there is no integer square root of n.</p>
-<p>Let's implement this in Python.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [28]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="mi">14</span>
-<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
-<span class="k">while</span> <span class="n">i</span><span class="o">**</span><span class="mi">2</span><span class="o">!=</span><span class="n">n</span> <span class="ow">and</span> <span class="n">i</span><span class="o">!=</span><span class="n">n</span><span class="p">:</span>
-    <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
-<span class="k">if</span> <span class="n">i</span><span class="o">**</span><span class="mi">2</span><span class="o">==</span><span class="n">n</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"The square root of "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">" is "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">"."</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"The square root of "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">" is not an integer."</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>The square root of 14 is not an integer.
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Next I am going to nest the code in a for loop so that we can run the algorithm for many values of n.  Specifically, we will try all integers from 0 to 29.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [30]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">):</span>
-    <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
-    <span class="k">while</span> <span class="n">i</span><span class="o">**</span><span class="mi">2</span><span class="o">!=</span><span class="n">n</span> <span class="ow">and</span> <span class="n">i</span><span class="o">!=</span><span class="n">n</span><span class="p">:</span>
-        <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
-    <span class="k">if</span> <span class="n">i</span><span class="o">**</span><span class="mi">2</span><span class="o">==</span><span class="n">n</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">"The square root of "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">" is "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">"."</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">"The square root of "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">" is not an integer."</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>The square root of 0 is 0.
-The square root of 1 is 1.
-The square root of 2 is not an integer.
-The square root of 3 is not an integer.
-The square root of 4 is 2.
-The square root of 5 is not an integer.
-The square root of 6 is not an integer.
-The square root of 7 is not an integer.
-The square root of 8 is not an integer.
-The square root of 9 is 3.
-The square root of 10 is not an integer.
-The square root of 11 is not an integer.
-The square root of 12 is not an integer.
-The square root of 13 is not an integer.
-The square root of 14 is not an integer.
-The square root of 15 is not an integer.
-The square root of 16 is 4.
-The square root of 17 is not an integer.
-The square root of 18 is not an integer.
-The square root of 19 is not an integer.
-The square root of 20 is not an integer.
-The square root of 21 is not an integer.
-The square root of 22 is not an integer.
-The square root of 23 is not an integer.
-The square root of 24 is not an integer.
-The square root of 25 is 5.
-The square root of 26 is not an integer.
-The square root of 27 is not an integer.
-The square root of 28 is not an integer.
-The square root of 29 is not an integer.
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Exhaustive search doesn't work if there are an infinite number of possible solutions (or even if the number of possible solutions is finite but very very large).</p>
-<p>Grid search is a similar approach where you find an approximate solution by creating a finite grid of very close values and trying every point on the grid to get as close as possible to the correct solution.</p>
-<p>For example, consider the problem of finding the square root of a positive integer, allowing for the non-integer solutions.  We can't try every possible solution (exhaustive search) because any positive real number is a possible solution and there are a lot of those!</p>
-<p>Instead, we break the positive real numbers into points separated by a parameter $\epsilon$ where the smaller $\epsilon$ is, the more precise our solution will be (but also, the smaller $\epsilon$ is, the longer it will take our program to run).</p>
-<p>If $\epsilon$ is 0.01, then we will try 0, 0.01, 0.02, 0.03, ..., n.  Our solution using grid search is the value $v$ that minimizes $|n-v^2|$.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Grid Search Algorithm:</p>
-<p>Set e to small number (i.e. 0.01)</p>
-<p>Set i to 0</p>
-<p>Set working min to infinity</p>
-<p>repeat until i&gt;n:</p>
-<pre><code>if |n-i*i| &lt;working min:
-
-    Set working min to |n-i*i|
-
-    Set answer to i
-
-Set i to i+e
-
-</code></pre>
-<p>Now let's implement this algorithm in python.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [33]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="mi">14</span>
-<span class="n">e</span><span class="o">=</span><span class="mf">0.01</span>
-<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
-<span class="n">workingmin</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">"inf"</span><span class="p">)</span>
-<span class="k">while</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">:</span>
-    <span class="n">error</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">i</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">error</span><span class="o">&lt;</span><span class="n">workingmin</span><span class="p">:</span>
-        <span class="n">workingmin</span><span class="o">=</span><span class="n">error</span>
-        <span class="n">answer</span><span class="o">=</span><span class="n">i</span>
-    <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="n">e</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">"The square root of "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">" is "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span><span class="o">+</span><span class="s2">"."</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>The square root of 14 is 3.7399999999999642.
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Again we can nest this code in a for loop to test with many values of n</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [35]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">):</span>
-    <span class="n">e</span><span class="o">=</span><span class="mf">0.01</span>
-    <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
-    <span class="n">workingmin</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">"inf"</span><span class="p">)</span>
-    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">:</span>
-        <span class="n">error</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">i</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">error</span><span class="o">&lt;</span><span class="n">workingmin</span><span class="p">:</span>
-            <span class="n">workingmin</span><span class="o">=</span><span class="n">error</span>
-            <span class="n">answer</span><span class="o">=</span><span class="n">i</span>
-        <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="n">e</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"The square root of "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">" is "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span><span class="o">+</span><span class="s2">"."</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>The square root of 0 is 0.
-The square root of 1 is 0.9900000000000007.
-The square root of 2 is 1.410000000000001.
-The square root of 3 is 1.7300000000000013.
-The square root of 4 is 2.0000000000000013.
-The square root of 5 is 2.239999999999996.
-The square root of 6 is 2.4499999999999917.
-The square root of 7 is 2.6499999999999875.
-The square root of 8 is 2.8299999999999836.
-The square root of 9 is 2.99999999999998.
-The square root of 10 is 3.1599999999999766.
-The square root of 11 is 3.319999999999973.
-The square root of 12 is 3.45999999999997.
-The square root of 13 is 3.609999999999967.
-The square root of 14 is 3.7399999999999642.
-The square root of 15 is 3.8699999999999615.
-The square root of 16 is 3.9999999999999587.
-The square root of 17 is 4.119999999999957.
-The square root of 18 is 4.239999999999954.
-The square root of 19 is 4.3599999999999515.
-The square root of 20 is 4.469999999999949.
-The square root of 21 is 4.579999999999947.
-The square root of 22 is 4.689999999999944.
-The square root of 23 is 4.799999999999942.
-The square root of 24 is 4.89999999999994.
-The square root of 25 is 4.999999999999938.
-The square root of 26 is 5.099999999999936.
-The square root of 27 is 5.199999999999934.
-The square root of 28 is 5.289999999999932.
-The square root of 29 is 5.3899999999999295.
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Bisection-Search">Bisection Search<a class="anchor-link" href="#Bisection-Search">¶</a></h2><p>Next we'll see an algorithm to find square root that is much faster than the previous one.  Here is the basic idea.  We know that the square root of x is between 0 and x (for $x\ge1$).  Since $y^2$ is an increasing function for y&gt;0, we also know that if $y^2&gt;x$, then $\sqrt{x}&lt;y$ and if $y^2&lt;x$ then $\sqrt{x}&gt;y$   (for any $y$ such that $0 &lt; y &lt; x$).</p>
-<p>So, we make a guess somewhere in the middle of 0 and x.  If the guess is too high, we make a new guess in the middle of 0 and the first guess.  If the guess is too low, we make a new guess in the middle of the first guess and x.  Then we repeat until we are "close" to the right answer.</p>
-<p>Algorithm:</p>
-<p>Set epsilon to small number  (i.e. 0.001)</p>
-<p>Set guess equal to x/2</p>
-<p>Set delta equal to guess/2</p>
-<p>Repeat until |guess^2-x| &lt; epsilon</p>
-<pre><code>if guess^2 &gt; x then
-
-    set guess = guess - delta
-
-else
-
-    set guess = guess + delta
-Set delta = delta/2
-</code></pre>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [37]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="mi">14</span>
-<span class="n">e</span><span class="o">=</span><span class="mf">0.01</span>
-<span class="n">answer</span><span class="o">=</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span>
-<span class="n">delta</span><span class="o">=</span><span class="n">answer</span><span class="o">/</span><span class="mi">2</span>
-<span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">answer</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">n</span><span class="p">)</span><span class="o">&gt;</span><span class="n">e</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">answer</span><span class="o">**</span><span class="mi">2</span><span class="o">&gt;</span><span class="n">n</span><span class="p">:</span>
-        <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="o">-</span><span class="n">delta</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="o">+</span><span class="n">delta</span>
-    <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="o">/</span><span class="mi">2</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">"The square root of "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">" is "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span><span class="o">+</span><span class="s2">"."</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>The square root of 14 is 3.74267578125.
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Why is bisection search faster than grid search?</p>
-<p>There is less computation that needs to be done.  With grid search, we compute y^2 for every y value between 0 and n with our chosen precision.  For example, with precision=0.01 and n=14, we compute y^2 1400 times (100*14).  In contrast, with bisection search, we immediately rule out all y&gt;7 in the first iteration (that's 700 values we don't need to try).  Then in the second iteration, we eliminate another 350 values.  Each iteration of the loop, we cut the problem in half.</p>
-<p>Let's see how many iterations of the loop there are by adding a print statement.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [39]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="mi">14</span>
-<span class="n">e</span><span class="o">=</span><span class="mf">0.01</span>
-<span class="n">answer</span><span class="o">=</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span>
-<span class="n">delta</span><span class="o">=</span><span class="n">answer</span><span class="o">/</span><span class="mi">2</span>
-<span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">answer</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">n</span><span class="p">)</span><span class="o">&gt;</span><span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"Current guess: "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">answer</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">answer</span><span class="o">**</span><span class="mi">2</span><span class="o">&gt;</span><span class="n">n</span><span class="p">:</span>
-        <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="o">-</span><span class="n">delta</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="o">+</span><span class="n">delta</span>
-    <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="o">/</span><span class="mi">2</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">"The square root of "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">" is "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span><span class="o">+</span><span class="s2">"."</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Current guess: 7.0
-Current guess: 3.5
-Current guess: 5.25
-Current guess: 4.375
-Current guess: 3.9375
-Current guess: 3.71875
-Current guess: 3.828125
-Current guess: 3.7734375
-Current guess: 3.74609375
-Current guess: 3.732421875
-Current guess: 3.7392578125
-The square root of 14 is 3.74267578125.
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>So there are only 11 iterations of the loop compared to 1400 for grid search.  Much faster!  We can't really notice the difference because computers are so fast today but this would become noticeable if we want a more precise answer.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [41]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
-<span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -8443,58 +7967,27 @@ The square root of 14 is 3.74267578125.
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[41]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[44]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>3.7416573867739413</pre>
+<pre>[1, 3, 6, 10, 15]</pre>
 </div>
 </div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[44]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 3, 6, 10, 15]</pre>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Suppose we want to find sqrt(14) to be accurate to 5 decimal places.  Now the difference is noticeable.  In fact, we can use bisection search to find accuracy to 10 decimal places instantly while grid search is slower with accuracy to just 5 decimal places.</p>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[44]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409681005824</pre>
 </div>
 </div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [129]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="mi">14</span>
-<span class="n">e</span><span class="o">=</span><span class="mf">0.00000000001</span>
-<span class="n">answer</span><span class="o">=</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span>
-<span class="n">delta</span><span class="o">=</span><span class="n">answer</span><span class="o">/</span><span class="mi">2</span>
-<span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">answer</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">n</span><span class="p">)</span><span class="o">&gt;</span><span class="n">e</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">answer</span><span class="o">**</span><span class="mi">2</span><span class="o">&gt;</span><span class="n">n</span><span class="p">:</span>
-        <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="o">-</span><span class="n">delta</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="o">+</span><span class="n">delta</span>
-    <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="o">/</span><span class="mi">2</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">"The square root of "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">" is "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span><span class="o">+</span><span class="s2">"."</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>The square root of 14 is 3.741657386773113.
-</pre>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[44]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409681005824</pre>
 </div>
 </div>
 </div>
@@ -8504,21 +7997,20 @@ The square root of 14 is 3.74267578125.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [131]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [46]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">n</span><span class="o">=</span><span class="mi">14</span>
-<span class="n">e</span><span class="o">=</span><span class="mf">0.000001</span>
-<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
-<span class="n">workingmin</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">"inf"</span><span class="p">)</span>
-<span class="k">while</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">:</span>
-    <span class="n">error</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">i</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">error</span><span class="o">&lt;</span><span class="n">workingmin</span><span class="p">:</span>
-        <span class="n">workingmin</span><span class="o">=</span><span class="n">error</span>
-        <span class="n">answer</span><span class="o">=</span><span class="n">i</span>
-    <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="n">e</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"The square root of "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="s2">" is "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span><span class="o">+</span><span class="s2">"."</span><span class="p">)</span>
+<span class="c1">#create new list r that is cumulative sum of elements of x</span>
+<span class="n">r</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)):</span>
+    <span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">r</span>
+<span class="n">x</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -8528,11 +8020,28 @@ The square root of 14 is 3.74267578125.
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>The square root of 14 is 3.7416570001690967.
-</pre>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[46]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 3, 6, 10, 15]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[46]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 2, 3, 4, 5]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[46]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409681010880</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[46]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409681013696</pre>
 </div>
 </div>
 </div>
@@ -8544,9 +8053,8 @@ The square root of 14 is 3.74267578125.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In a future lecture, we will discuss in more detail how to evaluate the efficiency of various algorithms.</p>
-<p>But here you have already seen the basic idea.  Algorithms are slower if they have more function evaluations.  And algorithms have more function evaluations if the number of iterations of loops increases.</p>
-<p>IMPORTANT:  It's important to remember that bisection search only works for the square root problem because we know that $y^2$ is an increasing function for positive $y$ values.   So we are able to utilize a faster algorithm because we are taking advantage of something we know about the specific problem we are solving.</p>
+<p>Copy</p>
+<p>The example above is for lists, but a copy method exists for many mutable objects.  For example:  arrays, Series, Dataframes, dictionaries</p>
 </div>
 </div>
 </div>
@@ -8557,48 +8065,43 @@ The square root of 14 is 3.74267578125.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Numerical-Optimization">Numerical Optimization<a class="anchor-link" href="#Numerical-Optimization">¶</a></h2><p>A common problem in economics, econometrics, and machine learning is numerical optimization - i.e. finding the parameter values that yield the maximum or minimum of a function.</p>
-<p>Examples:</p>
-<p>Linear regression:  find parameters to minimize sum of squared errors</p>
-<p>Maximum likelihood: find parameters to maximize likelihood of observing the data</p>
-<p>The grid search approach can be utilized.  But, as we will see, it can be very slow if you have many parameters and/or you need a reasonable precise answer.   (Also, only works if parameters are bounded or if you have some other info about function).</p>
-<p>An alternative approach is gradient-based search.  We will look specifically at Newton-Raphson, a well-known gradient-based method of optimization.</p>
-<p>For all numerical optimization methods, one concern is that your solution is a local min/max instead of global min/max.  To alleviate this concern with gradient-based methods, you can try many different start values.  To alleviate this concern with grid search, you can try increasing precision.</p>
+<p>Copy vs Deep Copy</p>
+<p>Note that copy creates a new list object but does not copy objects that are elements of the list.  To ensure you create a copy of all objects contained in a list, use deepcopy instead.</p>
+<p>In the example below, I am importing the copy module which provides a deepcopy function.  For Series and Dataframes in Pandas, the copy method provides an option to do a deep copy.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Grid-Search-Example-for-Optimization">Grid Search Example for Optimization<a class="anchor-link" href="#Grid-Search-Example-for-Optimization">¶</a></h2><p>Example:</p>
-<p>$f(x)=(x+2)^4$</p>
-<p>$f'(x)=4(x+2)^3$</p>
-<p>$f''(x)=12(x+2)^2$</p>
-<p>We are trying to find the value of x that leads to minimum of f without solving analytically.  The correct answer is -2 (since I know f and can apply calculus), but we will proceed as if we do not know the answer  (for many realistic examples, we cannot analytically solves for minimum).</p>
-<p>For grid search, the search space is bounded, so we will add the assumption that we are searching for a mininum on the interval $[-10,10]$.  If we want precision to nearest 0.01, then we can use the following code which checks every value from -10, -9.99, -9.98, ...., 9.99, 10.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [48]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [50]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Pre-defining f and its derivatives</span>
-<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">4</span>
-<span class="k">def</span> <span class="nf">f1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span>
-<span class="k">def</span> <span class="nf">f2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="mi">12</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">l</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,[</span><span class="mi">100</span><span class="p">,</span><span class="mi">101</span><span class="p">,</span><span class="mi">102</span><span class="p">],</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">c</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">l</span>
+<span class="n">c</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[50]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 2, [100, 101, 102], 4]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[50]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 2, [100, 101, 102], 4]</pre>
 </div>
 </div>
 </div>
@@ -8608,21 +8111,12 @@ The square root of 14 is 3.74267578125.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [107]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [52]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#Grid search</span>
-<span class="n">x</span><span class="o">=-</span><span class="mi">10</span>
-<span class="n">p</span><span class="o">=</span><span class="mf">0.01</span>
-<span class="n">workingmin</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">"inf"</span><span class="p">)</span>
-<span class="k">while</span> <span class="n">x</span><span class="o">&lt;=</span><span class="mi">10</span><span class="p">:</span>
-    <span class="n">f_val</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">f_val</span><span class="o">&lt;</span><span class="n">workingmin</span><span class="p">:</span>
-        <span class="n">workingmin</span><span class="o">=</span><span class="n">f_val</span>
-        <span class="n">xmin</span><span class="o">=</span><span class="n">x</span>
-    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="o">+</span><span class="n">p</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">xmin</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=-</span><span class="mi">1</span>
+<span class="n">l</span>
+<span class="n">c</span>
 </pre></div>
 </div>
 </div>
@@ -8632,29 +8126,17 @@ The square root of 14 is 3.74267578125.
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>-2.0000000000001705
-</pre>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[52]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 2, [100, 101, 102], 4]</pre>
 </div>
 </div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[52]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[-1, 2, [100, 101, 102], 4]</pre>
 </div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Newton-Raphson">Newton-Raphson<a class="anchor-link" href="#Newton-Raphson">¶</a></h2><p>The basic idea is to make a starting guess.  Then, the next guess is the value that would be the min/max if the function was a quadratic.  Then, repeat until the first derivative is very close to 0 (i.e. you are close to a critical value for local min/max).  If the function was actually a quadratic, it would find the local/min on the first iteration.</p>
-<p>Algorithm:</p>
-<p>Set guess to initial guess</p>
-<p>Repeat until $|f'(guess)|&lt;\epsilon$:</p>
-<pre><code>set guess to: old guess - f'(guess)/f''(guess)
-
-</code></pre>
 </div>
 </div>
 </div>
@@ -8663,14 +8145,16 @@ The square root of 14 is 3.74267578125.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [115]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [54]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="mi">0</span>  <span class="c1">#initial guess</span>
-<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.00001</span>
-<span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">f1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">&gt;</span><span class="n">epsilon</span><span class="p">:</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">-</span><span class="n">f1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">f2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">103</span><span class="p">)</span>
+<span class="n">l</span>
+<span class="n">c</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">id</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -8680,11 +8164,110 @@ The square root of 14 is 3.74267578125.
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>-1.9897235378276548
-</pre>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[54]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 2, [100, 101, 102, 103], 4]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[54]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[-1, 2, [100, 101, 102, 103], 4]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[54]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409680905920</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[54]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409635903296</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[54]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409662558016</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[54]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>1409662558016</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [24]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="n">l</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,[</span><span class="mi">100</span><span class="p">,</span><span class="mi">101</span><span class="p">,</span><span class="mi">102</span><span class="p">],</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">d</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="n">l</span>
+<span class="n">d</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 2, [100, 101, 102], 4]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 2, [100, 101, 102], 4]</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [25]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">103</span><span class="p">)</span>
+<span class="n">l</span>
+<span class="n">d</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[25]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 2, [100, 101, 102], 4]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[25]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>[1, 2, [100, 101, 102, 103], 4]</pre>
 </div>
 </div>
 </div>
@@ -8696,24 +8279,59 @@ The square root of 14 is 3.74267578125.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>If f is a function of multiple variables, then the repeat condition is until the norm of the gradient of f is close to 0.</p>
-<p>Algorithm (multivariable)</p>
-<p>Set guess to initial guess (a vector)</p>
-<p>Repeat until $|\nabla(guess)|&lt;\epsilon$:</p>
-<p>set guess to: old guess - $H^{-1}(guess)*\nabla(guess)$</p>
+<h3 id="Summary">Summary<a class="anchor-link" href="#Summary">¶</a></h3><p>If you create a variable that is equal to another variable, then both variables point to the same object.</p>
+<p>If that object is mutable, then any modification of that object affects both variables.</p>
+<p>If you use an assignment statement to re-define one of the variables to a new object, that does NOT affect the other variable, which will still point to the original object.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [27]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span> 
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">a</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">b</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">a</span><span class="o">==</span><span class="n">b</span>
+<span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
+<span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">d</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">c</span><span class="o">==</span><span class="n">d</span>
+<span class="n">c</span> <span class="ow">is</span> <span class="n">d</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[27]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>True</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[27]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>True</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[27]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>True</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[27]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>False</pre>
 </div>
 </div>
 </div>
