@@ -16,7 +16,7 @@
 
 | Folder | Topic |
 | --- | --- |
-| [Homework1/](Homeworks/Homework1/) | First homework. |
+| [Homework1/](Homeworks/Homework1/) | [Assignment prompt](Homeworks/Homework1/hw1_2026.docx) and [working script](Homeworks/Homework1/hw1.py). |
 | [Homework2/](Homeworks/Homework2/) | Iterables. |
 | [Homework3/](Homeworks/Homework3/) | NumPy and Pandas. |
 | [Homework4/](Homeworks/Homework4/) | London crime regression. |

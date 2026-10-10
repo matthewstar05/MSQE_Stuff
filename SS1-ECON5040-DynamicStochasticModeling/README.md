@@ -11,7 +11,7 @@
 | [Exams/Midterm/](Exams/Midterm/) | Midterm study guide. |
 | [Final_Project/](Final_Project/) | Project instructions, starter notebook, and SIR model example. |
 | [Readings/](Readings/) | McCall (1970) and COVID lockdown readings. |
-| [Resources/](Resources/) | Problem-set grading prompt and Python reference notebook. |
+| [Resources/](Resources/) | [Python reference notebooks](Resources/Python/), [command-line and Python/R tutorials](Resources/Tutorials/), and the grading prompt; see the [resource index](Resources/README.md). |
 
 ## Problem-set guide
 

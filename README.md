@@ -32,7 +32,7 @@ Folders are named `{term}-{course}`.
 - `SS2-ECONXXXX-Elective3(TBD)`
 
 **Other**
-- [SP26-ECON470-MicroeconAI](SP26-ECON470-MicroeconAI/) - Lab 1 programs, data, output, and reports grouped in `Labs/Lab1/`.
+- [SP26-ECON470-MicroeconAI](SP26-ECON470-MicroeconAI/) - Course info, lectures, Labs 0-5, readings and pre-class assignments, midterm practice, and presentation guidance.
 - `EXT` — extra / overflow
 
 Empty folders are placeholders (via `.gitkeep`) until files are added.
