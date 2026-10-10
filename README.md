@@ -18,11 +18,11 @@ Folders are named `{term}-{course}`.
 - `SU26-GSE518-StatsForEconometrics` — Probability & Statistics for Econometrics (Prof. Carlos A. Flores; Lecture Notes 1-14, Problem Sets 1-10 with solutions, Midterm & Final survival guides)
 
 **Semester 1 (Fall 2026)**
-- `SS1-ECON5015-ComputingMLEcon` — Computing & ML for Economics (Canvas `Modules/`, `In_Class_Notebooks/`, `Homeworks/`, `Scripts/`)
-- `SS1-ECON5021-AdvEconometrics1` — Advanced Econometrics I (Canvas `Modules/`, `Scripts/`, `Exam1/`)
-- `SS1-ECON5030-MicroeconomicAnalysis` — Microeconomic Analysis (Canvas `Modules/`, `ProblemSets/`)
-- `SS1-ECON5040-DynamicStochasticModeling` — Dynamic Stochastic Modeling (Canvas `Modules/` Weeks 1-14, `Week2`-`Week6` coursework)
-- `SS1-ECON5560-AppliedEconProj1` — Applied Economics Project (Canvas `Modules/`, `Replication-Project/`, `Deliverables/`)
+- [SS1-ECON5015-ComputingMLEcon](SS1-ECON5015-ComputingMLEcon/) - Computing & ML for Economics: homework, in-class notebooks, lecture notes, quizzes, and midterm practice.
+- [SS1-ECON5021-AdvEconometrics1](SS1-ECON5021-AdvEconometrics1/) - Advanced Econometrics I: course info, lecture notes, in-class practice, R scripts, and Exam 1.
+- [SS1-ECON5030-MicroeconomicAnalysis](SS1-ECON5030-MicroeconomicAnalysis/) - Microeconomic Analysis: course info, lecture notes, and numbered problem sets.
+- [SS1-ECON5040-DynamicStochasticModeling](SS1-ECON5040-DynamicStochasticModeling/) - Dynamic Stochastic Modeling: lectures, in-class notebooks, Problem Sets 1-9, midterm, final project, readings, and resources.
+- [SS1-ECON5560-AppliedEconProj1](SS1-ECON5560-AppliedEconProj1/) - Applied Economics Project: course info, project management, replication project, and deliverables.
 
 **Semester 2**
 - `SS2-ECON5022-AdvEconometrics2`
@@ -32,7 +32,7 @@ Folders are named `{term}-{course}`.
 - `SS2-ECONXXXX-Elective3(TBD)`
 
 **Other**
-- `SP26-ECON470-MicroeconAI`
+- [SP26-ECON470-MicroeconAI](SP26-ECON470-MicroeconAI/) - Lab 1 programs, data, output, and reports grouped in `Labs/Lab1/`.
 - `EXT` — extra / overflow
 
 Empty folders are placeholders (via `.gitkeep`) until files are added.

@@ -1,6 +1,6 @@
 # Memo Deliverables
 
-This directory contains the written policy and replication memos as specified in `Modules/03-Deliverables/Replication_Guidance.md`.
+This directory contains the written policy and replication memos as specified in [Replication_Guidance.md](../Replication_Guidance.md).
 
 ## Structure & Milestones
 - **Draft (Week 7)**: Complete draft covering both the technical appraisal and client-facing recommendations.

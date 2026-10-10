@@ -1,6 +1,6 @@
 # Presentation Deliverables
 
-This directory contains slide decks and presentation materials as specified in `Modules/03-Deliverables/Replication_Guidance.md`.
+This directory contains slide decks and presentation materials as specified in [Replication_Guidance.md](../Replication_Guidance.md).
 
 ## Structure & Milestones
 - **Draft (Week 8)**: Initial 2-slide appraisal presentation draft.

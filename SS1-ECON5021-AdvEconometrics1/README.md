@@ -1,25 +1,13 @@
 # ECON 5021: Advanced Econometrics I
 
-This directory contains course materials, scripts, and exam preparation for ECON 5021 (Advanced Econometrics I).
+## Folder guide
 
-## Directory Structure
+| Folder | Contents |
+| --- | --- |
+| [Course_Info/](Course_Info/) | Course syllabus. |
+| [Lecture_Notes/](Lecture_Notes/) | Core lecture notes. |
+| [In_Class_Practice/Unit1/](In_Class_Practice/Unit1/) | Statistical foundations and R practice handouts. |
+| [Scripts/](Scripts/) | R class work, simulations, exam scratch work, and FRED examples. |
+| [Exam1/](Exam1/) | Exam 1 preparation, practice exams, and solution scripts. |
 
-```text
-SS1-ECON5021-AdvEconometrics1/
-├── SS1-ECON5021-AdvEconometrics1.Rproj  # RStudio Project root
-├── README.md                            # Course directory overview
-├── Modules/                             # Official lecture slides & course documents
-│   ├── 01-Course-Material/              # Syllabus and core lecture slides (lectureECON5021.pdf)
-│   └── 02-Unit-1-Statistical-Foundations-and-Computing/ # Unit practice materials
-├── Scripts/                             # User R scripts, simulations, and API workflows
-│   ├── L1_L3.R                          # Returns & quantmod practice
-│   ├── exam.R                           # Exam scratch work
-│   ├── fredr_example.R                  # Federal Reserve Economic Data (FRED) API integration
-│   ├── mc_8020_10y_return.R             # 10-year portfolio Monte Carlo return simulations
-│   └── Untitled.R                       # Scratch calculations
-└── Exam1/                               # Exam 1 prep, practice exams, and solution scripts
-    ├── Exam1.Rproj
-    ├── exam1_solution.r
-    ├── practice_solutions.r
-    └── practice_exam1_*.r
-```
+The course RStudio project remains at `SS1-ECON5021-AdvEconometrics1.Rproj`. The separate Exam 1 RStudio project remains inside `Exam1/`.

@@ -1,27 +1,12 @@
 # ECON 5030: Microeconomic Analysis
 
-Repository for coursework, materials, and student problem sets for ECON 5030.
+## Folder guide
 
-## Directory Structure
+| Folder | Contents |
+| --- | --- |
+| [Course_Info/](Course_Info/) | Course syllabus. |
+| [Lecture_Notes/](Lecture_Notes/) | Course notes for Chapters 1-3. |
+| [ProblemSets/ProblemSet1/](ProblemSets/ProblemSet1/) | Official prompt and instructor answer key, plus student LaTeX sources, solution key, and submission PDFs. |
+| [ProblemSets/ProblemSet2/](ProblemSets/ProblemSet2/) | Official prompt and student workspace. |
 
-```text
-SS1-ECON5030-MicroeconomicAnalysis/
-├── Modules/
-│   ├── 01-Syllabus-and-course-notes/
-│   ├── 02-Problem-set-1/
-│   └── 03-Problem-Set-2/
-└── ProblemSets/
-    ├── ProblemSet1/
-    └── ProblemSet2/
-```
-
-### `Modules/`
-Contains official, canonical course materials downloaded from Canvas:
-- Course syllabus and lecture notes (`01-Syllabus-and-course-notes/`)
-- Official assignment sheets and problem set prompts
-- Official instructor answer keys and solutions (`AK_...`)
-
-### `ProblemSets/`
-Contains student workspace, solution drafting, and submission files:
-- LaTeX source files (`.tex`) and compiled deliverables (`.pdf`)
-- Scratch calculations, solution notes, and student working documents
+Each problem set keeps its prompt, solutions, and working files together. Instructor answer keys and student submissions retain their original filenames.

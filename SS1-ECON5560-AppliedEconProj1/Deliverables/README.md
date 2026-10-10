@@ -1,6 +1,6 @@
 # Deliverables Overview
 
-This directory houses the formal, evaluated course submissions aligned with [Modules/03-Deliverables/Replication_Guidance.md](../../Modules/03-Deliverables/Replication_Guidance.md).
+This directory houses the formal, evaluated course submissions aligned with [Replication_Guidance.md](Replication_Guidance.md).
 
 ## Subdirectories
 
@@ -11,4 +11,4 @@ This directory houses the formal, evaluated course submissions aligned with [Mod
   - **Week 8 Draft**: Draft presentation slides following the 2-slide appraisal format.
   - **Week 10 Final**: Final client briefing presentation slide deck and speaking notes.
 
-All underlying data processing, econometric estimation, and figure generation code live in [`Replication-Project/Data-Parsing/`](../../Replication-Project/Data-Parsing/).
+All underlying data processing, econometric estimation, and figure generation code live in [`Replication-Project/Data-Parsing/`](../Replication-Project/Data-Parsing/).

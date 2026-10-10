@@ -1,41 +1,28 @@
-# ECON 5560 — Applied Economic Projects 1
+# ECON 5560: Applied Economic Projects 1
 
-Repository for ECON S5560 Applied Economic Projects 1 course materials, replication project analysis, and final deliverables.
+## Folder guide
 
----
+| Folder | Contents |
+| --- | --- |
+| [Course_Info/](Course_Info/) | Course links and syllabus location. |
+| [Project_Management/](Project_Management/) | Internal milestones, team check-ins, signed team charter, and [charter examples](Project_Management/Charter_Examples/). |
+| [Replication-Project/Resources/](Replication-Project/Resources/) | Paper, raw dataset, and replication assignment guidance. |
+| [Replication-Project/Data-Parsing/](Replication-Project/Data-Parsing/) | Existing analysis pipeline, notebooks, results, figures, dashboard, and logs. |
+| [Deliverables/](Deliverables/) | Replication guidance and [Memo/](Deliverables/Memo/) and [Presentation/](Deliverables/Presentation/) workspaces. |
 
-## Repository Organization
+The replication analysis directory and its internal paths are unchanged. The signed charter is in `Project_Management/team charter (1).pdf`.
 
-```text
-SS1-ECON5560-AppliedEconProj1/
-├── Modules/                     # Course syllabus, milestones, guidelines, and rubrics
-│   ├── 01-Syllabus-and-course-info/      # Course overview and links
-│   ├── 02-Weeks-up-until-Draft-Week-7/   # Team check-ins, charters, milestones
-│   └── 03-Deliverables/                  # Replication memo & presentation guidelines
-│
-├── Replication-Project/         # Empirical implementation, scripts, and data
-│   ├── Data-Parsing/            # Analysis pipeline (Python/R, notebooks, logs)
-│   ├── Resources/               # Raw paper PDF and dataset (S1Table.DTA)
-│   └── team charter (1).pdf     # Signed team charter document
-│
-└── Deliverables/                # Formal project milestone deliverables
-    ├── Memo/                    # Week 7 Draft & Week 9 Final written memos
-    └── Presentation/            # Week 8 Draft & Week 10 Final presentation slides
-```
+## Course Milestones
 
----
-
-## Course Modules & Milestones
-
-Course requirements are documented in [`Modules/`](./Modules/):
+Course requirements are grouped in [Project_Management/](Project_Management/) and [Deliverables/](Deliverables/):
 
 | Week | Milestone | Specification Document |
 | :--- | :--- | :--- |
-| **Week 3** | Charter Draft & Data Access | [`Modules/02-Weeks-up-until-Draft-Week-7/Team_Check_ins.md`](./Modules/02-Weeks-up-until-Draft-Week-7/Team_Check_ins.md) |
-| **Week 4** | CATME & Single Stat Repro | [`Modules/02-Weeks-up-until-Draft-Week-7/Internal_Milestones.md`](./Modules/02-Weeks-up-until-Draft-Week-7/Internal_Milestones.md) |
-| **Week 5** | Main Result Attempt | [`Modules/02-Weeks-up-until-Draft-Week-7/Internal_Milestones.md`](./Modules/02-Weeks-up-until-Draft-Week-7/Internal_Milestones.md) |
-| **Week 6** | Appraisal Outline & Audience Split | [`Modules/03-Deliverables/Replication_Guidance.md`](./Modules/03-Deliverables/Replication_Guidance.md) |
-| **Week 7** | Full Memo Draft | [`Deliverables/Memo/`](./Deliverables/Memo/) & [`Modules/03-Deliverables/Replication_Guidance.md`](./Modules/03-Deliverables/Replication_Guidance.md) |
+| **Week 3** | Charter Draft & Data Access | [`Project_Management/Team_Check_ins.md`](./Project_Management/Team_Check_ins.md) |
+| **Week 4** | CATME & Single Stat Repro | [`Project_Management/Internal_Milestones.md`](./Project_Management/Internal_Milestones.md) |
+| **Week 5** | Main Result Attempt | [`Project_Management/Internal_Milestones.md`](./Project_Management/Internal_Milestones.md) |
+| **Week 6** | Appraisal Outline & Audience Split | [`Deliverables/Replication_Guidance.md`](./Deliverables/Replication_Guidance.md) |
+| **Week 7** | Full Memo Draft | [`Deliverables/Memo/`](./Deliverables/Memo/) & [`Deliverables/Replication_Guidance.md`](./Deliverables/Replication_Guidance.md) |
 | **Week 8** | Slides Draft (Appraisal Format) | [`Deliverables/Presentation/`](./Deliverables/Presentation/) |
 | **Week 9** | Final Memo Submission | [`Deliverables/Memo/`](./Deliverables/Memo/) |
 | **Week 10** | Final Presentation | [`Deliverables/Presentation/`](./Deliverables/Presentation/) |
