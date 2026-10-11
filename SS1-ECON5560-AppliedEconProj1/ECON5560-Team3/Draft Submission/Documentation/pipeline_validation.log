@@ -1,0 +1,304 @@
+
+==============================================================================
+>>> 01_parse_data.py
+==============================================================================
+Raw file: S1Table.DTA  rows=2,160  columns=147  respondents=180
+Each respondent has 12 rows = 4 choice cards x 3 options.
+Checks passed: attribute dummies match codes; status quo = none/high/none; one choice per card;
+  the 12 design cards are identical across respondents (each person got a random 4 of the 12).
+Note: raw 'water_high{t}' = High water x treatment t (base level). We build Low x $ ourselves.
+Answered all 4 cards: 164 respondents; fewer than 4: 16
+  incomplete respondents show only 1-3 distinct cards across their 4 'answers' (duplicated rows)
+Check passed: 'chosen' agrees with the recoded survey answers on every card.
+Sample 'All': 164 respondents -> 1,968 rows (paper N = 1,968)
+Sample 'Councillors': 123 respondents -> 1,476 rows (paper N = 1,476); 121 by role code + 2 from free text
+Respondents per treatment (complete): {1: 57, 2: 52, 3: 55}
+Status quo chosen on 26.7% of cards
+Wrote choice_long.csv (2,160 rows), respondents.csv (180), design_cards.csv (12 cards)
+<<< 01_parse_data.py done in 2s
+
+==============================================================================
+>>> 02_descriptives.py
+==============================================================================
+Table 1 - paper vs. ours
+           variable      category  paper  ours_all_180  ours_complete_164  diff_all
+            Gender        Female   32.5          32.5               31.9       0.0
+            Gender          Male   67.5          67.5               68.1      -0.0
+               Age           <40    8.4           8.4                8.0      -0.0
+               Age         40–49   14.8          14.8               14.7       0.0
+               Age         50–59   27.7          27.7               28.7       0.0
+               Age         60–69   36.8          36.8               36.7      -0.0
+               Age           >70   12.3          12.3               12.0      -0.0
+Personal residence         Rural   41.8          41.8               41.5      -0.0
+Personal residence         Urban   58.2          58.2               58.5       0.0
+  City inhabitants       >50,000   36.7          39.1               40.4       2.4
+  City inhabitants 15,001–50,000   30.9          29.0               28.2      -1.9
+  City inhabitants  5,000–15,000   21.3          20.1               19.2      -1.2
+  City inhabitants        <5,000   11.2          11.8               12.2       0.6
+
+9 of 13 Table 1 cells reproduced exactly on all 180 respondents; mismatches: >50,000, 15,001–50,000, 5,000–15,000, <5,000
+
+How often an option was picked when it was on the card, by treatment:
+treatment                            1      2      3
+attribute   level                                   
+cultural    None                 0.087  0.086  0.027
+            Stables              0.316  0.375  0.301
+            Stables & landscape  0.532  0.606  0.614
+development Commercial           0.442  0.533  0.449
+            Limited              0.298  0.350  0.267
+            Residential          0.311  0.340  0.368
+status quo  Status quo           0.307  0.202  0.286
+water       High                 0.711  0.827  0.815
+            Low                  0.069  0.074  0.038
+            Medium               0.236  0.269  0.205
+
+Wrote Table 1, Figure 1, choice-rate tables and figures.
+<<< 02_descriptives.py done in 0s
+
+==============================================================================
+>>> 03_conditional_logit.py
+==============================================================================
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:100: RuntimeWarning: divide by zero encountered in matmul
+  v = X @ b
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:100: RuntimeWarning: overflow encountered in matmul
+  v = X @ b
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:100: RuntimeWarning: invalid value encountered in matmul
+  v = X @ b
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:105: RuntimeWarning: divide by zero encountered in matmul
+  H = (P[:, None] * d).T @ d                              # information matrix
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:105: RuntimeWarning: overflow encountered in matmul
+  H = (P[:, None] * d).T @ d                              # information matrix
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:105: RuntimeWarning: invalid value encountered in matmul
+  H = (P[:, None] * d).T @ d                              # information matrix
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:109: RuntimeWarning: divide by zero encountered in matmul
+  V = Hinv @ (S.T @ S) @ Hinv * C / (C - 1)
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:109: RuntimeWarning: overflow encountered in matmul
+  V = Hinv @ (S.T @ S) @ Hinv * C / (C - 1)
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:109: RuntimeWarning: invalid value encountered in matmul
+  V = Hinv @ (S.T @ S) @ Hinv * C / (C - 1)
+
+=== Model (1) CL · All   N=1,968 (paper 1,968)
+log likelihood: replicated -852.92 | paper -852.9 | corrected -485.18 | null model for 3-option cards -720.7
+                                         paper      replicated  match     corrected (clustered p)
+Development: Limited               4.260 (0.000)   4.260***(0.000)    yes     2.235***(0.001)
+Development: Residential           4.553 (0.000)   4.553***(0.000)    yes     2.337***(0.000)
+Development: Commercial            4.112 (0.000)   4.112***(0.000)    yes     2.174***(0.000)
+Water quality: Medium             -3.954 (0.000)  -3.954***(0.000)    yes    -2.227***(0.000)
+Water quality: Low                -6.135 (0.000)  -6.135***(0.000)    yes    -3.818***(0.000)
+Cultural: Stables                 -0.822 (0.080)  -0.822*  (0.080)    yes    -0.406   (0.336)
+Cultural: Stables & landscape     -1.672 (0.031)  -1.673***(0.001)   coef    -0.999** (0.015)
+Limited × $ shown                  0.205 (0.452)   0.205   (0.452)    yes     0.397   (0.273)
+Residential × $ shown              0.670 (0.018)   0.699** (0.018)     NO     0.836** (0.039)
+Commercial × $ shown               0.308 (0.282)   0.308   (0.282)    yes     0.512   (0.191)
+Medium water × $ shown            -0.473 (0.076)  -0.473*  (0.076)    yes    -0.584*  (0.084)
+Low water × $ shown               -0.919 (0.082)  -0.919*  (0.082)    yes    -1.023*  (0.100)
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:100: RuntimeWarning: divide by zero encountered in matmul
+  v = X @ b
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:100: RuntimeWarning: overflow encountered in matmul
+  v = X @ b
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:100: RuntimeWarning: invalid value encountered in matmul
+  v = X @ b
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:105: RuntimeWarning: divide by zero encountered in matmul
+  H = (P[:, None] * d).T @ d                              # information matrix
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:105: RuntimeWarning: overflow encountered in matmul
+  H = (P[:, None] * d).T @ d                              # information matrix
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:105: RuntimeWarning: invalid value encountered in matmul
+  H = (P[:, None] * d).T @ d                              # information matrix
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:109: RuntimeWarning: divide by zero encountered in matmul
+  V = Hinv @ (S.T @ S) @ Hinv * C / (C - 1)
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:109: RuntimeWarning: overflow encountered in matmul
+  V = Hinv @ (S.T @ S) @ Hinv * C / (C - 1)
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:109: RuntimeWarning: invalid value encountered in matmul
+  V = Hinv @ (S.T @ S) @ Hinv * C / (C - 1)
+
+=== Model (2) CL · Councillors   N=1,476 (paper 1,476)
+log likelihood: replicated -646.98 | paper -647.0 | corrected -372.22 | null model for 3-option cards -540.5
+                                         paper      replicated  match     corrected (clustered p)
+Development: Limited               4.114 (0.000)   4.115***(0.000)    yes     2.250***(0.002)
+Development: Residential           4.545 (0.000)   4.545***(0.000)    yes     2.403***(0.000)
+Development: Commercial            4.184 (0.000)   4.184***(0.000)    yes     2.287***(0.000)
+Water quality: Medium             -0.393 (0.000)  -3.891***(0.000)     NO    -2.251***(0.000)
+Water quality: Low                -0.602 (0.000)  -6.184***(0.000)     NO    -3.927***(0.000)
+Cultural: Stables                 -0.758 (0.150)  -0.758   (0.150)    yes    -0.402   (0.386)
+Cultural: Stables & landscape     -1.850 (0.001)  -1.850***(0.001)    yes    -1.138** (0.011)
+Limited × $ shown                  0.084 (0.790)   0.084   (0.790)    yes     0.250   (0.554)
+Residential × $ shown              0.647 (0.058)   0.647*  (0.058)    yes     0.754   (0.103)
+Commercial × $ shown               0.254 (0.433)   0.254   (0.433)    yes     0.429   (0.361)
+Medium water × $ shown            -0.299 (0.323)  -0.299   (0.323)    yes    -0.364   (0.346)
+Low water × $ shown               -0.592 (0.286)  -0.592   (0.286)    yes    -0.645   (0.329)
+
+20 of 24 coefficient+p-value pairs match the paper to 3 decimals; 1 match on the coefficient only; mismatches: (1) CL · All Residential × $ shown; (2) CL · Councillors Water quality: Medium; (2) CL · Councillors Water quality: Low
+Wrote output/tables/table3_cl.csv and output/results/cl.json
+<<< 03_conditional_logit.py done in 45s
+
+==============================================================================
+>>> 04_mixed_logit.py
+==============================================================================
+/Users/star/Library/Python/3.9/lib/python/site-packages/numpy/linalg/_linalg.py:3220: RuntimeWarning: divide by zero encountered in matmul
+  return _core_matmul(x1, x2)
+/Users/star/Library/Python/3.9/lib/python/site-packages/numpy/linalg/_linalg.py:3220: RuntimeWarning: overflow encountered in matmul
+  return _core_matmul(x1, x2)
+/Users/star/Library/Python/3.9/lib/python/site-packages/numpy/linalg/_linalg.py:3220: RuntimeWarning: invalid value encountered in matmul
+  return _core_matmul(x1, x2)
+
+=== Model (3) ML · All  (123s)
+log likelihood: primary (2000 draws) -425.36 | paper -421.92 | 20 x 500-draw runs: -426.8 to -418.4
+                                          paper          primary    500-draw runs: median [min, max]  paper inside?
+Development: Limited               6.819 (0.002)   7.197***(0.002)        8.63 [  5.75,  18.23]       yes
+Development: Residential           6.259 (0.006)   6.778***(0.003)        7.53 [  5.18,  14.76]       yes
+Development: Commercial            6.387 (0.002)   6.581***(0.001)        7.66 [  5.19,  14.52]       yes
+Water quality: Medium             -7.324 (0.000)  -7.554***(0.000)       -9.03 [-15.83,  -6.37]       yes
+Water quality: Low               -14.950 (0.000) -14.589***(0.001)      -18.14 [-37.84, -12.50]       yes
+Cultural: Stables                 -1.239 (0.294)  -1.747   (0.186)       -1.97 [ -6.66,  -0.17]       yes
+Cultural: Stables & landscape     -2.765 (0.080)  -2.954** (0.046)       -3.37 [ -9.10,  -1.92]       yes
+Limited × $ shown                  1.290 (0.187)   1.740   (0.126)        1.96 [  1.23,   5.03]       yes
+Residential × $ shown              3.222 (0.015)   2.976** (0.039)        3.90 [  2.52,   7.72]       yes
+Commercial × $ shown               1.754 (0.082)   1.521   (0.142)        1.92 [  1.22,   4.06]       yes
+Medium water × $ shown            -2.272 (0.064)  -1.656   (0.188)       -2.07 [ -5.46,  -1.44]       yes
+Low water × $ shown               -4.305 (0.018)  -6.978** (0.021)       -6.79 [-13.54,  -3.65]       yes
+/Users/star/Library/Python/3.9/lib/python/site-packages/numpy/linalg/_linalg.py:3220: RuntimeWarning: divide by zero encountered in matmul
+  return _core_matmul(x1, x2)
+/Users/star/Library/Python/3.9/lib/python/site-packages/numpy/linalg/_linalg.py:3220: RuntimeWarning: overflow encountered in matmul
+  return _core_matmul(x1, x2)
+/Users/star/Library/Python/3.9/lib/python/site-packages/numpy/linalg/_linalg.py:3220: RuntimeWarning: invalid value encountered in matmul
+  return _core_matmul(x1, x2)
+
+=== Model (4) ML · Councillors  (95s)
+log likelihood: primary (2000 draws) -317.52 | paper -316.4 | 20 x 500-draw runs: -320.5 to -309.5
+                                          paper          primary    500-draw runs: median [min, max]  paper inside?
+Development: Limited               6.878 (0.011)  10.181** (0.038)       13.84 [  7.13,  25.30]        no
+Development: Residential           6.554 (0.013)   8.707** (0.037)       13.30 [  6.70,  25.03]        no
+Development: Commercial            6.663 (0.005)   8.603** (0.024)       13.69 [  6.53,  23.49]       yes
+Water quality: Medium             -7.578 (0.000) -10.150** (0.024)      -14.29 [-26.87,  -7.02]       yes
+Water quality: Low               -19.020 (0.001) -20.230*  (0.058)      -29.48 [-52.46, -14.85]       yes
+Cultural: Stables                 -2.131 (0.244)  -2.872   (0.167)       -3.82 [ -9.04,  -1.95]       yes
+Cultural: Stables & landscape     -2.366 (0.164)  -4.182*  (0.084)       -6.68 [-13.74,  -3.01]        no
+Limited × $ shown                  2.650 (0.109)   1.445   (0.386)        2.59 [  0.65,   5.69]       yes
+Residential × $ shown              3.450 (0.062)   4.119   (0.126)        5.60 [  2.12,  10.02]       yes
+Commercial × $ shown               2.225 (0.166)   1.939   (0.247)        2.48 [ -0.92,   6.45]       yes
+Medium water × $ shown            -2.085 (0.135)  -1.359   (0.453)       -2.53 [ -6.06,   0.04]       yes
+Low water × $ shown               -8.649 (0.015)  -3.053   (0.384)       -6.27 [-29.30,  -2.44]       yes
+
+Paper's ML coefficient inside our 500-draw range: 21 of 24
+Wrote output/tables/table3_ml.csv, figures, and output/results/ml.json
+<<< 04_mixed_logit.py done in 219s
+
+==============================================================================
+>>> 05_build_dashboard.py
+==============================================================================
+Wrote dashboard/index.html (120 KB)
+<<< 05_build_dashboard.py done in 0s
+
+==============================================================================
+>>> 06_slide_figures.py
+==============================================================================
+Wrote slide1_raw_pattern.png, slide2_reproduced.png, slide3_grouping_issue.png, slide4_effect_size.png
+<<< 06_slide_figures.py done in 0s
+
+==============================================================================
+>>> 07_paper_figures.py
+==============================================================================
+Read choice_long.csv (2,160 rows) and respondents.csv (180 rows); samples: 164 all, 123 councillors
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:100: RuntimeWarning: divide by zero encountered in matmul
+  v = X @ b
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:100: RuntimeWarning: overflow encountered in matmul
+  v = X @ b
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:100: RuntimeWarning: invalid value encountered in matmul
+  v = X @ b
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:105: RuntimeWarning: divide by zero encountered in matmul
+  H = (P[:, None] * d).T @ d                              # information matrix
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:105: RuntimeWarning: overflow encountered in matmul
+  H = (P[:, None] * d).T @ d                              # information matrix
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:105: RuntimeWarning: invalid value encountered in matmul
+  H = (P[:, None] * d).T @ d                              # information matrix
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:109: RuntimeWarning: divide by zero encountered in matmul
+  V = Hinv @ (S.T @ S) @ Hinv * C / (C - 1)
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:109: RuntimeWarning: overflow encountered in matmul
+  V = Hinv @ (S.T @ S) @ Hinv * C / (C - 1)
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:109: RuntimeWarning: invalid value encountered in matmul
+  V = Hinv @ (S.T @ S) @ Hinv * C / (C - 1)
+/Users/star/Library/Python/3.9/lib/python/site-packages/numpy/linalg/_linalg.py:3220: RuntimeWarning: divide by zero encountered in matmul
+  return _core_matmul(x1, x2)
+/Users/star/Library/Python/3.9/lib/python/site-packages/numpy/linalg/_linalg.py:3220: RuntimeWarning: overflow encountered in matmul
+  return _core_matmul(x1, x2)
+/Users/star/Library/Python/3.9/lib/python/site-packages/numpy/linalg/_linalg.py:3220: RuntimeWarning: invalid value encountered in matmul
+  return _core_matmul(x1, x2)
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:100: RuntimeWarning: divide by zero encountered in matmul
+  v = X @ b
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:100: RuntimeWarning: overflow encountered in matmul
+  v = X @ b
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:100: RuntimeWarning: invalid value encountered in matmul
+  v = X @ b
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:105: RuntimeWarning: divide by zero encountered in matmul
+  H = (P[:, None] * d).T @ d                              # information matrix
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:105: RuntimeWarning: overflow encountered in matmul
+  H = (P[:, None] * d).T @ d                              # information matrix
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:105: RuntimeWarning: invalid value encountered in matmul
+  H = (P[:, None] * d).T @ d                              # information matrix
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:109: RuntimeWarning: divide by zero encountered in matmul
+  V = Hinv @ (S.T @ S) @ Hinv * C / (C - 1)
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:109: RuntimeWarning: overflow encountered in matmul
+  V = Hinv @ (S.T @ S) @ Hinv * C / (C - 1)
+/Users/star/Desktop/Academic/ECON5560-Team3/Draft Submission/Replication/Data-Parsing/common.py:109: RuntimeWarning: invalid value encountered in matmul
+  V = Hinv @ (S.T @ S) @ Hinv * C / (C - 1)
+/Users/star/Library/Python/3.9/lib/python/site-packages/numpy/linalg/_linalg.py:3220: RuntimeWarning: divide by zero encountered in matmul
+  return _core_matmul(x1, x2)
+/Users/star/Library/Python/3.9/lib/python/site-packages/numpy/linalg/_linalg.py:3220: RuntimeWarning: overflow encountered in matmul
+  return _core_matmul(x1, x2)
+/Users/star/Library/Python/3.9/lib/python/site-packages/numpy/linalg/_linalg.py:3220: RuntimeWarning: invalid value encountered in matmul
+  return _core_matmul(x1, x2)
+  (1) CL · All           log likelihood   -852.92  (paper -852.9)
+  (2) CL · Councillors   log likelihood   -646.98  (paper -647.0)
+  (3) ML · All           log likelihood   -421.06  (paper -421.92)
+  (4) ML · Councillors   log likelihood   -317.15  (paper -316.4)
+01 Table 1: 9 of 13 cells match
+02 Table 2: coding table written ($-shown terms verified against treatment rules)
+03 Figure 1: 36 of 36 bars match; totals {1: 228, 2: 208, 3: 220}
+04 Table 3 written
+05 Figure 2 written (model 3), plus 05b comparison and 05c model-4 variant
+Side-by-side comparisons written to output/paper_figures/side_by_side/
+Files: 01_table1_respondent_characteristics.png, 01_table1_respondent_characteristics_comparison.csv, 02_table2_attributes_and_levels.png, 03_fig1_responses_per_choice_scenario.png, 03_fig1_responses_per_choice_scenario_comparison.csv, 04_table3_regression_results.png, 04_table3_regression_results_comparison.csv, 05_fig2_treatment_effect_densities.png, 05_fig2_treatment_effect_densities_summary.csv, 05b_fig2_vs_published.png, 05c_fig2_model4_variant.png
+<<< 07_paper_figures.py done in 60s
+
+==============================================================================
+>>> 08_debug_discrepancies.py
+==============================================================================
+
+### Table 3 (2) CL Councillors - Water quality: Medium
+  published -0.393 | ours -3.891
+  diagnosis: Standard error printed in the coefficient cell (with a minus sign)
+  evidence:  our standard error is 0.3926, which rounds to |-0.393|; every other model-2 number matches
+  verdict:   Explained: reporting error in the paper
+
+### Table 3 (2) CL Councillors - Water quality: Low
+  published -0.602 | ours -6.184
+  diagnosis: Standard error printed in the coefficient cell (with a minus sign)
+  evidence:  our standard error is 0.6017, which rounds to |-0.602|; every other model-2 number matches
+  verdict:   Explained: reporting error in the paper
+
+### Table 3 (1) CL All - Residential x $ shown
+  published 0.670 (p 0.018) | ours 0.699 (p 0.018)
+  diagnosis: Coefficient mistyped; the printed p-value is the one our coefficient produces
+  evidence:  with SE 0.295, 0.670 would give p = 0.023, but the paper prints 0.018 = p for 0.699. No alternative sample or coding we tried gives 0.670
+  verdict:   Explained: typo in the paper (0.699 is correct)
+
+### Table 3 (1) CL All - Stables & landscape (p-value)
+  published 0.031 (**) | ours 0.001 (***)
+  diagnosis: p-value (and its **) likely left over from an earlier run on all 180 respondents
+  evidence:  the same model on all 180 respondents gives p = 0.031 for this row; Table 1 also uses all 180. The coefficient in that run (-0.985) differs, so the match is suggestive, not proof
+  verdict:   Likely explained: stale value from a different sample
+
+### Table 1 - City inhabitants (4 rows)
+  published 36.7 / 30.9 / 21.3 / 11.2 | ours 39.1 / 29.0 / 20.1 / 11.8
+  diagnosis: Computed on a different (larger) version of the data than the one published
+  evidence:  the published shares are whole-number counts only for n = [188, 376] (n=188: 69/58/40/21); the file has 180 respondents, 169 of whom answered (66/49/34/20). Other samples don't match either: {'finished': [39.3, 29.4, 19.0, 12.3], 'complete 164': [40.4, 28.2, 19.2, 12.2]}. The gender, age and residence rows fit the published file exactly
+  verdict:   Explained as far as the public data allow: not reproducible from S1 Table
+
+### Table 3 (4) ML Councillors - Residential x $ shown (stars)
+  published 3.450** (p 0.062) | ours n/a (simulation-based column)
+  diagnosis: Significance stars inconsistent with the printed p-value
+  evidence:  ** means p < 0.05 in the table's own legend, but the printed p is 0.062 (would be *)
+  verdict:   Explained: reporting error in the paper
+
+Wrote output/tables/discrepancy_diagnosis.csv (6 diagnosed cells)
+<<< 08_debug_discrepancies.py done in 79s
