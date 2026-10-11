@@ -38,7 +38,7 @@ Course requirements are grouped in [Project_Management/](Project_Management/) an
 
 ## Syncing the team repo
 
-`ECON5560-Team3/` is a `git subtree` copy of https://github.com/matthewstar05/ECON5560-Team3. Run these from the MSQE_Stuff root.
+`ECON5560-Team3/` is a `git subtree` copy of https://github.com/matthewstar05/ECON5560-Team3. Run these from the MSQE_Stuff root. On this computer the shortcuts `git team3-pull` and `git team3-push` do the same thing (they're set in this repo's local git config, so they don't carry over to other clones).
 
 Pull the team's latest changes in:
 
