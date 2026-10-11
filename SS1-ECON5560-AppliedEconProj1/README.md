@@ -7,10 +7,10 @@
 | [Course_Info/](Course_Info/) | Course links and syllabus location. |
 | [Project_Management/](Project_Management/) | Internal milestones, team check-ins, signed team charter, and [charter examples](Project_Management/Charter_Examples/). |
 | [Replication-Project/Resources/](Replication-Project/Resources/) | Paper, raw dataset, and replication assignment guidance. |
-| [Replication-Project/Data-Parsing/](Replication-Project/Data-Parsing/) | Existing analysis pipeline, notebooks, results, figures, dashboard, and logs. |
+| [ECON5560-Team3/](ECON5560-Team3/) | The team replication repo ([GitHub](https://github.com/matthewstar05/ECON5560-Team3)), embedded with `git subtree`: analysis pipeline, results, dashboard, draft submission. See "Syncing the team repo" below. |
 | [Deliverables/](Deliverables/) | Replication guidance and [Memo/](Deliverables/Memo/) and [Presentation/](Deliverables/Presentation/) workspaces. |
 
-The replication analysis directory and its internal paths are unchanged. The signed charter is in `Project_Management/team charter (1).pdf`.
+The signed charter is in `Project_Management/team charter (1).pdf`.
 
 ## Course Milestones
 
@@ -29,14 +29,25 @@ Course requirements are grouped in [Project_Management/](Project_Management/) an
 
 ---
 
-## Replication Project (Team 1)
+## Replication Project (Team 3)
 
-- **Target Paper**: Shah, Dissanayake, Fujita, & Nunes (2019), *"Impact of a Local, Coastal Community Based Management Regime When Defining Marine Protected Areas: Empirical Results from a Study in Okinawa, Japan,"* *PLOS ONE* 14(3): e0213354.
-- **Team**: Miles, Z. · Hyde, W. · Wickboldt, E. · Neralla, H.
-- **Data & Paper Assets**: [`Replication-Project/Resources/`](./Replication-Project/Resources/)
-- **Analysis Pipeline**:
-  - `01_parse_data.py`: Loads and cleans `S1Table.DTA`.
-  - `02_descriptives.py`: Summary statistics and table reproduction.
-  - `03_conditional_logit.py` & `04_mixed_logit.py`: Main econometric choice models.
-  - `06_slide_figures.py` & `07_paper_figures.py`: Generates visual figures.
-  - `run_all.py`: End-to-end execution script.
+- **Target paper**: Eppink, Winden, Wright & Greenhalgh (2016), *"Non-Market Values in a Cost-Benefit World: Evidence from a Choice Experiment,"* *PLoS ONE* 11(10): e0165365.
+- **Team repo**: [`ECON5560-Team3/`](./ECON5560-Team3/). Start with its [README](./ECON5560-Team3/README.md).
+- **Analysis pipeline**: [`ECON5560-Team3/Data-Parsing/`](./ECON5560-Team3/Data-Parsing/) (`run_all.py` runs everything end to end).
+- **Course assets** (Canvas pages, assignment guidance): [`Replication-Project/Resources/`](./Replication-Project/Resources/)
+
+## Syncing the team repo
+
+`ECON5560-Team3/` is a `git subtree` copy of https://github.com/matthewstar05/ECON5560-Team3. Run these from the MSQE_Stuff root.
+
+Pull the team's latest changes in:
+
+```
+git subtree pull --prefix=SS1-ECON5560-AppliedEconProj1/ECON5560-Team3 https://github.com/matthewstar05/ECON5560-Team3.git main --squash
+```
+
+Send edits made here back to the team repo:
+
+```
+git subtree push --prefix=SS1-ECON5560-AppliedEconProj1/ECON5560-Team3 https://github.com/matthewstar05/ECON5560-Team3.git main
+```
