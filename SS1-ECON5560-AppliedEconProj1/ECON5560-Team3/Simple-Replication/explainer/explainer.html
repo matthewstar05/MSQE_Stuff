@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Eppink et al. (2016), Explained Simply</title>
+<style>
+  @page { size: Letter; margin: 0.8in 0.85in; }
+  body { font-family: Georgia, "Times New Roman", serif; font-size: 11pt; line-height: 1.45; color: #1d1d1d; }
+  h1 { font-size: 22pt; margin: 0 0 4pt; line-height: 1.15; }
+  h2 { font-size: 14.5pt; margin: 22pt 0 6pt; border-bottom: 1.5px solid #2f6db3; padding-bottom: 3pt; break-after: avoid; }
+  h3 { font-size: 12pt; margin: 14pt 0 4pt; break-after: avoid; }
+  .sub { color: #555; font-size: 11pt; margin-bottom: 14pt; }
+  p { margin: 0 0 8pt; }
+  table { border-collapse: collapse; width: 100%; margin: 6pt 0 10pt; font-size: 10pt; break-inside: avoid; }
+  th, td { border: 1px solid #c9c9c9; padding: 4pt 6pt; text-align: left; vertical-align: top; }
+  th { background: #eef2f8; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .box { background: #f4f7fb; border-left: 4px solid #2f6db3; padding: 8pt 11pt; margin: 8pt 0 12pt; break-inside: avoid; }
+  .warn { background: #fdf4ea; border-left: 4px solid #e0913a; }
+  .box p:last-child { margin-bottom: 0; }
+  code { font-family: Menlo, Consolas, monospace; font-size: 9pt; background: #f1f1f1; padding: 0 2pt; }
+  img { width: 100%; margin: 4pt 0; break-inside: avoid; }
+  .caption { font-size: 9pt; color: #555; margin-top: -2pt; }
+  .pagebreak { break-before: page; }
+  ul, ol { margin: 0 0 8pt; padding-left: 18pt; }
+  li { margin-bottom: 3pt; }
+  .qa p { margin-bottom: 4pt; }
+  .qa .q { font-weight: bold; margin-top: 8pt; }
+</style>
+</head>
+<body>
+
+<h1>Does Putting a Price Tag on Nature Change Decisions?</h1>
+<div class="sub">A plain-language guide to Eppink, Winden, Wright &amp; Greenhalgh (2016), <i>PLoS ONE</i> 11(10): e0165365, and to Team 3's replication of it.<br>ECON S5560 · Team 3</div>
+
+<div class="box">
+<p><b>The whole thing in five sentences.</b> Governments increasingly attach dollar values to nature, and critics worry that decision-makers will then focus on whatever has a dollar sign next to it. The authors tested this by giving 164 New Zealand councillors and council staff a survey where they chose between made-up housing developments. Everyone saw the same options, but randomly chosen groups saw dollar figures for some effects and not others. People who saw a dollar figure for something gave it more weight in their choices. We rebuilt the authors' analysis from their raw data: we match their main table almost exactly, but only by copying an unusual modelling choice. Done the standard way, the effects point the same direction but are less certain.</p>
+</div>
+
+<h2>1. The research question</h2>
+<p>Imagine you're on a town council deciding whether to approve a new housing development. A report tells you the development brings in <b>$3 million</b> in revenue. It also says the development will make the local stream murky, and that a historic building will be hemmed in by new houses. Only the first effect has a number attached.</p>
+<p>Will the dollar figure win out simply <i>because</i> it is a number? That's the worry: that decisions based on <b>"mixed" information</b> (some effects in dollars, some only described in words) tilt toward the effects that have been priced. The paper asks whether that tilt is real among actual decision-makers.</p>
+
+<h2>2. The experiment</h2>
+<h3>Who</h3>
+<p>An online survey of New Zealand regional and district <b>councillors and council staff</b>, run in late 2015. 180 people started it; 164 answered every question used in the analysis, and 123 of those were councillors.</p>
+
+<h3>What they were asked</h3>
+<p>Picture a town of 20,000 people growing 4% a year. On each <b>choice card</b>, pick one of three options: <b>Option A</b>, <b>Option B</b>, or <b>keep things as they are</b> (the <i>status quo</i>). Every option is described by three features (economists call them <b>attributes</b>):</p>
+<table>
+<tr><th>Attribute</th><th>Possible levels</th><th>Status quo</th></tr>
+<tr><td>Development</td><td>Limited (half the growth is housed) · Residential (all of it) · Commercial (all of it, plus shops)</td><td>None</td></tr>
+<tr><td>Water quality in the stream</td><td>High (swimmable) · Medium (murky) · Low (unsafe)</td><td>High</td></tr>
+<tr><td>Cultural heritage (a historic tavern called "The Stables")</td><td>Stables (surrounded by buildings) · Stables &amp; landscape (the view is affected too)</td><td>No impact</td></tr>
+</table>
+<p>The survey had 12 different cards in total, and each person answered 4 of them.</p>
+
+<h3>The trick: three randomly assigned groups</h3>
+<table>
+<tr><th>Group</th><th>Extra information shown</th><th class="num">People</th></tr>
+<tr><td>1</td><td>None: words only</td><td class="num">57</td></tr>
+<tr><td>2</td><td>Development <b>revenue</b> in dollars ($1M / $2M / $3M)</td><td class="num">52</td></tr>
+<tr><td>3</td><td>Development revenue <b>and</b> the dollar <b>loss</b> from worse water ($250k medium / $500k low)</td><td class="num">55</td></tr>
+</table>
+<p>The cultural impact <b>never</b> got a dollar figure. Because people were put into groups at random, the groups should be alike in every other way. Any difference in how the groups choose can therefore be blamed on the information they saw. That's what makes this an <b>experiment</b> rather than just a survey.</p>
+
+<h3>What the raw choices already show</h3>
+<img src="chart_raw_choices.png" alt="Pick rates by group">
+<p class="caption">How often an option was picked when it appeared on a card, by group. Made from the data by <code>step2_look_at_raw_choices.py</code>.</p>
+<p>Group 3, the only group that saw the dollar cost of dirty water, picked low-water options least often (3.8% vs. about 7%). Group 2, which saw development revenue, picked the status quo least often (20% of cards vs. 31% in Group 1). These are hints, though, not proof. Each option bundles several features at once, so we need a model to separate them.</p>
+
+<h2>3. The models, explained simply</h2>
+
+<h3>The basic idea: every option gets a score</h3>
+<p>Economists model choices like this: a person gives each option a <b>score</b> (formally, its <i>utility</i>) by adding up points for its features. Options with higher scores are more likely to be picked, but not guaranteed to be. People are a little unpredictable.</p>
+<div class="box">
+<p><b>Score of an option</b> = (points for its development level) + (points for its water level) + (points for its cultural impact) + (<b>extra points if this person's group saw a dollar figure for that feature</b>)</p>
+<p><b>Chance of picking an option</b> = e<sup>its score</sup> ÷ (e<sup>score A</sup> + e<sup>score B</sup> + e<sup>score status quo</sup>)</p>
+</div>
+<p>The status quo has none of the features, so its score is always <b>0</b>. Every "points" number is therefore measured <b>relative to leaving things as they are</b>. Those points are the <b>coefficients</b> in the paper's Table 3. The model's job is to find the coefficients that make the choices people actually made as likely as possible. This is called <b>maximum likelihood</b>.</p>
+<p>There are 12 coefficients:</p>
+<ul>
+<li><b>7 "main effects"</b>: Limited, Residential, Commercial, Medium water, Low water, Stables, Stables &amp; landscape. These answer "how much do people like or dislike this feature?"</li>
+<li><b>5 "$ shown" effects</b> (interactions): Limited × $, Residential × $, Commercial × $, Medium water × $, Low water × $. These answer "how much <i>extra</i> do people like or dislike this feature when they've seen its dollar value?" <b>These five numbers are the answer to the research question.</b> A positive Residential × $ means revenue figures make development more attractive. A negative Low water × $ means seeing the dollar loss makes people avoid dirty water even more.</li>
+</ul>
+<p>There is no "Cultural × $" coefficient because culture was never priced.</p>
+
+<h3>A worked example</h3>
+<p>Using our standard-setup estimates (rounded): Residential +2.34, Limited +2.24, Low water −3.82, Stables &amp; landscape −1.00, Residential × $ +0.84, Limited × $ +0.40, Low water × $ −1.02.</p>
+<table>
+<tr><th>Option</th><th>Features</th><th>Score, Group 1 (no $)</th><th>Score, Group 3 (all $)</th></tr>
+<tr><td>A</td><td>Residential, Low water, no cultural impact</td><td>2.34 − 3.82 = <b>−1.48</b></td><td>−1.48 + 0.84 − 1.02 = <b>−1.66</b></td></tr>
+<tr><td>B</td><td>Limited, High water, Stables &amp; landscape</td><td>2.24 − 1.00 = <b>1.24</b></td><td>1.24 + 0.40 = <b>1.64</b></td></tr>
+<tr><td>Status quo</td><td>Nothing changes</td><td><b>0</b></td><td><b>0</b></td></tr>
+<tr><th colspan="2">Predicted chance of picking A / B / status quo</th><th>4.9% / 73.8% / 21.3%</th><th>3.0% / 81.2% / 15.8%</th></tr>
+</table>
+<p>Seeing the dollar figures pushes people toward B, the option that develops <i>without</i> hurting the water.</p>
+
+<h3>Model type 1: Conditional logit (Table 3, columns 1 and 2)</h3>
+<p>This is exactly the score model above, with <b>one set of coefficients for everybody</b>. Column 1 uses all 164 people; column 2 uses only the 123 councillors. It's the workhorse model for choice experiments (McFadden, 1974).</p>
+<p><b>Simple analogy:</b> it's like working out the "average taste" of the whole room.</p>
+
+<h3>Model type 2: Mixed logit (Table 3, columns 3 and 4)</h3>
+<p>Real people differ: some councillors care a lot about water, others barely at all. The mixed logit lets <b>every person have their own coefficients</b>. We assume each coefficient is spread across people like a bell curve, so for each feature the model estimates two numbers:</p>
+<ul>
+<li>the <b>average</b> (this is what Table 3 reports), and</li>
+<li>the <b>spread</b>, meaning how much people disagree.</li>
+</ul>
+<p>It also recognises that the same person answered 4 cards, so their answers are connected.</p>
+<p><b>The catch:</b> we never see a person's own coefficients, so the math has no neat formula. Instead we <b>simulate</b>. For each person we invent 500 possible "taste profiles" drawn from the bell curves, check how well each profile explains that person's 4 choices, and average the results. The paper did the same with 500 "Halton draws", which are evenly spread pseudo-random numbers. Because it relies on random draws, <b>the answer changes a bit every time you change the random numbers</b>.</p>
+<p><b>Simple analogy:</b> instead of one "average taste", it estimates the whole range of tastes in the room.</p>
+<p><b>Figure 2 in the paper</b> takes this one step further. For each person, it estimates their personal "$ shown" effects (from the taste profiles that best fit their choices) and plots how those are spread out.</p>
+
+<h3>Other terms you'll hear</h3>
+<table>
+<tr><th>Term</th><th>What it means here</th></tr>
+<tr><td>p-value / stars</td><td>How surprising the estimate would be if the true effect were zero. Small p (below 0.05, **) means "probably a real effect". * means p &lt; 0.10, ** p &lt; 0.05, *** p &lt; 0.01.</td></tr>
+<tr><td>Standard error</td><td>The estimate's margin of error.</td></tr>
+<tr><td>Clustered standard errors</td><td>Margins of error that account for each person answering 4 cards. One person's 4 answers aren't 4 independent pieces of information.</td></tr>
+<tr><td>Log likelihood</td><td>A score for how well the model fits the choices. Closer to zero is better.</td></tr>
+<tr><td>N</td><td>Number of rows in the data. Each person contributes 12 rows: 4 cards × 3 options. So 164 people = 1,968 rows.</td></tr>
+<tr><td>Coefficient size</td><td>Only signs and relative sizes are meaningful. You can't compare a raw coefficient from one model with one from another, because each model has its own scale.</td></tr>
+</table>
+
+<h2>4. How we replicated it, step by step</h2>
+<p>The authors published <b>one data file</b> (<code>S1Table.DTA</code>, Stata format) and <b>no code</b>. We rebuilt everything in Python. The <code>Simple-Replication</code> folder has four short scripts, run in order (or all at once with <code>run_all.py</code>):</p>
+<table>
+<tr><th>Script</th><th>What it does</th><th>Paper exhibit</th></tr>
+<tr><td><code>step1_prepare_data.py</code></td><td>Loads the file, gives columns readable names, builds the "$ shown" variables, and picks out the right 164 people and 123 councillors.</td><td>The N's in Table 3</td></tr>
+<tr><td><code>step2_look_at_raw_choices.py</code></td><td>Pick rates by group, with no model.</td><td>Background</td></tr>
+<tr><td><code>step3_conditional_logit.py</code></td><td>Conditional logit, both the paper's setup and the standard setup.</td><td>Table 3, columns 1–2</td></tr>
+<tr><td><code>step4_mixed_logit.py</code></td><td>Mixed logit by simulation, plus each person's own effects.</td><td>Table 3, columns 3–4; Figure 2</td></tr>
+</table>
+
+<h3>Detective work 1: finding the right 164 people</h3>
+<p>The file has 180 people, but the paper's N of 1,968 implies 164. It turns out <b>16 people didn't answer all 4 cards</b>, and the file quietly fills their blanks with copies of cards they did answer. Dropping those 16 gives exactly 164.</p>
+
+<h3>Detective work 2: finding the 123 councillors</h3>
+<p>The "councillor" job code gives 121. Two more people ticked "Other" and wrote <i>"Mayor"</i> and <i>"Councillor but also Resource Consent Hearing Commissioner"</i>. Counting them gives 123, which matches the paper.</p>
+
+<h3>Detective work 3: the strange grouping</h3>
+<p>Our first, textbook attempt treated <b>one person answering one card</b> as one choice. That gave coefficients about half the size of the paper's. The clue was the paper's log likelihood of −852.9. A model that simply guesses "1 in 3" for every card scores −720.7, and a properly set-up model can never do <i>worse</i> than that. So the paper must have set the data up differently.</p>
+<p>The setup that reproduces the paper exactly treats <b>each of the 12 survey cards as one giant choice</b>, pooling everyone who answered that card into a single group. It's not the standard way to set up this model, and the paper doesn't mention it. Our scripts estimate <b>both</b> versions.</p>
+
+<h2>5. What we found</h2>
+<h3>Conditional logit (columns 1–2): an almost perfect match</h3>
+<p>With the paper's grouping, <b>20 of 24</b> coefficient/p-value pairs match to 3 decimal places. The 4 that don't all look like <b>typos in the paper</b>:</p>
+<ul>
+<li>In column 2, the two water "coefficients" (−0.393, −0.602) are exactly the <b>standard errors</b>, printed in the wrong place. The real coefficients are −3.891 and −6.184.</li>
+<li>Column 1's Residential × $ is printed as 0.670, but the printed p-value (0.018) matches our 0.699.</li>
+<li>Column 1's Stables &amp; landscape p-value is printed as 0.031. The data give 0.001, and 0.031 is what you get using all 180 people, so it's probably left over from an earlier run.</li>
+</ul>
+<img src="chart_money_effects.png" alt="Dollar effects under both setups">
+<p class="caption">The five "$ shown" effects (all respondents) under the paper's setup and the standard setup. The p-values for the standard setup are clustered by person. Made from <code>results_conditional_logit.csv</code>.</p>
+<p>Under the standard setup the main effects roughly halve, but <b>every "$ shown" effect keeps its sign</b>. Residential × $ stays significant (p = 0.04). The water effects are borderline (p ≈ 0.08–0.10), as they were in the paper.</p>
+
+<h3>Mixed logit (columns 3–4): close for everyone, fragile for councillors</h3>
+<ul>
+<li><b>Column 3 (all respondents):</b> our fit (log likelihood −425.6 vs. the paper's −421.9) and our coefficients are close to the paper's, with the same signs and similar sizes.</li>
+<li><b>Column 4 (councillors only):</b> the results jump around depending on the random draws. The paper's headline "Low water × $" effect for councillors (−8.65, p = 0.015) comes out <b>small and not significant</b> in our runs. With 123 people and 24 numbers to estimate, the data are stretched thin.</li>
+<li>The published Figure 2 matches the <b>all-respondents</b> model (column 3), even though the text says it's from the councillor model.</li>
+</ul>
+<p>To see the instability yourself, change <code>SEED</code> at the top of <code>step4_mixed_logit.py</code> and rerun it.</p>
+
+<h2>6. So what? Our overall read</h2>
+<div class="box">
+<p><b>The direction holds up.</b> In every version we ran, seeing a dollar figure makes people weigh that effect more: revenue makes development more attractive, and a dollar loss makes dirty water less attractive.</p>
+<p><b>The certainty doesn't hold up as well.</b> How large and how statistically solid the effect is depends on modelling choices the paper doesn't disclose: the card grouping, the random draws, and which sample is used.</p>
+</div>
+<p><b>Limits of the design worth knowing:</b></p>
+<ul>
+<li>About 55 people per group is small.</li>
+<li>"No development" only ever appears as the status quo, so the development coefficients also capture a general liking for <i>doing something</i>.</li>
+<li>In Group 3, development and water dollar figures always appear together, so their effects are hard to separate.</li>
+<li>The dollar figures for water losses were chosen by the authors, not taken from a real valuation study.</li>
+<li>It's a hypothetical survey, not real council votes.</li>
+</ul>
+<p><b>Policy message:</b> if decision-makers are shown dollar values for some effects but not others, the priced effects may get extra weight. Either price all the important effects, or flag clearly that the unpriced ones still matter.</p>
+
+<h2>7. Questions you might get asked</h2>
+<div class="qa">
+<p class="q">Why use a logit model instead of comparing averages?</p>
+<p>Each option bundles three features at once. The logit separates how much each feature, and each dollar figure, drives choices, while respecting that people pick exactly one option out of three.</p>
+<p class="q">What does a coefficient of −3.82 on Low water mean?</p>
+<p>Compared with the status quo, low water quality knocks 3.82 points off an option's score. That's a big penalty: by itself, it turns a 50/50 choice into roughly a 2% chance.</p>
+<p class="q">How do we know the dollar figures caused the change?</p>
+<p>People were assigned to groups at random, so the groups only differ in the information they saw.</p>
+<p class="q">Why do the mixed logit numbers look so much bigger than the conditional logit ones?</p>
+<p>The mixed logit separates out "people differ from each other" from "people are a bit random", which rescales all the coefficients. Compare signs and ratios, not raw sizes, across models.</p>
+<p class="q">Why didn't you match the mixed logit exactly?</p>
+<p>It's simulated, so it depends on the exact random numbers. The paper used Stata, which we didn't have, and we couldn't recreate Stata's exact random numbers in Python. Our numbers for all respondents are close. The councillor-only model is unstable even within our own runs.</p>
+<p class="q">Is the paper's grouping "wrong"?</p>
+<p>It's non-standard and undisclosed. It treats a whole card's worth of answers from different people as one decision. The textbook approach treats each person's answer to each card as one decision. We report both, and the main conclusion has the same sign either way.</p>
+<p class="q">What would you do differently?</p>
+<p>Use the standard grouping with person-clustered standard errors, report the mixed logit's sensitivity to the random draws, use a larger sample, and vary the development and water dollar figures separately.</p>
+</div>
+
+<h3>Reference</h3>
+<p style="font-size:10pt">Eppink, F. V., Winden, M., Wright, W. C. C., &amp; Greenhalgh, S. (2016). Non-market values in a cost-benefit world: Evidence from a choice experiment. <i>PLoS ONE, 11</i>(10), e0165365. https://doi.org/10.1371/journal.pone.0165365</p>
+
+</body>
+</html>
