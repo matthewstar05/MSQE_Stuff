@@ -1,0 +1,9 @@
+Verification environment (not a portable lockfile)
+3.9.6 (default, Dec  2 2025, 07:27:58)
+[Clang 17.0.0 (clang-1700.6.3.2)]
+pandas==2.3.3
+numpy==2.0.2
+scipy==1.13.1
+statsmodels==0.14.6
+matplotlib==3.9.4
+Rscript (R) version 4.6.1 (2026-06-24)

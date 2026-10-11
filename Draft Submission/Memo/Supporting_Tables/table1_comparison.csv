@@ -1,0 +1,14 @@
+variable,category,paper,ours_all_180,ours_complete_164,diff_all
+Gender,Female,32.5,32.5,31.9,0.0
+Gender,Male,67.5,67.5,68.1,-0.0
+Age,<40,8.4,8.4,8.0,-0.0
+Age,40–49,14.8,14.8,14.7,0.0
+Age,50–59,27.7,27.7,28.7,0.0
+Age,60–69,36.8,36.8,36.7,-0.0
+Age,>70,12.3,12.3,12.0,-0.0
+Personal residence,Rural,41.8,41.8,41.5,-0.0
+Personal residence,Urban,58.2,58.2,58.5,0.0
+City inhabitants,">50,000",36.7,39.1,40.4,2.4
+City inhabitants,"15,001–50,000",30.9,29.0,28.2,-1.9
+City inhabitants,"5,000–15,000",21.3,20.1,19.2,-1.2
+City inhabitants,"<5,000",11.2,11.8,12.2,0.6
