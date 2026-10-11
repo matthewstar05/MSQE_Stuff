@@ -1,0 +1,14 @@
+variable,category,paper,ours,match
+Gender,Female,32.5,32.5,True
+Gender,Male,67.5,67.5,True
+Age,<40,8.4,8.4,True
+Age,40–49,14.8,14.8,True
+Age,50–59,27.7,27.7,True
+Age,60–69,36.8,36.8,True
+Age,>70,12.3,12.3,True
+Personal residence,Rural,41.8,41.8,True
+Personal residence,Urban,58.2,58.2,True
+City inhabitants,">50,000",36.7,39.1,False
+City inhabitants,"15,001–50,000",30.9,29.0,False
+City inhabitants,"5,000–15,000",21.3,20.1,False
+City inhabitants,"<5,000",11.2,11.8,False

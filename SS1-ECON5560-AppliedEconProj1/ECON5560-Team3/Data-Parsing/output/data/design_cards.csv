@@ -1,0 +1,13 @@
+card,a_development,b_development,a_water,b_water,a_cultural,b_cultural
+1,Residential,Limited,High,Low,Stables & landscape,None
+2,Commercial,Residential,Low,High,None,Stables & landscape
+3,Residential,Limited,Low,Medium,Stables & landscape,Stables
+4,Residential,Commercial,High,Medium,Stables & landscape,None
+5,Limited,Residential,Medium,Medium,Stables,Stables & landscape
+6,Residential,Limited,Low,High,None,Stables & landscape
+7,Commercial,Residential,High,Medium,Stables & landscape,Stables & landscape
+8,Limited,Commercial,Medium,High,Stables,Stables
+9,Commercial,Limited,High,Medium,Stables & landscape,Stables
+10,Commercial,Limited,Low,Medium,None,Stables
+11,Residential,Commercial,Low,High,None,Stables & landscape
+12,Limited,Residential,Medium,Low,Stables,Stables

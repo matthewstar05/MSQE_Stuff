@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+.Rhistory
+# never commit saved course-portal (Canvas) pages: they embed personal account identifiers
+*Applied Economics Project*.html
+*Applied Economics Project_files/

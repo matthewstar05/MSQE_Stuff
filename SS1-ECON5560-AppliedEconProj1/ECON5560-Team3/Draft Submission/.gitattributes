@@ -1,0 +1,8 @@
+# Preserve exact submission bytes so checksums also verify after cloning.
+* -text
+*.pdf binary
+*.docx binary
+*.png binary
+*.DTA binary
+*.csv whitespace=cr-at-eol
+*.log whitespace=-blank-at-eol

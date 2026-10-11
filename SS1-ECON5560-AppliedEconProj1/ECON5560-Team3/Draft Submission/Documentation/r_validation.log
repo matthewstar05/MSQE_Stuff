@@ -1,0 +1,62 @@
+
+== (1) CL All  (strata = card)  logLik = -852.92  N = 1968
+              coef Pr(>|z|)
+dev_limited  4.260    0.000
+dev_high     4.553    0.000
+dev_com      4.112    0.000
+wat_med     -3.954    0.000
+wat_low     -6.135    0.000
+cult_s      -0.822    0.080
+cult_sl     -1.673    0.001
+lim_money    0.205    0.452
+res_money    0.699    0.018
+com_money    0.308    0.282
+med_money   -0.473    0.076
+low_money   -0.919    0.082
+
+== (2) CL Councillors  (strata = card)  logLik = -646.98  N = 1476
+              coef Pr(>|z|)
+dev_limited  4.115    0.000
+dev_high     4.545    0.000
+dev_com      4.184    0.000
+wat_med     -3.891    0.000
+wat_low     -6.184    0.000
+cult_s      -0.758    0.150
+cult_sl     -1.850    0.001
+lim_money    0.084    0.790
+res_money    0.647    0.058
+com_money    0.254    0.433
+med_money   -0.299    0.323
+low_money   -0.592    0.286
+
+== (1c) corrected All  (strata = occasion)  logLik = -485.18  N = 1968
+              coef Pr(>|z|)
+dev_limited  2.235    0.000
+dev_high     2.337    0.000
+dev_com      2.174    0.000
+wat_med     -2.227    0.000
+wat_low     -3.818    0.000
+cult_s      -0.406    0.327
+cult_sl     -0.999    0.027
+lim_money    0.397    0.162
+res_money    0.836    0.007
+com_money    0.512    0.090
+med_money   -0.584    0.042
+low_money   -1.023    0.055
+
+== (2c) corrected Councillors  (strata = occasion)  logLik = -372.22  N = 1476
+              coef Pr(>|z|)
+dev_limited  2.250    0.001
+dev_high     2.403    0.000
+dev_com      2.287    0.000
+wat_med     -2.251    0.000
+wat_low     -3.927    0.000
+cult_s      -0.402    0.385
+cult_sl     -1.138    0.024
+lim_money    0.250    0.444
+res_money    0.754    0.035
+com_money    0.429    0.211
+med_money   -0.364    0.263
+low_money   -0.645    0.249
+
+Wrote output/tables/r_crosscheck_clogit.csv

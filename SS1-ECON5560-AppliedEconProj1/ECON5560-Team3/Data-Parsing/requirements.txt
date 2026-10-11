@@ -1,0 +1,8 @@
+# Python 3.10+ (developed on 3.14)
+pandas>=2.0
+numpy>=1.26
+scipy>=1.11
+statsmodels>=0.14
+matplotlib>=3.8
+# only for the walkthrough notebook
+jupyter
