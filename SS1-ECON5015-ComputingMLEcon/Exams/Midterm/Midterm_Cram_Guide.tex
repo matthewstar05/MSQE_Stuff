@@ -1,0 +1,479 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage[most]{tcolorbox}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist{itemsep=1pt,topsep=2pt}
+
+\lstset{language=Python, basicstyle=\ttfamily\footnotesize, columns=fullflexible, keepspaces=true,
+  upquote=true, showstringspaces=false, commentstyle=\color{green!40!black}, keywordstyle=\color{blue!60!black}\bfseries,
+  stringstyle=\color{red!60!black}, frame=single, rulecolor=\color{gray!40}, backgroundcolor=\color{gray!5},
+  xleftmargin=2pt, xrightmargin=2pt, aboveskip=4pt, belowskip=4pt}
+\newcommand{\code}[1]{\lstinline[basicstyle=\ttfamily\small]{#1}}
+
+\newtcolorbox{trap}[1][Trap]{colback=red!4,colframe=red!50!black,fonttitle=\bfseries\small,title={#1},breakable,left=4pt,right=4pt,top=2pt,bottom=2pt}
+\newtcolorbox{keyrule}[1][Rule]{colback=blue!4,colframe=blue!45!black,fonttitle=\bfseries\small,title={#1},breakable,left=4pt,right=4pt,top=2pt,bottom=2pt}
+
+\title{ECON 5015 Midterm Cram Guide\\\large DataFrames first, then everything else}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-3em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{0. What the exam looks like (from both practice midterms)}
+Roughly 50 points, about 8 questions. The same question types repeat:
+\begin{center}
+\small
+\begin{tabular}{p{0.38\textwidth}p{0.55\textwidth}}
+\hline
+\textbf{Question type} & \textbf{What to have ready} \\ \hline
+Short loop fragment, no built-ins (5 pts) & Accumulator template (\S4): factorial, product, sum, min/max. \\
+Small function with dict/list (5--6 pts) & \texttt{//} and \texttt{\%}; return a dict; build a new list with \code{append}; don't modify the input. \\
+DataFrame manipulation (6 pts) & Long$\to$wide reshape without \code{pivot} (\S1.9). \\
+Implement an algorithm from pseudocode (8 pts) & Translate line by line (\S9); insertion sort; grid search; $O$ and $\Omega$. \\
+Scope/mutability trace (8 pts $\times$2) & The 5-step trace method (\S2). Watch for dead code after \code{return}. \\
+Big-O of given code (4 pts) & Loops multiply; halving gives $\log n$; early \code{return} gives $\Omega(1)$ (\S8). \\ \hline
+\end{tabular}
+\end{center}
+\textbf{``No built-in functions''} means you can use only \code{len}, \code{range}, operators, and list methods (\code{append}, \code{copy}, \ldots). No \code{sum}, \code{max}, \code{min}, \code{sorted}, \code{abs}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{1. DataFrames (pandas) --- your weak spot, so the most detail}
+
+\subsection*{1.1 Mental model}
+\begin{itemize}
+\item A \textbf{Series} is a 1-D array \emph{plus an index} (row labels). The default index is \code{0,1,2,...}.
+\item A \textbf{DataFrame} is a set of Series (the columns) that all share \emph{one} index. Each column has a single type, and different columns can have different types.
+\item A DataFrame breaks into three pieces: \code{df.values} (a 2-D NumPy array), \code{df.columns} (the column names), and \code{df.index} (the row labels).
+\item DataFrames are \textbf{mutable}: \code{df2 = df} is the \emph{same} object. Use \code{df.copy()} for an independent copy.
+\end{itemize}
+
+\subsection*{1.2 Creating and importing}
+\begin{lstlisting}
+import numpy as np
+import pandas as pd
+df = pd.DataFrame({"numbers": [1, 2, 3], "letters": ["a", "b", "c"]})  # dict: column name -> list/array
+df = pd.read_csv("aapl.csv")          # filename only, file sits next to the script
+s  = pd.Series([1, 3, 5])             # default index 0,1,2
+s2 = pd.Series(["a", "b"], ["A", "B"])  # data, then index
+\end{lstlisting}
+
+\subsection*{1.3 Getting columns}
+\begin{lstlisting}
+df["letters"]          # one column -> Series   (always works)
+df.letters             # same thing             (only if the name has no spaces and isn't a method name)
+df[["numbers", "letters"]]   # list of names -> DataFrame
+df.columns             # Index of names; df.columns[1] -> "letters"
+\end{lstlisting}
+
+\subsection*{1.4 Getting rows and cells: \texttt{iloc} vs \texttt{loc} (this is the core idea)}
+\begin{keyrule}[iloc = position, loc = label]
+\code{iloc} counts positions \code{0..n-1}, and slices \emph{exclude} the end (like lists).\\
+\code{loc} uses index \emph{labels}, and slices \emph{include} the end.\\
+With a fresh default index, labels equal positions, so both look the same. They differ \textbf{after you filter, drop, or sort rows}.
+\end{keyrule}
+\begin{lstlisting}
+df.iloc[0]            # first row (as a Series)
+df.iloc[1:4]          # rows at positions 1,2,3 (DataFrame)
+df.iloc[2:3]          # one row, kept as a DataFrame
+df.iloc[2, 1]         # row position 2, column position 1
+df.loc[3, "letters"]  # row LABEL 3, column "letters"
+df.loc[1:3]           # labels 1,2,3  (end INCLUDED)
+df.letters.iloc[0]    # first value of a column   <- the safest way to get one cell
+df.values[2, 1]       # via the NumPy array: always positional
+df.values[:, 1]       # whole column 1 as an array
+\end{lstlisting}
+\begin{trap}[Trap: \texttt{df.col[i]} uses the LABEL, not the position]
+\begin{lstlisting}
+b = df[df.week > 2]   # keeps labels 2,3  (NOT 0,1)
+b.x[2]                # works: label 2
+b.x[0]                # KeyError: no label 0
+b.x.iloc[0]           # works: first row by position
+\end{lstlisting}
+If you loop with \code{for i in range(len(df))}, use \code{.iloc[i]} or \code{.values[i]}. Then the loop works even when the index isn't \code{0..n-1}.
+\end{trap}
+
+\subsection*{1.5 Filtering rows (boolean masks)}
+\begin{lstlisting}
+df[df.numbers > 1]                          # rows where condition is True
+df[(df.week >= 80) & (df.week <= 85)]       # AND: use &, and PARENTHESES around each condition
+df[(df.x < 0) | (df.y > 5)]                 # OR: |      NOT: ~(df.x > 3)
+df[df.borough.isin([1, 2, 3, 6, 14])]       # value is in a list
+df[df.week < 53].reset_index(drop=True)     # filter, then renumber rows 0..n-1
+\end{lstlisting}
+\begin{trap}[Trap: use \texttt{\&}, \texttt{|}, \texttt{\~{}} on Series, never \texttt{and}/\texttt{or}/\texttt{not}]
+\code{(df.x > 1) and (df.x < 5)} raises ``truth value of a Series is ambiguous''. You also need the parentheses, because \code{&} binds tighter than \code{>}.
+\end{trap}
+
+\subsection*{1.6 Adding, changing, and removing}
+\begin{lstlisting}
+df["neg"]  = np.arange(-1, -4, -1)          # new column from an array (length must match)
+df["mult"] = df.numbers * df.neg            # vectorized column math, row by row
+df["crimerate"] = df["crime"] / df["population"]
+df["lcrime"] = np.log(df["crimerate"])      # numpy functions work element-wise on columns
+df["treat"] = (df.week >= 80).astype(int)   # bool -> 0/1 dummy
+df = df.drop("mult", axis="columns")        # drop a column  (returns NEW df -> reassign!)
+df = df.drop(3)                             # drop the row with LABEL 3
+df = df.reset_index(drop=True)              # relabel rows 0..n-1 (drop=True: don't keep old index as a column)
+new = pd.DataFrame({"numbers": [27], "letters": ["aa"], "neg": [-27]})
+df = pd.concat([df, new], ignore_index=True)   # add rows (concat makes a new df)
+df = df.sort_values(["borough", "week"])    # sort by borough, then by week
+\end{lstlisting}
+\begin{trap}[Trap: \texttt{drop}, \texttt{concat}, \texttt{sort\_values}, \texttt{reset\_index} return a NEW DataFrame]
+Calling \code{df.drop(3)} on its own line changes nothing. Write \code{df = df.drop(3)}.
+\end{trap}
+
+\subsection*{1.7 Summary statistics (HW3 style: ``use numpy functions'')}
+\begin{lstlisting}
+high = np.max(df.High)        # highest High
+low  = np.min(df.Low)
+avg  = np.mean(df.Close)
+sd   = np.std(df.Close)       # POPULATION sd (ddof=0).  df.Close.std() is SAMPLE sd (ddof=1)
+date = df.Date.iloc[np.argmax(df.Volume)]   # date on the highest-volume day (argmax = POSITION)
+np.sum(df.x > 3)              # how many rows satisfy the condition (True counts as 1)
+len(df)                       # number of rows;   df.shape -> (rows, cols)
+\end{lstlisting}
+\begin{trap}[Trap: footnote rows in CSVs]
+\code{yhoo.csv} has a footnote on the last row. The class fix was \code{yhoo = yhoo.drop(66)} (the label of that row). Check \code{df.tail()} before computing anything.
+\end{trap}
+
+\subsection*{1.8 Index alignment: the trap from HW4 (differencing)}
+Arithmetic between two Series lines up rows \emph{by index label}, not by position.
+\begin{lstlisting}
+df1 = df[df.week < 53]          # labels 0..k
+df2 = df[df.week > 52]          # labels k+1..  -> no labels overlap with df1!
+df2.x - df1.x                   # ALL NaN  (no matching labels)
+df1 = df[df.week < 53].reset_index(drop=True)
+df2 = df[df.week > 52].reset_index(drop=True)
+df2.x - df1.x                   # correct: row i minus row i
+df2.x.values - df1.x.values     # also correct: plain arrays ignore the index
+\end{lstlisting}
+\textbf{HW4 recipe:} sort by \code{[borough, week]}, split into the two years, \code{reset_index(drop=True)} on both, then subtract column by column into a new DataFrame. This works because both halves are in the same borough/week order.
+
+\subsection*{1.9 Reshaping long $\to$ wide WITHOUT \texttt{pivot} (practice midterm Q4)}
+\textbf{Setup:} \code{long} has 4000 rows (columns \code{id, year, outcome}); each firm has 4 consecutive rows, years 1 to 4. You need \code{wide} with columns \code{id, year1, ..., year4}, one row per firm.
+
+\textbf{Idea:} firm $k$'s rows are at positions $4k, 4k+1, 4k+2, 4k+3$. Walk through in steps of 4 and collect the values into lists.
+\begin{lstlisting}
+ids = []; y1 = []; y2 = []; y3 = []; y4 = []
+i = 0
+while i < len(long):                      # or: for i in range(0, len(long), 4):
+    ids.append(long.id.iloc[i])
+    y1.append(long.outcome.iloc[i])
+    y2.append(long.outcome.iloc[i + 1])
+    y3.append(long.outcome.iloc[i + 2])
+    y4.append(long.outcome.iloc[i + 3])
+    i = i + 4
+wide = pd.DataFrame({"id": ids, "year1": y1, "year2": y2, "year3": y3, "year4": y4})
+\end{lstlisting}
+\textbf{Faster version with slicing} (step-4 slices pick every 4th row; no loop needed):
+\begin{lstlisting}
+v = long.outcome.values
+wide = pd.DataFrame({"id": long.id.values[::4], "year1": v[0::4], "year2": v[1::4],
+                     "year3": v[2::4], "year4": v[3::4]})
+\end{lstlisting}
+\textbf{If the rows were NOT in order}, map each id to a list of 4 slots with a dict:
+\begin{lstlisting}
+d = {}
+for k in range(len(long)):
+    fid = long.id.iloc[k]
+    if fid not in d:
+        d[fid] = [0, 0, 0, 0]
+    d[fid][long.year.iloc[k] - 1] = long.outcome.iloc[k]   # year 1 -> slot 0
+ids = list(d.keys())
+wide = pd.DataFrame({"id": ids, "year1": [d[f][0] for f in ids], "year2": [d[f][1] for f in ids],
+                     "year3": [d[f][2] for f in ids], "year4": [d[f][3] for f in ids]})
+\end{lstlisting}
+\textbf{Reverse (wide $\to$ long):} a nested loop over firms and years.
+\begin{lstlisting}
+ids = []; yrs = []; outs = []
+for k in range(len(wide)):
+    for t in range(1, 5):
+        ids.append(wide.id.iloc[k]); yrs.append(t); outs.append(wide["year" + str(t)].iloc[k])
+long = pd.DataFrame({"id": ids, "year": yrs, "outcome": outs})
+\end{lstlisting}
+Every snippet above was run and checked against the practice example (firms 100 and 104).
+
+\subsection*{1.10 Other pandas you might see}
+\begin{lstlisting}
+df.head(); df.tail(); df.shape; df.dtypes
+df.groupby("id").outcome.mean()           # mean outcome per id (a Series indexed by id)
+df["col"].unique(); df["col"].value_counts()
+\end{lstlisting}
+
+\subsection*{1.11 Series indexing quirks (from the Pandas notebook)}
+\begin{lstlisting}
+s = pd.Series([1, 3, 5, 7, 9])
+s[0]; s[1:3]; s[::-1]; s[[1, 3]]; s[[True, False, True, True, False]]
+# s[-1]  -> ERROR (no label -1).  Use s.iloc[-1]
+s = pd.Series([1, 3, 5, 7, 9], [1, 2, 3, 4, 5])   # integer labels that are not 0..4
+s[3]        # -> 5   (LABEL 3)
+s[1:3]      # -> 3, 5 (POSITIONS 1, 2) -- confusing! so always use loc/iloc
+s.loc[1:3]  # -> 1, 3, 5 (labels 1..3 inclusive)
+s.iloc[1:3] # -> 3, 5
+\end{lstlisting}
+
+\subsection*{1.12 statsmodels regression (HW4)}
+\begin{lstlisting}
+import statsmodels.formula.api as smf
+model1 = smf.ols("lcrime ~ lpolice + lemp + lun + lymale + lwhite", data=fulldata).fit()
+model2 = smf.ols("dlcrime ~ dlpolice + dlemp + C(week)", data=diffdata).fit()  # C() = dummies (fixed effects)
+model1.params; model1.bse; model1.rsquared; model1.summary(); model1.predict()
+\end{lstlisting}
+Why the log-log regression: coefficients are elasticities, and an extra police hour matters less when there are already many. Why difference year 2 minus year 1: it removes borough effects that don't change over time. Week fixed effects pick up shocks common to all boroughs in a given week. The cross-sectional coefficient on police is biased upward by reverse causation (high-crime boroughs get more police).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{2. Scope and mutability: the trace method (two 8-point questions)}
+\begin{keyrule}[The five facts that answer every trace question]
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Assignment inside a function (\code{x = ...}) creates a LOCAL variable.} The global with the same name is untouched.
+\item \textbf{Parameters are local names bound to the objects passed in.} \code{f(L, x)} binds the 1st parameter to \code{L}'s object and the 2nd to \code{x}'s object, \emph{whatever the parameters are called}.
+\item \textbf{Mutating a passed-in mutable object (\code{L[0]=8}, \code{L.append(...)}) changes the caller's object.} Re-assigning the name (\code{L = 3}) does not.
+\item \textbf{Slices and arithmetic create NEW objects}: \code{x[::2]}, \code{x[1:]}, \code{x + [5]}, \code{x.copy()}. \code{y = x} does not copy.
+\item \textbf{Code after \code{return} never runs} (it's dead code). Exams hide lines such as \code{x=x-5} or \code{x[1]=8} after the \code{return}, inside the function.
+\end{enumerate}
+\end{keyrule}
+\textbf{Method.} Keep two boxes on scratch paper, GLOBAL and LOCAL. When the function is called, write each parameter in LOCAL with an arrow to the object it refers to. Run the body line by line, applying the facts above. When the function returns, erase LOCAL. Ints, floats, strings, and tuples are immutable, so ``changing'' one always makes a new object.
+
+\begin{trap}[Trap: using a global you also assign to]
+\begin{lstlisting}
+z = 3
+def g(x):
+    z = z + 1      # UnboundLocalError: z is local (assigned in g) but used before assignment
+    return x * z
+\end{lstlisting}
+Reading a global without assigning to it works: \code{def h(x): return x*y} uses global \code{y}.
+\end{trap}
+
+\textbf{Copy vs.\ deepcopy.} \code{c = l.copy()} is a new outer list, but any inner lists are \emph{shared}: \code{c[2].append(5)} also changes \code{l}. \code{copy.deepcopy(l)} copies everything. \code{a is b} asks ``same object?''; \code{a == b} asks ``same value?''.
+
+\textbf{Default arguments:} \code{def myvar(values, sample=True)}. The default is used if no argument is passed, and it overrides a global with the same name. Named arguments can come in any order: \code{myvar(sample=False, values=a)}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{3. Core Python you must not fumble}
+\begin{lstlisting}
+7 // 2 -> 3      7 % 2 -> 1      2 ** 3 -> 8      7 / 2 -> 3.5      -7 // 2 -> -4
+float("inf"), -float("inf")      # start values for min / max searches
+66 // 12 -> 5 (feet)     66 % 12 -> 6 (inches)      n % 3 == 0  -> divisible by 3
+\end{lstlisting}
+\textbf{Iterables.} \code{str} and \code{tuple} are immutable; \code{list} is mutable; \code{range(start, stop, step)} excludes \code{stop}.
+\begin{lstlisting}
+s = "Go Mustangs!"
+s[3:5] -> "Mu"   s[-2] -> "s"   s[::-1] -> reversed   s[3:1:-1] -> "M "   s[1:4:2] -> "o"+"M"
+list(range(10, 0, -2)) -> [10, 8, 6, 4, 2]          t = (3,)   # one-element tuple needs the comma
+l.append(v)  l.insert(i, v)  l.remove(v)  # removes first matching VALUE
+del l[i]     # removes by INDEX
+[3, 4] + [1] -> [3, 4, 1]        "ell" in "hello" -> True        len("") -> 0
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{4. Loop templates (copy these patterns)}
+\begin{lstlisting}
+# factorial of x (x >= 1), no built-ins
+y = 1
+for i in range(1, x + 1):
+    y = y * i
+# product (p) / sum of list x
+p = 1
+for v in x:
+    p = p * v
+# min with index
+cur = float("inf")
+for i in range(len(l)):
+    if l[i] < cur:
+        cur = l[i]; idx = i
+# second highest (one pass)
+def f(x):
+    m = -float("inf"); m2 = -float("inf")
+    for v in x:
+        if v > m:
+            m2 = m; m = v        # old max becomes second
+        elif v > m2:
+            m2 = v
+    return m2
+# filter + transform into a NEW list (input not modified)
+def f(x):
+    r = []
+    for v in x:
+        if v >= 0:
+            r.append(v ** 2)
+    return r
+# list comprehension version
+r = [v ** 2 for v in x if v >= 0]
+# cumulative sum (new list)
+r = [l[0]]
+for i in range(1, len(l)):
+    r.append(r[i - 1] + l[i])
+# move first element to end (new list)
+def f(x):
+    r = x[1:]          # slice = new list, so x is safe
+    r.append(x[0])
+    return r
+# dict return
+def inches_to_feet(n):
+    return {"feet": n // 12, "inches": n % 12}
+# list of dicts
+s = x[0]["c"] + x[len(x) - 1]["j"]      # or x[-1]["j"]
+\end{lstlisting}
+\textbf{while vs for:} use \code{for} when you know how many iterations there are, and \code{while} until a condition holds (make sure something in the body changes the condition). \code{break} exits the loop; \code{continue} skips to the next iteration.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{5. Dictionaries (hash tables)}
+\begin{lstlisting}
+d = {}; d["x"] = 3; d["y"] = 6        # add / overwrite
+d["y"]          # 6        d["z"] -> KeyError
+"x" in d        # True   (checks KEYS)       6 in d.values()  # True
+d.keys(); d.values(); len(d)
+d2 = {"a": 4, "b": "hello", "c": [1, 2, 6], 4: 3.14}
+for k in d:                       # loops over keys
+    print(k, d[k])
+counts = {}                       # counting pattern
+for v in data:
+    if v in counts: counts[v] = counts[v] + 1
+    else:           counts[v] = 1
+\end{lstlisting}
+Keys must be immutable (int, float, str, bool, tuple). Lookup is $O(1)$ on average; searching a list is $O(n)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{6. NumPy}
+\begin{lstlisting}
+np.array([1, 3, 5]); np.zeros(20); np.zeros(20, dtype=int); np.ones(10); np.full(10, 4)
+np.arange(0, 10, 1)      # 0..9 (stop excluded)
+np.linspace(0, 1, 101)   # 101 points, 0 and 1 INCLUDED  (grid search!)
+np.random.seed(100); np.random.random(10); np.random.normal(0, 1, 10); np.random.randint(0, 100, 10)
+np.random.choice(np.arange(30), 10, replace=False)
+a = np.arange(1, 101)    # HW3: no loops
+b = a ** 2;  c = a * (a + 1) / 2;  d = (c % 3 == 0)
+e = np.nonzero(d)[0]     # INDICES where True (nonzero returns a tuple -> take [0])
+f = c[d]                 # VALUES where True (boolean mask)
+g = np.cumsum(b)
+np.sum, np.prod, np.min, np.max, np.mean, np.std, np.var, np.median, np.sort, np.argmin, np.argmax
+np.any(x > 3); np.all(x > 3); np.sum(x > 3)          # count of True
+x[(x >= 3) & (x <= 5)]; x[~(x > 3)]; x[np.array([4, 1, 3])]   # fancy indexing
+np.concatenate([x, y])
+m = np.arange(6).reshape(2, 3); m.shape -> (2, 3); m[1, 2]; m[:, 1]; m[0]
+\end{lstlisting}
+Vectorized operations (\code{x + y}, \code{2*x}, \code{np.log(x)}) are much faster than Python loops. Arrays hold a single type and are mutable.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{7. Functions and classes}
+\begin{lstlisting}
+def f(a, b=2):          # body runs only when f is CALLED
+    return a + b, a * b # returns a tuple; unpack with s, p = f(3)
+class Point:
+    def __init__(self, x=0, y=0):     # constructor; self = the instance
+        self.x = x; self.y = y
+    def dist(self):                   # method: first parameter is self
+        return (self.x ** 2 + self.y ** 2) ** 0.5
+    def __str__(self):                # used by print(p)
+        return "(" + str(self.x) + "," + str(self.y) + ")"
+    def __add__(self, other):         # overloads p + q
+        return Point(self.x + other.x, self.y + other.y)
+p = Point(3, 4); p.dist() -> 5.0
+\end{lstlisting}
+Objects are mutable: a function that does \code{p.x = p.x + 1} changes the caller's object. A \textbf{method} is called on an object (\code{df.drop(...)}, \code{l.append(...)}); a \textbf{function} is called on its own (\code{pd.concat(...)}, \code{len(l)}).
+
+\textbf{Graph (HW6).} \code{Graph.nodes} is a dict mapping name to \code{Node}. Each \code{Node} has a name and its edges, and each edge has a weight and two nodes. For an undirected graph, \code{add_edge(n1, n2, w)} adds the edge to \emph{both} nodes, overwrites an existing weight, and does nothing if a name is invalid. \code{get_node(n)} returns $-1$ if \code{n} is missing.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{8. Big-O, $\Omega$, $\Theta$}
+\begin{keyrule}[Definitions and rules]
+$O$ = worst case (upper bound); $\Omega$ = best case (lower bound); $\Theta$ = both, when best and worst cases are the same order. Drop constants and lower-order terms: $2n^2+2n+10 \to O(n^2)$. Use the right $n$: the input size that can grow.
+\end{keyrule}
+\begin{center}
+\small
+\begin{tabular}{p{0.52\textwidth}p{0.40\textwidth}}
+\hline
+\textbf{Code pattern} & \textbf{Cost} \\ \hline
+Fixed number of operations, or \code{return} on the first iteration & $O(1)$ \\
+\code{while n>1: n = n//2} (halve each time), binary search, fast power & $O(\log n)$ \\
+One loop over $n$ items, \code{np.mean}, \code{sum}, \code{in} on a list & $O(n)$ \\
+Nested loops over $n$ and $n$ (e.g.\ an $n\times n$ matrix), insertion sort worst case & $O(n^2)$ \\
+Loop calling an $O(n)$ function each time (\code{np.mean} inside a loop) & $O(n^2)$ (move it out of the loop!) \\
+Grid search with $n$ decimal places in 1-D / 2-D & $O(10^n)$ / $O(100^n)$, worse than any polynomial \\ \hline
+\end{tabular}
+\end{center}
+\textbf{Ordering:} $1 < \log n < n < n\log n < n^2 < n^{10} < 2^n < 10^n$. (So $O(10^n)$ is \emph{much worse} than $O(n^{10})$.)
+
+\textbf{Search with early return:} $\Omega(1)$ (found at the first position) and $O(n)$ (not there), or $O(n^2)$ for a matrix. \textbf{Binary search:} $\Omega(1)$ (middle element on the first check) and $O(\log n)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{9. Algorithms you might have to code from pseudocode}
+\begin{lstlisting}
+def inssort(x):                         # insertion sort (practice Q5)
+    r = x.copy()                        # don't modify input
+    for i in range(1, len(r)):          # i = 1 .. n-1
+        j = i
+        while j >= 1 and r[j] < r[j - 1]:
+            temp = r[j]; r[j] = r[j - 1]; r[j - 1] = temp    # swap
+            j = j - 1
+    return r
+# best case (already sorted): while never runs -> Omega(n)
+# worst case (reverse sorted): while runs i times -> 1+2+...+(n-1) = n(n-1)/2 -> O(n^2)
+
+x = np.linspace(0, 1, 101); y = np.linspace(0, 1, 101)    # 2-D grid search for a MAX
+max_value = -float("inf")
+for i in x:
+    for j in y:
+        fv = f(i, j)
+        if fv > max_value:
+            max_value = fv; x_max = i; y_max = j
+
+ans = n / 2; delta = ans / 2                     # bisection: sqrt(n)
+while abs(ans ** 2 - n) > e:
+    if ans ** 2 > n: ans = ans - delta
+    else:            ans = ans + delta
+    delta = delta / 2
+
+x = 0                                            # Newton-Raphson minimization
+while abs(f1(x)) > eps:                          # f1 = f', f2 = f''
+    x = x - f1(x) / f2(x)
+
+def power2(x, n):                                # fast power, O(log n)
+    r = 1
+    while n > 0:
+        if n % 2 > 0: r = r * x
+        n = n // 2; x = x * x
+    return r
+\end{lstlisting}
+\textbf{Translation tips:} ``from $i=1$ to $n-1$ inclusive'' is \code{range(1, n)}. ``Repeat as long as A AND B'' is \code{while A and B:}. Put the index check \emph{first} (\code{j >= 1 and r[j] < r[j-1]}) so \code{r[-1]} is never evaluated. ``Return a new list'' means work on \code{x.copy()}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{10. Practice midterm answers, worked (all verified by running them)}
+\textbf{Fall 2025 Q6.} \code{x=[0,1]; n=7}; \code{f(n)} makes a LOCAL \code{x=[0,1]}. The loop runs with $n=7$ (append 15, $n\to3$), then $n=3$ (append 7, $n\to1$), then stops.
+(a) \code{y = [0,1,15,7]}. (b) Global \code{x = [0,1]} (the function only changed its local \code{x}). (c) \code{n = 7} (the function changed only its local \code{n}). (d) $n$ halves each time, so $O(\log n)$.
+
+\textbf{Fall 2025 Q7.} \code{L=[4,3,2,1]; x=5}. Calling \code{f(L, L[1])} binds local \code{x} to the global \code{L} list and local \code{y} to 3. Then \code{y=6}; local \code{L = x[::2] = [4,2]} (a new list); \code{L[0]=6} gives local \code{[6,2]}; \code{x.append(6)} mutates the \emph{global} list $L$ to \code{[4,3,2,1,6]}; return local \code{L[1] = 2}. The line \code{x[1]=8} is after the \code{return}, so it is dead code.
+(a) 2. (b) \code{y = 2*5 = 10}. (c) \code{x = 5}. (d) \code{L = [4,3,2,1,6]}.
+
+\textbf{Fall 2025 Q8.} \code{search_matrix}: $O(n^2)$, $\Omega(1)$. \code{search_sorted_array}: $O(\log n)$, $\Omega(1)$.
+\textbf{Q5:} insertion sort is $\Omega(n)$ and $O(n^2)$ (code in \S9). \textbf{Q1--Q3:} templates in \S4. \textbf{Q4:} \S1.9.
+
+\textbf{Fall 2023 Q5.} The function's \code{r} and \code{x} are local: (a) \code{y = 9/3 = 3.0}, (b) \code{r = 10}, (c) \code{x = 2}, (d) $O(n)$.
+
+\textbf{Fall 2023 Q6.} \code{x=[1,2,3,4]; L=4; y=1}. Calling \code{f(L, x)} binds parameter \code{y} to 4 and parameter \code{L} to the global \emph{list} \code{x}. Then \code{L[0]=8} mutates the global list to \code{[8,2,3,4]}; \code{y=3}, \code{x=2}, and \code{L=x} are all local; return 3. \code{x=x-5} comes after the \code{return}, so it is dead code.
+(a) 3. (b) \code{y = 1 + 3*1 = 4}. (c) \code{x = [8,2,3,4]}. (d) \code{L = 4}.
+
+\textbf{Fall 2023 Q5 (grid search).} Code in \S9. (b) With $n$ decimal places there are $10^n+1$ points per axis, so $(10^n)^2$ evaluations: $O(100^n)$, which the key writes as $O(10^n)$ (exponential). (c) Much worse than $O(n^{10})$.
+
+\textbf{Practice quiz trace.} \code{x=[0,1]; n=7}: $n=7$: append 15, $7\%3\ne0$, $n\to3$. $n=3$: append 7, $3\%3=0$ so \code{x[0]=3}, $n\to1$. Result: \code{n = 1}, \code{x = [3,1,15,7]}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{11. Last-five-minutes checklist}
+\begin{enumerate}[leftmargin=*]
+\item ``Don't modify the input'': start with \code{r = x.copy()} or build \code{r = []}. Never write \code{r = x}.
+\item ``No built-ins'': no \code{sum/max/min/sorted/abs}. Use loops with \code{float("inf")}.
+\item DataFrames: use \code{.iloc[i]} for positions, \code{&}/\code{|} with parentheses, reassign after \code{drop}/\code{concat}/\code{sort_values}, and \code{reset_index(drop=True)} before subtracting two filtered halves.
+\item Trace questions: find dead code after \code{return}; separate mutation (\code{L[0]=}, \code{.append}) from re-binding (\code{L=}); match arguments to parameters by \emph{position}.
+\item Big-O: halving gives $\log n$, nested loops give $n^2$, an early \code{return} gives $\Omega(1)$, and decimal precision gives $10^n$.
+\item Indent carefully on paper. The \code{return} goes \emph{after} the loop, not inside it.
+\end{enumerate}
+
+\end{document}
