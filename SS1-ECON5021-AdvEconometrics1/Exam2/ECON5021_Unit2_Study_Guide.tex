@@ -1,0 +1,498 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb,bm,mathtools}
+\usepackage{enumitem,booktabs,array}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+
+\definecolor{ink}{HTML}{1F3A5F}
+\definecolor{key}{HTML}{8A1C1C}
+\definecolor{soft}{HTML}{EEF3F8}
+\definecolor{warn}{HTML}{FFF4E0}
+
+\titleformat{\section}{\Large\bfseries\color{ink}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries\color{ink}}{\thesubsection}{0.5em}{}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\veps}{\bm{\varepsilon}}
+\newcommand{\plim}{\operatorname*{plim}}
+
+\newtcolorbox{skel}[1]{colback=soft,colframe=ink,boxrule=0.6pt,arc=2pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt,fonttitle=\bfseries\small,title={#1}}
+\newtcolorbox{trap}{colback=warn,colframe=key,boxrule=0.6pt,arc=2pt,
+  left=6pt,right=6pt,top=3pt,bottom=3pt,fonttitle=\bfseries\small,title={Watch out}}
+
+\newcounter{pf}
+\newcommand{\proofhead}[2]{\refstepcounter{pf}\subsection*{P\thepf.\ #1 \hfill{\normalsize\color{gray}#2}}\addcontentsline{toc}{subsection}{P\thepf.\ #1}}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries\color{ink} ECON 5021 Unit 2 Study Guide}\\[4pt]
+{\large Linear Regression Model and OLS (Lectures 8--12): the proof bank}\\[2pt]
+{\small Built from the Canvas short-answer questions (SAQs) and the lecture notes (Oct 14, 2026 version)}
+\end{center}
+
+\begin{tcolorbox}[colback=white,colframe=key,boxrule=0.8pt,arc=2pt,title={\bfseries How to use this guide}]
+The proof section of the exam is 3--5 proofs taken from the SAQs, sometimes with the parts reordered or combined. This guide gives you:
+\begin{enumerate}[nosep,leftmargin=1.4em]
+\item \textbf{§1 Toolkit}: the 12 algebra facts that every proof uses. Learn these first.
+\item \textbf{§2 Proof bank (P1--P15)}: every SAQ proof, written out in full. The SAQ answers that only said \emph{``see the lecture notes''} or \emph{``work this out on your own''} are filled in here from the notes. Each proof starts with a \textbf{skeleton card} (the chain of steps to memorize) and ends with any common traps.
+\item \textbf{§3 One-page formula sheet} and \textbf{§4 Skeleton drill}: for the night before.
+\item \textbf{§5 Mock proof exam}: 5 permuted prompts. Write them out cold, then check against the bank.
+\end{enumerate}
+\textbf{Method:} read a skeleton card, close the guide, write the full proof on blank paper, then compare. Any proof you can't reproduce twice in a row goes back in the pile.
+\end{tcolorbox}
+
+\tableofcontents
+\newpage
+
+%=====================================================================
+\section{Toolkit: the moves every proof uses}
+
+\begin{enumerate}[label=\textbf{T\arabic*.},leftmargin=2.2em,itemsep=3pt]
+\item \textbf{Transpose of a product:} $(AB)'=B'A'$. Also $(A^{-1})'=(A')^{-1}$, so $(X'X)^{-1}$ is symmetric because $X'X$ is.
+\item \textbf{Inverse of a scaled matrix:} $(cA)^{-1}=c^{-1}A^{-1}$. This is how you pull $n$ out: $(X'X)^{-1}=\big(n\cdot\tfrac{X'X}{n}\big)^{-1}=\tfrac1n\big(\tfrac{X'X}{n}\big)^{-1}$.
+\item \textbf{$2\times2$ inverse:} $\begin{bmatrix}a&b\\c&d\end{bmatrix}^{-1}=\dfrac{1}{ad-bc}\begin{bmatrix}d&-b\\-c&a\end{bmatrix}$.
+\item \textbf{Constants come out of (conditional) expectations:} $\E(a+Bz)=a+B\,\E(z)$. Conditioning on $X$ makes any function of $X$ (such as $A=(X'X)^{-1}X'$) a constant: $\E(A\veps\mid X)=A\,\E(\veps\mid X)$.
+\item \textbf{Law of iterated expectations (LIE):} $\E(z)=\E_X\big[\E(z\mid X)\big]$. This is how you go from a \emph{conditional} result to an \emph{unconditional} one.
+\item \textbf{Variance of a linear transform:} $\Var(a+A z\mid X)=A\,\Var(z\mid X)\,A'$.
+\item \textbf{Variance as an outer product:} $\Var(z)=\E(zz')-\E(z)\E(z)'$. When $\E(z)=0$, this becomes $\Var(z)=\E(zz')$.
+\item \textbf{Projection and residual maker:} $P_X=X(X'X)^{-1}X'$ and $M_X=I-P_X$. Both are \emph{symmetric} ($P'=P$) and \emph{idempotent} ($PP=P$). Also $P_XX=X$, $M_XX=0$, $P_XY=Xb=\hat Y$, and $M_XY=e$.
+\item \textbf{Trace rules:} a scalar equals its own trace. $\tr(AB)=\tr(BA)$ (you can cycle the factors). $\tr(A\pm B)=\tr A\pm\tr B$, $\tr(cA)=c\,\tr A$, $\tr(I_n)=n$, and $\E[\tr(\cdot)]=\tr[\E(\cdot)]$.
+\item \textbf{Sums as matrix products:} $X'X=\sum_i x_ix_i'$, $X'Y=\sum_i x_iy_i$, and $X'\veps=\sum_i x_i\varepsilon_i$. For a column of ones $\iota$: $\iota'\iota=n$, $\iota'x=\sum_ix_i=n\bar x$.
+\item \textbf{Sample covariance and variance shortcuts:} $\tfrac1n\sum(x_i-\bar x)(y_i-\bar y)=\overline{xy}-\bar x\bar y$ and $\sum(x_i-\bar x)^2=\sum x_i^2-n\bar x^2$. To prove the second: expand, and use $\sum x_i=n\bar x$.
+\item \textbf{Completing the square / cross-term trick (used in P1 and P2):} write the target as \emph{(the true thing) + (the error)}, expand the square, then show the cross term has expectation zero.
+\end{enumerate}
+
+\textbf{The five LRM assumptions} (you are often asked which one a step uses):
+\textbf{A1} linearity, $Y=X\beta+\veps$.
+\textbf{A2} full rank, so $(X'X)^{-1}$ exists.
+\textbf{A3} mean independence, $\E(\veps\mid X)=0$.
+\textbf{A4} homoskedasticity and no autocorrelation, $\Var(\veps\mid X)=\sigma^2I_n$.
+\textbf{A5} normality, $\veps\mid X\sim N(0,\sigma^2I_n)$.
+Unbiasedness needs A1--A3. $\Var(b\mid X)=\sigma^2(X'X)^{-1}$ also needs A4. Exact $N$/$t$ inference also needs A5.
+
+%=====================================================================
+\section{Proof bank}
+
+\subsection*{Lecture 8: Linear Regression Model}
+
+%---------------------------------------------------------------------
+\proofhead{The mean minimizes expected squared error}{L8 Q1}
+\textbf{Show:} $\arg\min_a \E[(y-a)^2]=\mu=\E(y)$.
+\begin{skel}{Skeleton}
+$y=\mu+u$ with $\E u=0$ $\;\to\;$ $\E[(u+\mu-a)^2]$ $\;\to\;$ expand $\;\to\;$ the cross term $2(\mu-a)\E u=0$ $\;\to\;$ $\E u^2+(\mu-a)^2$ $\;\to\;$ set $a=\mu$.
+\end{skel}
+Define $u=y-\mu$. Then $\E(u)=\E(y)-\mu=0$. Substitute:
+\[
+\E[(y-a)^2]=\E[(u+\mu-a)^2]=\E\big[u^2+2u(\mu-a)+(\mu-a)^2\big]
+=\E(u^2)+2(\mu-a)\underbrace{\E(u)}_{0}+(\mu-a)^2 .
+\]
+So $\E[(y-a)^2]=\E(u^2)+(\mu-a)^2$. The first term does not depend on $a$. The second term is $\ge0$, and it equals $0$ exactly when $a=\mu$. \hfill$\blacksquare$
+
+\emph{Calculus check:} $\frac{d}{da}\E[(y-a)^2]=-2\E(y-a)=0\Rightarrow a=\E y$. Use the decomposition argument on the exam, because it is the one the solution key uses.
+
+%---------------------------------------------------------------------
+\proofhead{The CEF is the best predictor}{L8 Q2(a)--(c)}
+\textbf{Setup:} $m(x)=\E(y\mid x)$ and $u=y-m(x)$.
+\begin{skel}{Skeleton}
+(a) $\E(u|x)=\E(y|x)-m(x)=0$. $\;$
+(b) $\E(h(x)u|x)=h(x)\E(u|x)=0$, then use LIE. $\;$
+(c) $y=m+u$ $\to$ expand $\E[(u+m-g)^2]$ $\to$ the cross term is $\E[u\,h(x)]$ with $h=m-g$, which is $0$ by (b) $\to$ $\E u^2+\E(m-g)^2$ $\to$ set $g=m$.
+\end{skel}
+\textbf{(a)} $\E(u\mid x)=\E(y-m(x)\mid x)=\E(y\mid x)-m(x)=m(x)-m(x)=0$. ($m(x)$ is fixed once we condition on $x$.)
+
+\textbf{(b)} Condition on $x$: $\E(h(x)u\mid x)=h(x)\E(u\mid x)=0$. By the LIE, $\E(h(x)u)=\E_x[\E(h(x)u\mid x)]=\E_x(0)=0$.
+
+\textbf{(c)} Substitute $y=m(x)+u$:
+\[
+\E[(y-g(x))^2]=\E[(u+m(x)-g(x))^2]=\E(u^2)+2\E\big[u\,(m(x)-g(x))\big]+\E\big[(m(x)-g(x))^2\big].
+\]
+Let $h(x)=m(x)-g(x)$. The middle term is $2\E[h(x)u]=0$ by (b). So
+$\E[(y-g(x))^2]=\E(u^2)+\E[(m(x)-g(x))^2]$. The first term does not depend on $g$. The second term is minimized, at zero, by $g(x)=m(x)=\E(y\mid x)$. \hfill$\blacksquare$
+
+\begin{trap}
+You must \emph{name} $h(x)=m(x)-g(x)$ so you can cite part (b). This is the step the grader looks for. Say ``by the LIE'' explicitly in (b).
+\end{trap}
+
+%---------------------------------------------------------------------
+\proofhead{Algebraic properties of OLS residuals}{L8 Q3(a)--(c)}
+\textbf{Given} the FOCs $-2\sum_i x_{ik}(y_i-x_i'b)=0$ for every $k$, and $e_i=y_i-x_i'b$.
+\begin{skel}{Skeleton}
+FOCs $\Leftrightarrow \sum_i x_{ik}e_i=0$ for all $k$ $\;$ (a) take $k=1$ with $x_{i1}=1$, so $\sum e_i=0$ $\;$ (b) $\bar e=\bar y-\bar x'b=0$ $\;$ (c) expand the covariance into $\tfrac1n\sum x_{ik}e_i-\bar x_k\bar e=0-0$.
+\end{skel}
+Divide each FOC by $-2$ and substitute $e_i$: $\sum_{i=1}^n x_{ik}e_i=0$ for $k=1,\dots,K$. (In matrix form, $X'e=0$.)
+
+\textbf{(a)} With $x_{i1}=1$, the $k=1$ condition reads $\sum_i 1\cdot e_i=0$, so $\sum_i e_i=0$ (and $\bar e=0$).
+
+\textbf{(b)} Average the residuals: $\bar e=\frac1n\sum_i(y_i-x_i'b)=\frac1n\sum_iy_i-\big(\frac1n\sum_ix_i\big)'b=\bar y-\bar x'b$. From (a), $\bar e=0$, so $\bar y=\bar x'b$. In words, the fitted line passes through the point of means.
+
+\textbf{(c)} Expand:
+\[
+\widehat{\Cov}(x_k,e)=\tfrac1n\sum_i(x_{ik}-\bar x_k)(e_i-\bar e)
+=\tfrac1n\sum_i x_{ik}e_i-\bar x_k\bar e-\bar e\bar x_k+\bar x_k\bar e
+=\underbrace{\tfrac1n\sum_i x_{ik}e_i}_{=0\text{ (FOC)}}-\bar x_k\underbrace{\bar e}_{=0\text{ (a)}}=0.
+\]
+\hfill$\blacksquare$
+\begin{trap}
+Part (c) needs \emph{both} the $k$-th FOC and $\bar e=0$. The second fact comes from having a constant in the model. Without a constant, $X'e=0$ still holds but $\bar e$ need not be 0, so say where each zero comes from.
+\end{trap}
+
+%---------------------------------------------------------------------
+\proofhead{\texorpdfstring{Bivariate OLS in matrix form; slope $=\widehat{\Cov}/\widehat{\Var}$}{Bivariate OLS in matrix form; slope = Cov/Var}}{L8 Q4(a)--(b)}
+\textbf{Setup:} $\hat w=b_1+b_2e$. Here $e$ is \emph{education}, not the residual. $X=[\iota\;\; e]$ and $Y=w$.
+\begin{skel}{Skeleton}
+Multiply out $X'X$ and $X'Y$ $\to$ factor out $n$ $\to$ $(nA)^{-1}(nc)=A^{-1}c$ $\to$ $2\times2$ inverse with determinant $\overline{ee}-\bar e^2$ $\to$ the 2nd row gives $b_2=(\overline{ew}-\bar e\bar w)/(\overline{ee}-\bar e^2)$.
+\end{skel}
+\textbf{(a)} Write out the products element by element:
+\[
+X'X=\begin{bmatrix}1&1&\cdots&1\\ e_1&e_2&\cdots&e_n\end{bmatrix}
+\begin{bmatrix}1&e_1\\ \vdots&\vdots\\ 1&e_n\end{bmatrix}
+=\begin{bmatrix}\sum_i 1&\sum_i e_i\\ \sum_i e_i&\sum_i e_i^2\end{bmatrix}
+=n\begin{bmatrix}1&\bar e\\ \bar e&\overline{ee}\end{bmatrix},
+\]
+\[
+X'Y=\begin{bmatrix}1&\cdots&1\\ e_1&\cdots&e_n\end{bmatrix}\begin{bmatrix}w_1\\ \vdots\\ w_n\end{bmatrix}
+=\begin{bmatrix}\sum_i w_i\\ \sum_i e_iw_i\end{bmatrix}=n\begin{bmatrix}\bar w\\ \overline{ew}\end{bmatrix}.
+\]
+Then (T2) gives
+$b=(X'X)^{-1}X'Y=\frac1n\begin{bmatrix}1&\bar e\\ \bar e&\overline{ee}\end{bmatrix}^{-1}n\begin{bmatrix}\bar w\\ \overline{ew}\end{bmatrix}
+=\begin{bmatrix}1&\bar e\\ \bar e&\overline{ee}\end{bmatrix}^{-1}\begin{bmatrix}\bar w\\ \overline{ew}\end{bmatrix}.$
+
+\textbf{(b)} Apply the $2\times2$ inverse (T3). The determinant is $\overline{ee}-\bar e^{2}$:
+\[
+b=\frac{1}{\overline{ee}-\bar e^2}\begin{bmatrix}\overline{ee}&-\bar e\\ -\bar e&1\end{bmatrix}\begin{bmatrix}\bar w\\ \overline{ew}\end{bmatrix}
+=\frac{1}{\overline{ee}-\bar e^2}\begin{bmatrix}\overline{ee}\,\bar w-\bar e\,\overline{ew}\\ -\bar e\bar w+\overline{ew}\end{bmatrix}.
+\]
+The second element is
+$b_2=\dfrac{\overline{ew}-\bar e\bar w}{\overline{ee}-\bar e^{2}}=\dfrac{\widehat{\Cov}(e,w)}{\widehat{\Var}(e)}.$ \hfill$\blacksquare$
+
+\emph{Bonus check:} the first element simplifies to $b_1=\bar w-b_2\bar e$. This matches $\bar y=\bar x'b$ from P3.
+\begin{trap}
+Don't confuse education $e_i$ with the residual. If you want, rename it $ed_i$ on your paper and say so.
+\end{trap}
+
+\subsection*{Lecture 9: Properties of OLS}
+
+%---------------------------------------------------------------------
+\proofhead{OLS is unbiased (conditionally, then unconditionally)}{L9 Q1(a)--(b)}
+\begin{skel}{Skeleton}
+Substitute $Y=X\beta+\veps$ $\to$ $b=\beta+(X'X)^{-1}X'\veps$ $\to$ take $\E(\cdot|X)$ and pull out the functions of $X$ $\to$ $\E(\veps|X)=0$ (A3) $\to$ $\E(b|X)=\beta$ $\to$ LIE gives $\E(b)=\E_X(\beta)=\beta$.
+\end{skel}
+\textbf{(a)}
+\[
+\E(b\mid X)=\E\big[(X'X)^{-1}X'(X\beta+\veps)\mid X\big]
+=\underbrace{(X'X)^{-1}X'X}_{I_K}\beta+(X'X)^{-1}X'\,\underbrace{\E(\veps\mid X)}_{0\text{ by A3}}=\beta.
+\]
+We can pull $(X'X)^{-1}X'$ out of the expectation because it is a function of $X$, so it is fixed once we condition on $X$ (T4). $\beta$ is a constant.
+
+\textbf{(b)} By the LIE (T5), $\E(b)=\E_X[\E(b\mid X)]=\E_X(\beta)=\beta$. \hfill$\blacksquare$
+
+%---------------------------------------------------------------------
+\proofhead{\texorpdfstring{Sampling error, the variance sandwich, and $\sigma^2(X'X)^{-1}$}{Sampling error, the variance sandwich, and sigma2(X'X)-1}}{L9 Q2(a)--(d)}
+\begin{skel}{Skeleton}
+(a) $b=\beta+A\veps$ with $A=(X'X)^{-1}X'$. $\;$
+(b) $b-\E(b|X)=A\veps$, so $\Var=\E[A\veps\veps'A'|X]=A\,\E(\veps\veps'|X)A'$. $\;$
+(c) $\Var=\E(\veps\veps')-\E\veps\E\veps'$ and the 2nd term is $0$. $\;$
+(d) diagonal $=\sigma^2$, off-diagonal $=0$ $\to$ $\sigma^2I$ $\to$ $\sigma^2(X'X)^{-1}X'X(X'X)^{-1}=\sigma^2(X'X)^{-1}$.
+\end{skel}
+\textbf{(a)} $b=(X'X)^{-1}X'(X\beta+\veps)=(X'X)^{-1}X'X\beta+(X'X)^{-1}X'\veps=\beta+(X'X)^{-1}X'\veps$.
+
+\textbf{(b)} Since $\E(b\mid X)=\beta$, we have $b-\E(b\mid X)=(X'X)^{-1}X'\veps$. Its transpose is $\veps'X(X'X)^{-1}$ (T1, using the symmetry of $(X'X)^{-1}$). So
+\[
+\Var(b\mid X)=\E\big[(X'X)^{-1}X'\veps\veps'X(X'X)^{-1}\mid X\big]=(X'X)^{-1}X'\,\E(\veps\veps'\mid X)\,X(X'X)^{-1}.
+\]
+\textbf{(c)} $\Var(\veps\mid X)=\E(\veps\veps'\mid X)-\E(\veps\mid X)\E(\veps\mid X)'$. Under A3 the second term is $0\cdot0'=0$, so $\Var(\veps\mid X)=\E(\veps\veps'\mid X)$.
+
+\textbf{(d)} $\Var(\veps\mid X)$ is $n\times n$. Its diagonal entries are $\Var(\varepsilon_i\mid X)$, and its off-diagonal entries are $\Cov(\varepsilon_i,\varepsilon_j\mid X)$.
+\emph{Homoskedasticity} means every diagonal entry equals the same $\sigma^2$, which does not depend on $X$.
+\emph{No autocorrelation} means every off-diagonal entry is $0$. So
+\[
+\Var(\veps\mid X)=\begin{bmatrix}\sigma^2&0&\cdots&0\\0&\sigma^2&\cdots&0\\ \vdots&&\ddots&\vdots\\0&0&\cdots&\sigma^2\end{bmatrix}=\sigma^2I_n .
+\]
+Plug this into (b):
+$\Var(b\mid X)=(X'X)^{-1}X'(\sigma^2I_n)X(X'X)^{-1}=\sigma^2(X'X)^{-1}\underbrace{X'X(X'X)^{-1}}_{I_K}=\sigma^2(X'X)^{-1}.$ \hfill$\blacksquare$
+
+%---------------------------------------------------------------------
+\proofhead{\texorpdfstring{OLS as a sample average: LLN $\Rightarrow$ consistency, CLT $\Rightarrow$ normality}{OLS as a sample average: LLN, CLT}}{L9 Q3(a)--(c)}
+\begin{skel}{Skeleton}
+$X'\veps=\sum x_i\varepsilon_i=n\bar w$ $\to$ $b=\beta+(X'X)^{-1}n\bar w=\beta+(X'X/n)^{-1}\bar w$ $\to$ LLN: $\bar w\to\E w_i=0$ and $X'X/n\to\E(x_ix_i')$, so $\plim b=\beta$ $\to$ CLT: $\bar w$ is approximately normal, so $b$ is approximately normal even without A5.
+\end{skel}
+\textbf{(a)} $X'\veps=\begin{bmatrix}\sum_ix_{i1}\varepsilon_i\\ \vdots\\ \sum_ix_{iK}\varepsilon_i\end{bmatrix}=\sum_i x_i\varepsilon_i=\sum_iw_i=n\bar w$. So
+$b=\beta+(X'X)^{-1}n\bar w=\beta+\big(n^{-1}X'X\big)^{-1}\bar w=\beta+\big(\tfrac{X'X}{n}\big)^{-1}\bar w$, using T2.
+
+\textbf{(b) LLN $\Rightarrow$ consistency.} First, $\E(w_i)=\E(x_i\varepsilon_i)=\E_x[x_i\E(\varepsilon_i\mid x_i)]=0$ by A3 and the LIE. The LLN says sample averages converge in probability to population means:
+\begin{itemize}[nosep]
+\item $\plim\bar w=\E(w_i)=0$;
+\item $\tfrac{X'X}{n}=\tfrac1n\sum_ix_ix_i'$ is also a sample average, so $\plim\tfrac{X'X}{n}=\E(x_ix_i')$, which is invertible by A2.
+\end{itemize}
+Therefore $\plim b=\beta+\E(x_ix_i')^{-1}\cdot 0=\beta$. \textbf{OLS is consistent:} as $n\to\infty$, $b$ concentrates on $\beta$. Formally, $\Pr(|b-\beta|\ge\eta)\to0$ for every $\eta>0$.
+
+\textbf{(c) CLT $\Rightarrow$ approximate normality.} $\bar w$ is a sample average of mean-zero random vectors, so by the CLT its sampling distribution is approximately normal in large samples. The estimator $b$ is $\beta$ plus a (nearly constant) matrix $(X'X/n)^{-1}$ times $\bar w$. A linear function of an approximately normal vector is approximately normal, so $b\overset{a}{\sim}N\big(\beta,\sigma^2(X'X)^{-1}\big)$ in large samples, \emph{without} assuming A5. This justifies $t$-tests and confidence intervals when the errors are not normal.
+
+\emph{Formal version (optional):} $\sqrt n\,\bar w\overset{d}{\to}N(0,\sigma^2Q)$ with $Q=\E(x_ix_i')$ under A4, so $\sqrt n(b-\beta)\overset{d}{\to}N(0,Q^{-1}\sigma^2QQ^{-1})=N(0,\sigma^2Q^{-1})$.
+
+\emph{Related (L9.20):} with A5, $b=\beta+A\veps$ is a linear function of a normal vector, so $b\mid X\sim N(\beta,\sigma^2(X'X)^{-1})$ holds \emph{exactly}.
+
+\subsection*{Lecture 10: Interpretation of OLS}
+
+%---------------------------------------------------------------------
+\proofhead{\texorpdfstring{Residuals are orthogonal to $X$: $P_XH=0$ and regressing $e$ on $X$ gives $a=0$}{Residuals are orthogonal to X}}{L10 Q1(a)--(d)}
+\begin{skel}{Skeleton}
+$P_X=X(X'X)^{-1}X'$ $\to$ $H=Y-Xb$ $\to$ $P_XH=X(X'X)^{-1}X'Y-X(X'X)^{-1}X'Xb=Xb-Xb=0$ $\to$ $a=(X'X)^{-1}X'H=b-b=0$.
+\end{skel}
+\textbf{(a)} $P_X=X(X'X)^{-1}X'$ ($n\times n$). It projects any $n$-vector onto the column space of $X$.
+
+\textbf{(b)} $P_XH=X(X'X)^{-1}X'(Y-Xb)=X\underbrace{(X'X)^{-1}X'Y}_{b}-X\underbrace{(X'X)^{-1}X'X}_{I}b=Xb-Xb=0$.
+
+\textbf{(c)} In words: the OLS residuals cannot be predicted by \emph{any} linear combination of the columns of $X$. Everything $X$ can linearly explain about $Y$ is already in $\hat Y=Xb$.
+
+\textbf{(d)} Regress $H$ on $X$: $a=(X'X)^{-1}X'H=(X'X)^{-1}X'Y-(X'X)^{-1}X'Xb=b-b=0$. \hfill$\blacksquare$
+
+(Equivalently, $X'H=X'e=0$ is just the stacked OLS FOCs from P3.)
+
+%---------------------------------------------------------------------
+\proofhead{Projecting on a constant = averaging; residual maker = demeaning}{L10 Q2(a)--(c)}
+\textbf{Setup:} $Y=\tau Z+\kappa X+\veps$, where $Z=\iota$ is an $n\times1$ vector of ones.
+\begin{skel}{Skeleton}
+$Z'Z=n$ $\to$ $P_Z=\tfrac1n\iota\iota'$, an $n\times n$ matrix with all entries $1/n$ $\to$ $P_ZX=\bar x\,\iota$ $\to$ $X^*=M_ZX=X-\bar x\iota$, whose $i$-th entry is $x_i-\bar x$.
+\end{skel}
+\textbf{(a)} $Z'Z=\sum_i1\cdot1=n$, so $P_Z=Z(Z'Z)^{-1}Z'=\tfrac1nZZ'$. Here $ZZ'$ is $(n\times1)(1\times n)=n\times n$ with every entry equal to $1\cdot1=1$. So \textbf{$P_Z$ is $n\times n$ and every element equals $1/n$}.
+
+\textbf{(b)} $P_ZX$ is $(n\times n)(n\times1)=n\times1$. Row $i$ is $\sum_j\tfrac1nx_j=\bar x$, so $P_ZX=(\bar x,\bar x,\dots,\bar x)'$. \textbf{Every element is the sample mean of $X$.}
+
+\textbf{(c)} \emph{(The ``work this out on your own'' part.)} $M_Z=I-P_Z$, so
+\[
+X^*=M_ZX=X-P_ZX=\begin{bmatrix}x_1-\bar x\\ x_2-\bar x\\ \vdots\\ x_n-\bar x\end{bmatrix}.
+\]
+\textbf{$X^*$ is $n\times1$, and each element is that observation's price minus the average price}, so $X^*$ is \emph{demeaned} price. The same holds for $Y^*$ ($y_i-\bar y$) and $\veps^*$ ($\varepsilon_i-\bar\varepsilon$). The constant drops out because $M_ZZ=Z-Z=0$.
+
+\emph{Payoff (Frisch--Waugh):} OLS on the transformed model gives
+\[\hat\kappa=(X^{*\prime}X^*)^{-1}X^{*\prime}Y^*=\dfrac{\sum_i(x_i-\bar x)(y_i-\bar y)}{\sum_i(x_i-\bar x)^2}=\dfrac{\widehat{\Cov}(x,y)}{\widehat{\Var}(x)}.\]
+This matches P4: including a constant is the same as demeaning everything.
+
+\subsection*{Lecture 11: Inference with OLS}
+
+%---------------------------------------------------------------------
+\proofhead{\texorpdfstring{The standardized estimate: $N(0,1)$, then $t_{n-K}$}{The standardized estimate: N(0,1), then t}}{L11 Q1}
+\begin{skel}{Skeleton}
+$b_k|X\sim N(\beta_k,\sigma^2[(X'X)^{-1}]_{kk})$ $\to$ subtract the mean and divide by the SD to get $N(0,1)$ $\to$ $\sigma^2$ is unknown, so use $s^2=e'e/(n-K)$ $\to$ the result is $t_{n-K}$.
+\end{skel}
+From $b\mid X\sim N(\beta,\sigma^2(X'X)^{-1})$, the $k$-th element satisfies $b_k\mid X\sim N\big(\beta_k,\sigma^2[(X'X)^{-1}]_{kk}\big)$. Here $[(X'X)^{-1}]_{kk}$ is the $k$-th diagonal element. Standardize by subtracting the mean and dividing by the standard deviation:
+\[
+z_k=\frac{b_k-\beta_k}{\sqrt{\sigma^2[(X'X)^{-1}]_{kk}}}\sim N(0,1).
+\]
+$\sigma^2$ is unobserved, so estimate it with $s^2=\frac{1}{n-K}\sum_ie_i^2$ (unbiased, see P11). Replacing $\sigma^2$ by $s^2$ adds estimation noise, and the distribution becomes
+\[
+t_k=\frac{b_k-\beta_k}{\sqrt{s^2[(X'X)^{-1}]_{kk}}}=\frac{b_k-\beta_k}{\widehat{SE}(b_k)}\sim t_{n-K}.
+\]
+\emph{Why $t$ (optional depth):} $t_k=z_k\big/\sqrt{\tfrac{(n-K)s^2/\sigma^2}{n-K}}$. Under A5, $(n-K)s^2/\sigma^2=\veps'M_X\veps/\sigma^2\sim\chi^2_{n-K}$, and it is independent of $b$. A standard normal divided by $\sqrt{\chi^2_{df}/df}$ is $t_{df}$.
+
+\emph{How it's used:} 95\% CI is $b_k\pm\kappa\,\widehat{SE}(b_k)$ with $\kappa$ = \texttt{qt(0.975, n-K)}. To test $H_0:\beta_k=q$, use $t=(b_k-q)/\widehat{SE}$ with $p$-value \texttt{2*(1-pt(abs(t), n-K))}.
+
+%---------------------------------------------------------------------
+\proofhead{\texorpdfstring{$e'e=\veps'M_X\veps$ and $s^2$ is unbiased (trace proof)}{e'e and s2 is unbiased (trace proof)}}{L11 Q2(a)--(b)}
+\begin{skel}{Skeleton}
+(a) $e=M\veps$ $\to$ $e'e=\veps'M'M\veps$ $\to$ $M'=M$, and expand $MM=I-2P+PP=I-P=M$. $\;$
+(b) scalar $=$ its trace $\to$ cycle the factors $\to$ $\E$ and $\tr$ commute $\to$ $\sigma^2\tr(M)$ $\to$ $\tr(M)=n-\tr((X'X)^{-1}X'X)=n-K$.
+\end{skel}
+\textbf{(a)} (Why $e=M_X\veps$: $e=M_XY=M_X(X\beta+\veps)=M_XX\beta+M_X\veps=M_X\veps$, since $M_XX=X-X(X'X)^{-1}X'X=0$.)
+Then $e'e=(M_X\veps)'(M_X\veps)=\veps'M_X'M_X\veps$.
+\emph{Symmetry:} $M_X'=I'-\big(X(X'X)^{-1}X'\big)'=I-X\big((X'X)^{-1}\big)'X'=I-X(X'X)^{-1}X'=M_X$.
+\emph{Idempotency:}
+\[
+\begin{aligned}
+M_X'M_X=M_XM_X&=\big(I-X(X'X)^{-1}X'\big)\big(I-X(X'X)^{-1}X'\big)\\
+&=I-2X(X'X)^{-1}X'+X\underbrace{(X'X)^{-1}X'X}_{I}(X'X)^{-1}X'
+\end{aligned}
+\]
+\[
+=I-2X(X'X)^{-1}X'+X(X'X)^{-1}X'=I-X(X'X)^{-1}X'=M_X.
+\]
+So $e'e=\veps'M_X\veps$.
+
+\textbf{(b)} \emph{(Deriving the given expression, in case they ask:)} $e'e$ is a scalar, so $e'e=\tr(\veps'M_X\veps)=\tr(M_X\veps\veps')$ by cycling. Since $\E$ and $\tr$ commute and $M_X$ is fixed given $X$: $\E(e'e\mid X)=\tr\big(M_X\E(\veps\veps'\mid X)\big)$.
+
+Under A4 (homoskedasticity and no autocorrelation), $\E(\veps\veps'\mid X)=\Var(\veps\mid X)=\sigma^2I_n$. The first equality uses A3, as in P6(c). Then
+\[
+\E(e'e\mid X)=\tr(M_X\sigma^2I_n)=\sigma^2\tr(M_X).
+\]
+Compute the trace:
+\[
+\tr(M_X)=\tr(I_n)-\tr\big(X(X'X)^{-1}X'\big)=n-\tr\big((X'X)^{-1}X'X\big)=n-\tr(I_K)=n-K.
+\]
+In the middle step, cycle $X$ from the front to the back. Note that $I_K$ is $K\times K$ because $(X'X)^{-1}X'X$ is $K\times K$. So $\E(e'e\mid X)=\sigma^2(n-K)$. Dividing by the constant $n-K$:
+\[
+\E\Big(\frac{e'e}{n-K}\,\Big|\,X\Big)=\sigma^2,\qquad\text{i.e. } s^2 \text{ is (conditionally) unbiased. By the LIE, }\E(s^2)=\sigma^2. \quad\blacksquare
+\]
+\begin{trap}
+``No shortcuts'' means: write that $M_X$ is symmetric, show $MM=M$ by expanding, and justify each trace step: scalar = trace, cycling, linearity, $\tr(I_n)=n$, $\tr(I_K)=K$. The dimension switch from $n\times n$ to $K\times K$ is the key point, so state it.
+\end{trap}
+
+%---------------------------------------------------------------------
+\proofhead{\texorpdfstring{Variance of the bivariate slope: $\sigma^2/\sum(x_i-\bar x)^2$}{Variance of the bivariate slope}}{L11 Q3(a)--(b)}
+\begin{skel}{Skeleton}
+$X'X=\begin{bmatrix}n&\sum x\\ \sum x&\sum x^2\end{bmatrix}$ $\to$ $2\times2$ inverse, determinant $n\sum x^2-(\sum x)^2$ $\to$ the (2,2) entry is $n/\det$ $\to$ $\det=n\sum(x_i-\bar x)^2$ $\to$ $\sigma^2/SST_x=\sigma^2/[(n-1)s_x^2]$.
+\end{skel}
+\textbf{(a)} $X'X=\begin{bmatrix}1&\cdots&1\\x_1&\cdots&x_n\end{bmatrix}\begin{bmatrix}1&x_1\\ \vdots&\vdots\\1&x_n\end{bmatrix}=\begin{bmatrix}n&\sum_ix_i\\ \sum_ix_i&\sum_ix_i^2\end{bmatrix}$. By T3,
+\[
+\Var(b\mid X)=\sigma^2(X'X)^{-1}=\frac{\sigma^2}{n\sum_ix_i^2-(\sum_ix_i)^2}\begin{bmatrix}\sum_ix_i^2&-\sum_ix_i\\-\sum_ix_i&n\end{bmatrix}.
+\]
+$\Var(b_2\mid X)$ is the (2,2) element: $\dfrac{\sigma^2\,n}{n\sum_ix_i^2-(\sum_ix_i)^2}$. Simplify the determinant using $\sum_ix_i=n\bar x$:
+\[
+n\sum x_i^2-(n\bar x)^2=n\Big(\sum x_i^2-n\bar x^2\Big)=n\sum_i(x_i-\bar x)^2.
+\]
+The last step is T11: $\sum(x_i-\bar x)^2=\sum x_i^2-2\bar x\sum x_i+n\bar x^2=\sum x_i^2-n\bar x^2$. Cancel $n$:
+\[
+\Var(b_2\mid X)=\frac{\sigma^2}{\sum_{i=1}^n(x_i-\bar x)^2}=\frac{\sigma^2}{SST_x}.\quad\blacksquare
+\]
+\textbf{(b) Three factors.} Write $SST_x=(n-1)s_x^2$, so $\Var(b_2\mid X)=\dfrac{\sigma^2}{(n-1)s_x^2}$.
+\begin{enumerate}[nosep]
+\item $\sigma^2$, the \textbf{disturbance variance}: more noise in the unobservables gives a less precise $b_2$.
+\item $n$, the \textbf{sample size}: more observations give a smaller variance, holding $s_x^2$ fixed.
+\item $s_x^2$, the \textbf{variation in $x$}: more spread in the regressor gives a more precise slope, holding $n$ fixed.
+\end{enumerate}
+
+%---------------------------------------------------------------------
+\proofhead{\texorpdfstring{Multiple regression: $\Var(b_k)=\sigma^2/[(1-R_k^2)SST_{x_k}]$}{Multiple regression: Var(bk)}}{L11 Q4(a)--(b)}
+\begin{skel}{Skeleton}
+Partition $Y=X_1\beta_1+x_k\beta_k+\veps$ $\to$ apply $M_1$ (FWL) $\to$ $\Var(b_k)=\sigma^2/(x_k^{*\prime}x_k^*)=\sigma^2/SST_{x_k^*}$ $\to$ $SST_{x^*_k}$ is the SSE of the auxiliary regression, which equals $(1-R_k^2)SST_{x_k}$.
+\end{skel}
+\textbf{(a) Formula (memorize):}
+\[
+\boxed{\;\Var(b_3\mid X)=\frac{\sigma^2}{(1-R_3^2)\,SST_{x_3}},\qquad SST_{x_3}=\sum_i(x_{i3}-\bar x_3)^2\;}
+\]
+Here $R_3^2$ is the $R^2$ from regressing $x_3$ on \emph{all the other regressors} (including the constant).
+
+\emph{Where it comes from (L11.18--11.20), in case they ask for a derivation:} Partition the model as $Y=X_1\beta_1+x_k\beta_k+\veps$. Multiply by $M_1$: $M_1Y=x_k^*\beta_k+M_1\veps$, where $x_k^*=M_1x_k$ is the residual from regressing $x_k$ on $X_1$. So $\Var(b_k\mid X)=\sigma^2(x_k^{*\prime}x_k^*)^{-1}=\sigma^2/SST_{x_k^*}$. Because $X_1$ has a constant, $x_k^*$ has mean $0$, so $x_k^{*\prime}x_k^*$ is the SSE of that auxiliary regression. Since $R_k^2=1-\frac{SSE_{aux}}{SST_{x_k}}$, we get $SSE_{aux}=(1-R_k^2)SST_{x_k}$.
+
+\textbf{(b) The three components, and how each one improves precision:}
+\begin{enumerate}[nosep]
+\item $\sigma^2$, the variance of the unobserved part of $y$. Precision improves when $\sigma^2$ is smaller, for example by adding relevant controls that explain $y$ and so take variation out of the disturbance.
+\item $SST_{x_k}=(n-1)s_{x_k}^2$, the total observed variation in $x_k$. Precision improves with more variation in $x_k$ or a larger sample.
+\item $1-R_k^2$, the share of the variation in $x_k$ that is \emph{not} explained by the other regressors. $R_k^2$ comes from regressing $x_k$ on all the other $x$'s and measures how well they predict $x_k$. OLS identifies $\beta_k$ only from the \emph{unique} variation in $x_k$, the part left after partialling out the others. Precision improves when $R_k^2$ is low, meaning $x_k$ is not highly correlated with the other regressors. As $R_k^2\to1$, $\Var(b_k)\to\infty$. At $R_k^2=1$, A2 (full rank) fails. $\mathrm{VIF}_k=1/(1-R_k^2)$.
+\end{enumerate}
+
+%---------------------------------------------------------------------
+\proofhead{Multicollinearity and the bias--variance trade-off}{L11 Q5(a)--(b)}
+\begin{skel}{Skeleton}
+(a) Define multicollinearity as high $R_k^2$ $\to$ the denominator shrinks $\to$ the variance rises. $\;$
+(b) Dropping a correlated regressor lowers $R_k^2$ and the variance, but it moves that regressor into $\varepsilon$; since it is predictable from $x_k$, this breaks A3 and gives OVB, $\E(\Gamma)\beta_2$.
+\end{skel}
+\textbf{(a)} Multicollinearity is the degree to which a regressor is (linearly) correlated with the other regressors, measured by $R_k^2$. From $\Var(b_k\mid X)=\sigma^2/[(1-R_k^2)SST_{x_k}]$: as $R_k^2\uparrow$, $(1-R_k^2)\downarrow$, so $\Var(b_k)\uparrow$ and the estimates become less precise. Warning signs are a high overall $R^2$ with few significant coefficients, unstable estimates, and odd signs. The model is ``close to'' violating full rank. The effect can be offset by a smaller $\sigma^2$ or a larger $SST_{x_k}$.
+
+\textbf{(b)} Dropping a highly correlated regressor $x_j$ lowers $R_k^2$, which raises the denominator and \emph{lowers} $\Var(b_k)$. But $x_j$ now moves from the explained part of the model into the disturbance. Because $x_j$ is highly predictable from $x_k$ (that is what multicollinearity means), $x_k$ now predicts the disturbance, so $\E(\varepsilon\mid X)\neq0$. Mean independence (A3) fails, and $b_k$ becomes biased. From the OVB formula (L10.12), the bias is $\E(b_1-\beta_1)=\E(\Gamma)\beta_2$, which is nonzero exactly when the dropped variable matters ($\beta_2\ne0$) and is predicted by the kept ones ($\Gamma\ne0$). This is the trade-off: lower variance in exchange for bias.
+
+\subsection*{Lecture 12: OLS in Practice}
+
+%---------------------------------------------------------------------
+\proofhead{Log functional forms: log-level, level-log, log-log}{L12 Q1--Q3}
+\begin{skel}{Skeleton}
+Exponentiate or differentiate $\to$ the chain rule gives the marginal effect $\to$ rearrange into ``\%-change'' form, $100\,\partial y/y$ and/or $100\,\partial x/x$ $\to$ read off the interpretation (watch the units).
+\end{skel}
+\textbf{Log-level, $\log(fare)=4.666+0.043\,dist$} (dist in hundreds of miles)
+\begin{enumerate}[label=(\alph*),nosep]
+\item $fare=\exp(4.666+0.043\,dist)$.
+\item $\dfrac{\partial fare}{\partial dist}=\exp(4.666+0.043\,dist)\cdot0.043=0.043\,fare$.
+\item Rearrange (b): $100\dfrac{\partial fare}{fare}=100(0.043)\,\partial dist=4.3\,\partial dist$. One unit of $dist$ (100 miles) gives a $\approx4.3\%$ increase. One mile is $\partial dist=1/100=0.01$, so $100\dfrac{\partial fare}{fare}=4.3\times0.01=0.043\%$. So the coefficient, read in percent, is the effect of \emph{one mile}: $\approx0.043\%$.
+\end{enumerate}
+\textbf{Level-log, $fare=41+66\log(dist)$}
+\begin{enumerate}[label=(\alph*),nosep]
+\item $\dfrac{\partial fare}{\partial dist}=\dfrac{66}{dist}$.
+\item Rearrange: $\dfrac{\partial fare}{\partial dist/dist}=66$, so $\dfrac{\partial fare}{100\,\partial dist/dist}=\dfrac{66}{100}=0.66$. A 1\% increase in $dist$ raises $fare$ by $\approx\$0.66$.
+\item Units don't matter. In miles, the hundreds-unit variable is $dist/100$:
+$fare=41+66\log(dist/100)=\big(41-66\log100\big)+66\log(dist)$. Only the intercept changes. The slope is still 66, so a 1\% increase still gives $\approx\$0.66$.
+\end{enumerate}
+\textbf{Log-log, $\log(fare)=4.25+0.40\log(dist)$} \emph{(the parts with no posted solution)}
+\begin{enumerate}[label=(\alph*),nosep]
+\item $fare=\exp(4.25+0.40\log dist)=e^{4.25}\,dist^{0.40}\;(\approx70.1\,dist^{0.40})$.
+\item $\dfrac{\partial fare}{\partial dist}=0.40\,e^{4.25}dist^{0.40-1}=0.40\,\dfrac{e^{4.25}dist^{0.40}}{dist}=0.40\,\dfrac{fare}{dist}$.
+\item Rearrange: $\dfrac{\partial fare/fare}{\partial dist/dist}=0.40$, so $100\dfrac{\partial fare}{fare}=0.40\times100\dfrac{\partial dist}{dist}$. This is an \emph{elasticity}. Setting $100\,\partial dist/dist=10$ gives $100\,\partial fare/fare=0.40\times10=4$, so a 10\% increase in distance means $\approx4\%$ higher fare.
+\end{enumerate}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}llll@{}}\toprule
+Model & Marginal effect & Interpretation of $\beta$ & Units matter?\\\midrule
+$y=\ldots+\beta x$ & $\beta$ & $+1$ unit $x\Rightarrow+\beta$ units $y$ & yes\\
+$\log y=\ldots+\beta x$ & $\beta y$ & $+1$ unit $x\Rightarrow\approx100\beta\%$ change in $y$ & yes (in $x$)\\
+$y=\ldots+\beta\log x$ & $\beta/x$ & $+1\%$ in $x\Rightarrow\approx\beta/100$ units of $y$ & no\\
+$\log y=\ldots+\beta\log x$ & $\beta y/x$ & $+1\%$ in $x\Rightarrow\approx\beta\%$ change in $y$ (elasticity) & no\\
+LPM ($y\in\{0,1\}$) & $\beta$ & $+1$ unit $x\Rightarrow 100\beta$ \emph{percentage points} & \\\bottomrule
+\end{tabular}
+\end{center}
+Non-constant marginal effects: quadratic $\partial y/\partial x=\beta_2+2\beta_3x$; interaction $\partial y/\partial x_k=\beta_2+\beta_4x_j$.
+
+%=====================================================================
+\newpage
+\section{One-page formula sheet}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}>{\raggedright}p{0.22\textwidth}p{0.74\textwidth}@{}}\toprule
+OLS & $b=(X'X)^{-1}X'Y$; FOCs $X'e=0$; $\hat Y=Xb=P_XY$; $e=M_XY=M_X\veps$\\
+With a constant & $\sum e_i=0$, $\bar y=\bar x'b$, $\widehat\Cov(x_k,e)=0$\\
+Bivariate & $b_2=\dfrac{\overline{xy}-\bar x\bar y}{\overline{x^2}-\bar x^2}=\dfrac{\widehat\Cov(x,y)}{\widehat\Var(x)}$, $b_1=\bar y-b_2\bar x$\\
+Best predictors & $\arg\min_a\E(y-a)^2=\E y$; $\arg\min_g\E(y-g(x))^2=\E(y|x)$\\
+Sampling error & $b=\beta+(X'X)^{-1}X'\veps=\beta+(X'X/n)^{-1}\bar w$, $\;w_i=x_i\varepsilon_i$\\
+Unbiased (A1--A3) & $\E(b|X)=\beta\Rightarrow\E(b)=\beta$ (LIE)\\
+Sandwich & $\Var(b|X)=(X'X)^{-1}X'\E(\veps\veps'|X)X(X'X)^{-1}$\\
+Classical (A4) & $\E(\veps\veps'|X)=\sigma^2I_n\Rightarrow\Var(b|X)=\sigma^2(X'X)^{-1}$\\
+Robust (L13) & $\widehat\Var(b|X)=\frac{n}{n-K}(X'X)^{-1}X'\mathrm{diag}(e_i^2)X(X'X)^{-1}$\\
+Consistency / normality & LLN: $\plim\bar w=0\Rightarrow\plim b=\beta$; CLT: $b\overset a\sim N$\\
+$P$ and $M$ & symmetric, idempotent; $P_XX=X$, $M_XX=0$; $\tr(M_X)=n-K$\\
+Constant-only $P$ & $P_\iota=\frac1n\iota\iota'$ (all entries $1/n$); $P_\iota x=\bar x\iota$; $M_\iota x=x-\bar x$\\
+$s^2$ & $s^2=\frac{e'e}{n-K}$, $\E(e'e|X)=\sigma^2(n-K)$\\
+Inference & $\frac{b_k-\beta_k}{\sqrt{\sigma^2[(X'X)^{-1}]_{kk}}}\sim N(0,1)$; $\frac{b_k-\beta_k}{\widehat{SE}}\sim t_{n-K}$\\
+CI / test & $b_k\pm\kappa\widehat{SE}$; $t=\frac{b_k-q}{\widehat{SE}}$; $p=2[1-F_{n-K}(|t|)]$\\
+Bivariate variance & $\Var(b_2|X)=\sigma^2/\sum(x_i-\bar x)^2=\sigma^2/[(n-1)s_x^2]$\\
+Multiple variance & $\Var(b_k|X)=\dfrac{\sigma^2}{(1-R_k^2)SST_{x_k}}$, $\mathrm{VIF}_k=\frac{1}{1-R_k^2}$\\
+FWL & $b_1=(X_1^{*\prime}X_1^*)^{-1}X_1^{*\prime}Y^*$, $\;X_1^*=M_2X_1$, $Y^*=M_2Y$\\
+OVB & $b_1=\beta_1+\Gamma\beta_2+\delta$; $\E(b_1-\beta_1)=\E(\Gamma)\beta_2$, $\Gamma=(X_1'X_1)^{-1}X_1'X_2$\\
+Meas.\ error & $\E(b_2)=[1-\E(\gamma_2)]\beta_2$, $0<\E\gamma_2<1$ $\Rightarrow$ attenuation toward 0\\
+Fit & $R^2=1-\frac{SSE}{SST}$; adj-$R^2=1-\frac{SSE/(n-K)}{SST/(n-1)}$\\\bottomrule
+\end{tabular}
+
+%=====================================================================
+\section{Skeleton drill (cover the right column)}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}p{0.34\textwidth}p{0.6\textwidth}@{}}\toprule
+\textbf{Prompt} & \textbf{Chain of moves}\\\midrule
+P1 $\arg\min_a\E(y-a)^2$ & $y=\mu+u$; expand; $\E u=0$ kills the cross term; $\E u^2+(\mu-a)^2$\\
+P2 CEF best predictor & $\E(u|x)=0$; $\E(hu)=\E_x[h\E(u|x)]=0$; cross term with $h=m-g$\\
+P3 residual facts & FOC $\sum x_{ik}e_i=0$; $k{=}1$: $\sum e=0$; $\bar e=\bar y-\bar x'b$; Cov expands to FOC $-\bar x_k\bar e$\\
+P4 bivariate matrix & write out $X'X$, $X'Y$; factor $n$; $2\times2$ inverse; row 2\\
+P5 unbiased & substitute model; pull out $f(X)$; A3; LIE\\
+P6 variance & $b-\beta=A\veps$; $A\E(\veps\veps')A'$; $\E\veps=0$; $\sigma^2I$; cancel\\
+P7 LLN/CLT & $X'\veps=n\bar w$; $(X'X/n)^{-1}\bar w$; $\E w_i=0$ by LIE; plims; CLT\\
+P8 $P_XH=0$ & $H=Y-Xb$; $P_XY=Xb$; $P_XX=X$; $a=b-b$\\
+P9 $P_Z$ with ones & $Z'Z=n$; all entries $1/n$; $P_ZX=\bar x$; $X^*=x_i-\bar x$\\
+P10 standardize & $N(0,1)$ with $\sigma^2$; $t_{n-K}$ with $s^2$\\
+P11 $s^2$ unbiased & $M'M=M$ (expand); trace, cycle, $\E$; $\sigma^2\tr M$; $n-K$\\
+P12 bivariate Var & $(X'X)^{-1}$ (2,2) entry; $\det=n\,SST_x$; three factors\\
+P13 $\Var(b_k)$ & FWL $\to\sigma^2/SST_{x^*}$; $SSE_{aux}=(1-R^2_k)SST$; three parts\\
+P14 multicollinearity & $R_k^2\uparrow\Rightarrow\Var\uparrow$; drop $\Rightarrow$ A3 fails $\Rightarrow$ OVB\\
+P15 logs & exponentiate; chain rule; $100\partial y/y$ vs $100\partial x/x$; units\\\bottomrule
+\end{tabular}
+
+%=====================================================================
+\section{Mock proof exam (permuted, closed book)}
+Give yourself about 50 minutes. Write every step and cite the assumption you use at each one.
+\begin{enumerate}[leftmargin=1.6em,itemsep=6pt]
+\item Let $m(x)=\E(y\mid x)$ and $u=y-m(x)$. Show that $\E(u\mid x)=0$. Then show that no function $g(x)$ predicts $y$ with smaller expected squared error than $m(x)$. \hfill\emph{(P2)}
+\item Starting from $Y=X\beta+\veps$ and $b=(X'X)^{-1}X'Y$: (a) show $b=\beta+(X'X)^{-1}X'\veps$; (b) show $\E(b)=\beta$, stating where you use mean independence and the LIE; (c) derive $\Var(b\mid X)=\sigma^2(X'X)^{-1}$ under homoskedasticity and no autocorrelation. \hfill\emph{(P5 + P6)}
+\item Show $e=M_X\veps$, then $e'e=\veps'M_X\veps$, then $\E\!\big(\tfrac{e'e}{n-K}\mid X\big)=\sigma^2$. Use no shortcuts. Finally, explain why replacing $\sigma^2$ with $s^2$ in the standardized estimate changes $N(0,1)$ to $t_{n-K}$. \hfill\emph{(P11 + P10)}
+\item In $y_i=\beta_1+\beta_2x_i+\varepsilon_i$: (a) derive $b_2=\widehat\Cov(x,y)/\widehat\Var(x)$ from $(X'X)^{-1}X'Y$; (b) derive $\Var(b_2\mid X)=\sigma^2/\sum(x_i-\bar x)^2$ and name the three factors. \hfill\emph{(P4 + P12)}
+\item Let $Z$ be a column of ones. Describe $P_Z$, $P_ZX$, and $M_ZX$ completely. Use the result to explain how OLS ``holds other variables fixed.'' Then write the formula for $\Var(b_k\mid X)$ in a multiple regression and explain what $R_k^2$ represents. \hfill\emph{(P9 + P13)}
+\end{enumerate}
+\textbf{Bonus quick hits:} (i) Show $P_XH=0$ and that regressing $e$ on $X$ gives $a=0$. (ii) In $\log(fare)=4.25+0.40\log(dist)$, show that a 10\% increase in distance gives about a 4\% higher fare. (iii) Explain why dropping a collinear regressor can introduce bias.
+
+\vfill
+{\small\color{gray} Source files: \texttt{Exercises/Short\_Answers/PDF/} (Canvas SAQ questions and solutions, Lectures 08--12) and \texttt{Lecture\_Notes/lectureECON5021.pdf} (Oct 14, 2026), Lectures 8--13.}
+\end{document}
