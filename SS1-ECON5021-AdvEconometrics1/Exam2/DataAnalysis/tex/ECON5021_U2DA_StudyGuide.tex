@@ -1,0 +1,215 @@
+\documentclass[10pt]{article}
+\usepackage[letterpaper,margin=0.8in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{amsmath}
+\usepackage[italic]{mathastext}
+\usepackage[table]{xcolor}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\pagestyle{fancy}\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\itshape ECON 5021 Unit 2: Data Analysis Study Guide}\fancyhead[R]{\thepage}
+\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}
+\setlist{itemsep=1pt,topsep=2pt}
+\lstset{basicstyle=\ttfamily\small,columns=fullflexible,keepspaces=true,showstringspaces=false,language=R,
+  commentstyle=\color{black!50},breaklines=true,frame=single,rulecolor=\color{black!25},
+  backgroundcolor=\color{black!3},xleftmargin=3pt,xrightmargin=3pt,escapechar=@}
+\newtcolorbox{trap}{colback=red!4,colframe=red!50!black,boxrule=0.5pt,left=4pt,right=4pt,top=2pt,bottom=2pt,fontupper=\small}
+\newtcolorbox{tip}{colback=green!5,colframe=green!40!black,boxrule=0.5pt,left=4pt,right=4pt,top=2pt,bottom=2pt,fontupper=\small}
+\newcommand{\code}[1]{\texttt{#1}}
+\begin{document}
+
+{\Large\bfseries ECON 5021 Unit 2: Data Analysis Study Guide}\\[2pt]
+{\small How to type the R for the coding section mechanically. Built from the practice exam \code{26101200001} (\code{fertil1} + \code{catholic}). The exam will be a permutation of it: a different \code{wooldridge} dataset and different variables, with the same 15 question types.}
+
+\section*{1. The shape of the exam}
+15 multiple-choice questions in two blocks. Each block starts with \textit{``This is the start of a multipart question''}, names a \code{wooldridge} dataset, and runs on one model.
+
+\begin{center}\small
+\begin{tabular}{@{}clll@{}}
+\toprule
+Q & Type & One-liner & Main trap\\ \midrule
+1 & Summary stat & \code{mean(dat\$y)} & mean vs median; \code{na.rm=TRUE}\\
+2 & Count NAs & \code{sum(is.na(dat\$x))} & the right variable\\
+3 & OLS coefficient & \code{m = lm(y \textasciitilde\ ..., dat)} & \code{I(x\^{}2)}; the answer may be (e)\\
+4 & SSR & \code{sum(resid(m)\^{}2)} & SSR vs $\hat\sigma$ vs $\hat\sigma^2$\\
+5 & Critical value & \code{qt(1-a/2, df.residual(m))} & \code{qnorm}; df from the full $n$ when NAs were dropped\\
+6 & Strongest conclusion & p-value from \code{summary(m)} & map $p$ to a level (table below)\\
+7 & p-value, $H_0:\beta=c$ & $t=(\hat\beta-c)/se$ & two-sided; $c\neq0$, so you can't read it off \code{summary}\\
+8 & Cov of two estimates & \code{vcov(m)["a","b"]} & name is \code{"(Intercept)"}, \code{"I(age\^{}2)"}\\ \midrule
+9 & Make a dummy, \% & \code{mean(new)*100} & include every group; NAs\\
+10 & LPM $R^2$ & \code{summary(m1)\$r.squared} & $R^2$ vs adjusted; the NA rows lm drops\\
+11 & Interpretation & coef $\times 100$ & \textbf{percentage points}, not percent\\
+12 & CI bound & \code{confint(m1, level=.90)} & level; which row; lower or upper\\
+13 & Strongest conclusion & same as Q6 & \\
+14 & \% change in coef & \code{100*(new/old-1)} & sign; the ratio alone is not the answer\\
+15 & VIF & \code{car::vif(m2)} & by hand you need the \textbf{same rows}\\ \bottomrule
+\end{tabular}
+\end{center}
+
+\section*{2. Setup: type this first (before reading anything else)}
+\begin{lstlisting}
+install.packages(c("wooldridge", "car"))   # only if not installed (check this BEFORE the exam)
+library(wooldridge)
+library(car)
+dat = wooldridge::fertil1        # <- dataset name from the exam
+?fertil1                         # variable descriptions, if a name is unclear
+names(dat); nrow(dat)            # spelling + n (you need n to spot dropped rows)
+\end{lstlisting}
+
+\section*{3. The master skeleton (memorize this, then fill in the blanks)}
+Fill in only the parts marked \code{<...>}. Everything else is the same on every version.
+\begin{lstlisting}
+# ================= BLOCK 1 (Q1-8) =================
+dat = wooldridge::<data1>
+mean(dat$<y>)                                  # Q1  (or median / sd / quantile)
+sum(is.na(dat$<x>))                            # Q2
+m = lm(<y> ~ <x1> + <x2> + I(<x2>^2) + <...>, data = dat)
+summary(m)                                     # Q3 coef, Q6 p-value (Pr(>|t|))
+nobs(m); df.residual(m)                        # check: were rows dropped?
+sum(resid(m)^2)                                # Q4 SSR
+qt(1 - <alpha>/2, df = df.residual(m))         # Q5  alpha = 1 - level  (97.5% -> 0.025)
+b = coef(m)["<x>"]; se = sqrt(vcov(m)["<x>", "<x>"])
+2 * pt(-abs((b - <c>) / se), df = df.residual(m))   # Q7  H0: beta_x = c
+vcov(m)["(Intercept)", "<x>"]                  # Q8
+
+# ================= BLOCK 2 (Q9-15) =================
+dat = wooldridge::<data2>
+dat$<new> = as.numeric(<condition>)            # e.g. asian == 1 | hispan == 1 | black == 1
+100 * mean(dat$<new>, na.rm = TRUE)            # Q9
+m1 = lm(<ybin> ~ <new> + <x1> + <x2> + <x3>, data = dat)   # 5 parameters incl. intercept
+summary(m1)                                    # Q10 R^2 (bottom), Q13 p-value
+100 * coef(m1)["<x>"]                          # Q11 -> "percentage points"
+confint(m1, level = <0.90>)                    # Q12
+m2 = lm(<ybin> ~ <new> + <x1> + <x2> + <x3> + <extra>, data = dat)
+100 * (coef(m2)["<x>"] / coef(m1)["<x>"] - 1)  # Q14
+vif(m2)                                        # Q15
+\end{lstlisting}
+
+\begin{tip}
+\textbf{Speed:} \code{summary(m)} alone answers Q3, Q6, Q10, Q13 and the SE you need for Q7. Run it once and read off all of them. If a name isn't found in \code{coef(m)["..."]}, print \code{names(coef(m))} and copy the exact spelling (\code{"I(age\^{}2)"}, \code{"(Intercept)"}).
+\end{tip}
+
+\section*{4. Rules you must know cold}
+
+\textbf{Strongest conclusion (Q6, Q13).} Take $p$ = \code{Pr(>|t|)} for that variable:
+\begin{center}\small
+\begin{tabular}{@{}ll@{\qquad}ll@{}}
+\toprule
+$p<0.001$ & (a) reject at 0.1\% (\code{***}) & $0.05\le p<0.10$ & (d) reject at 10\% (\code{.})\\
+$0.001\le p<0.01$ & (b) reject at 1\% (\code{**}) & $p\ge0.10$ & (e) fail to reject at 10\%\\
+$0.01\le p<0.05$ & (c) reject at 5\% (\code{*}) & & \\ \bottomrule
+\end{tabular}
+\end{center}
+The significance stars in \code{summary()} map one-to-one onto (a)--(d), and no star means (e). \code{"e-05"} means $10^{-5}$, so that's (a).
+
+\textbf{Critical value (Q5).} Confidence level $L$, so $\alpha = 1-L$, and the value is \code{qt(1 - alpha/2, df.residual(m))}.
+\begin{center}\small
+\begin{tabular}{@{}l*{6}{c}@{}}\toprule
+Level & 90\% & 95\% & 97.5\% & 98\% & 99\% & 99.5\%\\
+\code{qt(p, df)} with $p=$ & 0.95 & 0.975 & 0.9875 & 0.99 & 0.995 & 0.9975\\ \bottomrule
+\end{tabular}
+\end{center}
+
+\begin{trap}
+\textbf{df trap.} Always use \code{df.residual(m)}, which equals $n_{\text{used}} - k$. When the model has a variable with NAs, lm silently drops those rows, so $n_{\text{used}} < $ \code{nrow(dat)}. The wrong-df answer and the \code{qnorm} answer are both planted as distractors. In practice B the correct value is not even listed, so the answer is (e).
+\end{trap}
+
+\textbf{p-value for $H_0:\beta=c$ (Q7).} $t = (\hat\beta - c)/se(\hat\beta)$, then $p = 2\,P(T_{df} > |t|)$ = \code{2*pt(-abs(t), df)}. The \code{summary()} p-value tests $c=0$ only. \textbf{Watch the sign of $c$:} for $H_0:\beta=-0.15$ the numerator is $\hat\beta + 0.15$. The one-sided value (half the answer) is a planted distractor.
+
+\textbf{Percent vs percentage points (Q11).} In an LPM (0/1 outcome) $\hat\beta=0.0302$ means the probability goes up by $0.0302 \times 100 = 3.02$ \textbf{percentage points}. ``3.02 percent'' is wrong.
+\begin{center}\small
+\begin{tabular}{@{}lll@{}}\toprule
+Model & Interpretation of $\hat\beta_x$ & Example\\ \midrule
+$y\in\{0,1\}$ (LPM), $x$ level & $100\hat\beta$ percentage points per unit of $x$ & $0.0302\to3.02$ pp\\
+$\log y$, $x$ level & $\approx 100\hat\beta$ \% change in $y$ per unit of $x$ & $0.063\to6.3$\% (exact: $100(e^{\hat\beta}-1)$)\\
+$y$ level, $\log x$ & $\hat\beta/100$ units of $y$ per 1\% increase in $x$ & \\
+$\log y$, $\log x$ & elasticity: $\hat\beta$ \% per 1\% & \\
+$x$ and $x^2$ & marginal effect $\hat\beta_1 + 2\hat\beta_2 x$; turning point $-\hat\beta_1/(2\hat\beta_2)$ & \\ \bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Percentage change in a coefficient (Q14).} $100\times(\hat\beta_{\text{new}}/\hat\beta_{\text{old}} - 1)$, where ``new'' is the model with the extra control. The sign matters. If both coefficients are negative and the new one is closer to zero, the change is negative (e.g.\ $-92\%$).
+
+\textbf{VIF (Q15).} $\text{VIF}_j = 1/(1-R_j^2)$, where $R_j^2$ comes from regressing $x_j$ on all the \textit{other} regressors (not $y$). The easy way is \code{car::vif(m2)}, which automatically uses the same rows as \code{m2}.
+\begin{trap}
+\textbf{Same-observations trap.} If the \textbf{outcome} has NAs (\code{hsgrad} in \code{catholic}, \code{highwage} in \code{mroz}), the main regression drops those rows but the auxiliary regression of $x_j$ on the other $x$'s does not, because $y$ isn't in it. By hand you must subset first:
+\begin{lstlisting}
+d = dat[!is.na(dat$<y>), ]           # or: d = model.frame(m2)
+1 / (1 - summary(lm(<xj> ~ <other x's>, data = d))$r.squared)
+\end{lstlisting}
+\code{catholic}: 1.0249 (correct) vs 1.0167 (wrong). \code{mroz}: 1.5525 vs 1.6279. Other distractors are $1-R_j^2$ (below 1, impossible for a VIF) and the VIF of a different variable.
+\end{trap}
+
+\textbf{Making the new variable (Q9).}
+\begin{lstlisting}
+dat$nonwhite = as.numeric(dat$asian == 1 | dat$hispan == 1 | dat$black == 1)   # OR of groups
+dat$young    = as.numeric(dat$age < 35)            # strict vs <= changes the answer
+dat$arrested = as.numeric(dat$narr86 > 0)          # count -> any
+dat$highwage = as.numeric(dat$wage > 5)            # NA stays NA -> need na.rm = TRUE
+100 * mean(dat$young)                              # "what percent" -> times 100
+\end{lstlisting}
+
+\begin{trap}
+\textbf{NA checklist.} (1) \code{mean()} of a column with NAs returns \code{NA}, so add \code{na.rm = TRUE}. (2) Read the denominator off the question: ``percent of the population'' versus ``among those with a reported wage''. (3) After \code{lm}, compare \code{nobs(m)} with \code{nrow(dat)}. If they differ, every df-based answer (Q5, Q7, Q12) has to use \code{df.residual(m)}, and \code{confint}/\code{summary} already do.
+\end{trap}
+
+\section*{5. Likely twists (same muscle, a different function)}
+\begin{multicols}{2}\small
+\begin{lstlisting}
+median(x); sd(x); var(x); IQR(x)
+quantile(x, 0.9); min(x); max(x)
+table(dat$x); mean(dat$x == 2)
+sum(complete.cases(dat))       # rows w/o NA
+summary(m)$adj.r.squared
+summary(m)$sigma               # resid. SE
+summary(m)$sigma^2             # SSR/df
+summary(m)$fstatistic          # overall F
+nobs(m); df.residual(m)
+coef(summary(m))["x", ]        # est,se,t,p
+sqrt(diag(vcov(m)))            # all SEs
+pt(t, df, lower.tail = FALSE)  # 1-sided
+# joint test H0: b1 = b2 = 0
+linearHypothesis(m, c("x1 = 0", "x2 = 0"))
+anova(m_restricted, m)         # same F
+# prediction
+predict(m, newdata = data.frame(educ = 12,
+  age = 40, year = 80, ...))
+# CI by hand
+b + c(-1, 1) * qt(.95, df) * se
+# turning point of a quadratic
+-coef(m)["age"] / (2 * coef(m)["I(age^2)"])
+\end{lstlisting}
+\end{multicols}
+
+\section*{6. Execution checklist (about 30 seconds per question)}
+\begin{enumerate}[leftmargin=*]
+\item Type the setup and \code{dat = wooldridge::...}. Run \code{names(dat)} and \code{nrow(dat)}.
+\item Q1--Q2: one line each. Q2 just counts; it doesn't change the data.
+\item Write the model \textbf{exactly} as printed. Squares are \code{I(age\^{}2)} (or an existing \code{agesq} column; both give identical estimates). Run \code{summary(m)} once.
+\item Read Q3, Q6 and the SE for Q7 from that one output. Q4 \code{sum(resid(m)\^{}2)}, Q5 \code{qt}, Q8 \code{vcov}.
+\item Block 2: create the dummy \textbf{before} fitting. Count the parameters (the question says ``5 parameters including the intercept'').
+\item Q11: multiply by 100 and say \emph{percentage points}. Q12: \code{confint} at the stated level.
+\item Q14--Q15: fit \code{m2} = \code{m1} + the extra control. Use \code{vif(m2)}.
+\item None of the above is a real answer, used about 2--3 times per exam. If your number is computed correctly and isn't listed, pick (e). Don't round toward the nearest option.
+\end{enumerate}
+
+\section*{7. Practice set in this folder}
+\begin{center}\small
+\begin{tabular}{@{}llll@{}}\toprule
+File & Block 1 & Block 2 & Twists\\ \midrule
+\code{Original\_Key / \_Highlighted} & \code{fertil1} & \code{catholic} & the real practice exam\\
+\code{PracticeA\_Key} & \code{bwght} (NAs) & \code{k401ksubs} & 99\% $t$, $c<0$ null, upper CI bound\\
+\code{PracticeB\_Key} & \code{wage2} ($\log y$) & \code{crime1} & median, $\hat\sigma$, 98\% $t$ not listed, adj.\ $R^2$\\
+\code{PracticeC\_Key} & \code{card} & \code{mroz} (NA outcome) & \code{na.rm}, \code{nobs}, VIF same-rows trap\\ \bottomrule
+\end{tabular}
+\end{center}
+\textbf{How to drill:} open a blank R script, type the Section 3 skeleton from memory, then work an exam with the key hidden. Check against the \code{key\_*.r} file. Target: all 15 questions in under 20 minutes.
+
+\end{document}

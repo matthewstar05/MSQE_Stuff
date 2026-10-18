@@ -1,0 +1,187 @@
+\def\examid{26101200003}
+\begin{document}
+\begin{enumerate}
+\item \multipart{1}{8}
+The data set \code{wage2} contains data on working men in the US from the 1980 National Longitudinal Survey. You can load the data into R using the \code{wooldridge} library using:
+
+\medskip
+\code{library(wooldridge)}\\
+\code{dat = wooldridge::wage2}
+\medskip
+
+The main outcome of interest is the variable \textit{wage}, which is monthly earnings in dollars.\\
+What is the median of the variable \textit{wage} in the dataset?
+\begin{opts}
+\item 957.95
+\item \ca{905.00}
+\item 925.00
+\item 1000.00
+\item None of the above
+\end{opts}
+
+\item How many missing values or NA's are there for the variable \textit{meduc} in the dataset?
+\begin{opts}
+\item 83
+\item 194
+\item 0
+\item \ca{78}
+\item None of the above
+\end{opts}
+
+\item Consider the following linear regression model.
+\[\begin{aligned}
+\log(wage) = \beta_0 + \beta_1(educ) + \beta_2(exper) + \beta_3(exper^2) + \beta_4(tenure) + \beta_5(married) &+ \\
+\beta_6(black) + \beta_7(south) + \beta_8(urban) + \beta_9(meduc) &+ \varepsilon
+\end{aligned}\]
+The model includes controls for years of education, years of work experience and experience squared, and years with the current employer (\textit{tenure}). The model also controls for mother's education (\textit{meduc}). Finally, (\textit{married, black, south, urban}) are indicator variables.\\
+Estimate the model above with OLS. What is the estimated coefficient on \textit{educ}?
+\begin{opts}
+\item 0.06541
+\item 0.05982
+\item \ca{0.06313}
+\item 0.07012
+\item 0.05433
+\end{opts}
+
+\item What is the residual standard error ($\hat\sigma$) of the model?
+\begin{opts}
+\item 0.1312
+\item \ca{0.3623}
+\item 0.3601
+\item 111.152
+\item None of the above
+\end{opts}
+
+\item Suppose we wanted to create a confidence interval for one of the parameters of the model. If we wanted to create a 98\% confidence interval, what critical value would we use?
+\begin{opts}
+\item 2.3263
+\item 2.0569
+\item 2.5816
+\item 2.3304
+\item \ca{None of the above}
+\end{opts}
+
+\item Consider the null hypothesis that $H_0:\beta_{south}=0$. What is the strongest conclusion we can draw about this null hypothesis?
+\begin{opts}
+\item Reject the null at the 0.1\% level
+\item \ca{Reject the null at the 1\% level}
+\item Reject the null at the 5\% level
+\item Reject the null at the 10\% level
+\item Fail to reject the null at the 10\% level
+\end{opts}
+
+\item Consider the null hypothesis that $H_0:\beta_{educ}=0.05$. What is the p-value associated with this hypothesis test?
+\begin{opts}
+\item 0.0266
+\item \ca{0.0531}
+\item 0.9469
+\item 0.0000
+\item None of the above
+\end{opts}
+
+\item What is the covariance between the estimate of the parameter on \textit{exper} and the parameter on \textit{exper}$^2$?
+\begin{opts}
+\item \ca{$-7.4233\times10^{-6}$}
+\item $7.4233\times10^{-6}$
+\item $-5.8152\times10^{-4}$
+\item $-3.2770\times10^{-4}$
+\item None of the above
+\end{opts}
+
+\item \multipart{9}{15}
+The data set \code{crime1} contains data on young men in California who were arrested at least once before 1986. You can load the data into R using the \code{wooldridge} library using:
+
+\medskip
+\code{library(wooldridge)}\\
+\code{dat = wooldridge::crime1}
+\medskip
+
+We would like to study what are the main determinants of being arrested in 1986 using a linear probability model. To answer this question you will need to add a new variable to the data set called \textit{arrested} which should equal 1 if the man was arrested at least once in 1986 (i.e., \textit{narr86} $>0$) and zero otherwise.\\
+What percent of the population were \textit{arrested}?
+\begin{opts}
+\item 72.29\%
+\item 40.48\%
+\item \ca{27.71\%}
+\item 7.21\%
+\item None of the above
+\end{opts}
+
+\item Estimate a linear probability model on \textit{arrested}.\\
+Include in your model controls for the proportion of prior arrests that led to a conviction (\textit{pcnv}), months spent in prison in 1986 (\textit{ptime86}), the number of quarters employed in 1986 (\textit{qemp86}), and \textit{black}. Your model should have 5 parameters including the intercept.\\
+What is the adjusted R-squared from the estimated model?
+\begin{opts}
+\item 0.06053
+\item \ca{0.05915}
+\item 0.04412
+\item 0.07230
+\item 0.05121
+\end{opts}
+
+\item What is the correct interpretation of the parameter on \textit{qemp86}? Holding fixed the variables in the model, one additional quarter of employment changes the probability of being arrested by \dots
+\begin{opts}
+\item $-3.8155$ percent
+\item $-0.0382$ percentage points
+\item \ca{$-3.8155$ percentage points}
+\item $-38.155$ percentage points
+\item None of the above
+\end{opts}
+
+\item What is the estimate of the lower bound of the 95\% confidence interval for the parameter on \textit{qemp86}?
+\begin{opts}
+\item $-0.04707$
+\item $-0.02754$
+\item $-0.04914$
+\item \ca{$-0.04878$}
+\item None of the above
+\end{opts}
+
+\item Consider the null hypothesis that $H_0:\beta_{pcnv}=0$. What is the strongest conclusion we can draw about this null hypothesis?
+\begin{opts}
+\item \ca{Reject the null at the 0.1\% level}
+\item Reject the null at the 1\% level
+\item Reject the null at the 5\% level
+\item Reject the null at the 10\% level
+\item Fail to reject the null at the 10\% level
+\end{opts}
+
+\item Re-estimate the model adding legal income in 1986 (\textit{inc86}) as an additional control. What is the percentage change in the parameter on \textit{qemp86} when we control for income?
+\begin{opts}
+\item \ca{$-92.23\%$}
+\item 92.23\%
+\item $-12.87\%$
+\item 7.77\%
+\item None of the above
+\end{opts}
+
+\item Re-estimate the model adding legal income in 1986 (\textit{inc86}) as an additional control. What is the variance inflation factor for the parameter on \textit{qemp86} when we control for income? (note: if you are calculating the variance inflation factor from the formula you need to ensure that the same observations are used in the different regressions)
+\begin{opts}
+\item 2.0362
+\item 1.0833
+\item \ca{2.1398}
+\item 0.4673
+\item None of the above
+\end{opts}
+\end{enumerate}
+
+\keyheader
+\begin{keytable}
+\krow{1}{b}{905}{\code{median(dat\$wage)}; 957.95 is the mean}
+\krow{2}{d}{78}{\code{sum(is.na(dat\$meduc))}; 83 = \textit{brthord}, 194 = \textit{feduc}}
+\krow{3}{c}{0.06313}{\code{log(wage)} or \code{lwage}; lm drops 78 rows, $n=857$}
+\krow{4}{b}{0.3623}{\code{summary(m)\$sigma}; 0.1312 $=\hat\sigma^2$, 111.152 = SSR}
+\krow{5}{e}{2.3308}{\code{qt(0.99, df.residual(m))}, df $=857-10=847$. 2.3304 uses $935-10$; 2.3263 is \code{qnorm}}
+\krow{6}{b}{$p=0.0048$}{$0.001<p<0.01$}
+\krow{7}{b}{0.0531}{$t=(0.06313-0.05)/0.00678=1.936$; 0.0266 is one-sided}
+\krow{8}{a}{$-7.42\times10^{-6}$}{\code{vcov(m)["exper","I(exper\^{}2)"]}}
+\krow{9}{c}{27.71\%}{\code{arrested = as.numeric(narr86 > 0)}}
+\krow{10}{b}{0.05915}{\code{summary(m1)\$adj.r.squared}; 0.06053 is $R^2$}
+\krow{11}{c}{$-0.0382$}{LPM: $\times100$ = percentage points}
+\krow{12}{d}{$-0.04878$}{\code{confint(m1)}; $-0.04707$ is the 90\% bound}
+\krow{13}{a}{$p\approx10^{-13}$}{$p<0.001$}
+\krow{14}{a}{$-92.23\%$}{$100(-0.002966/-0.038155-1)$; 7.77\% is just the ratio}
+\krow{15}{c}{2.1398}{\code{car::vif(m2)}; 2.0362 is the VIF of \textit{inc86}}
+\end{keytable}
+
+\subsection*{R code}
+\lstinputlisting{../key_practiceB.r}
+\end{document}

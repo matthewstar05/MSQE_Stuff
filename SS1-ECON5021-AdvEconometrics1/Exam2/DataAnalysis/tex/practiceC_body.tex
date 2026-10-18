@@ -1,0 +1,187 @@
+\def\examid{26101200004}
+\begin{document}
+\begin{enumerate}
+\item \multipart{1}{8}
+The data set \code{card} contains data on young men in the US from the 1976 National Longitudinal Survey of Young Men. You can load the data into R using the \code{wooldridge} library using:
+
+\medskip
+\code{library(wooldridge)}\\
+\code{dat = wooldridge::card}
+\medskip
+
+The main outcome of interest is the variable \textit{lwage}, which is the log of the hourly wage.\\
+What is the mean of the variable \textit{lwage} in the dataset?
+\begin{opts}
+\item 6.2004
+\item 6.3520
+\item 6.1395
+\item 5.9810
+\item \ca{None of the above}
+\end{opts}
+
+\item How many missing values or NA's are there for the variable \textit{IQ} in the dataset?
+\begin{opts}
+\item 47
+\item \ca{949}
+\item 690
+\item 0
+\item None of the above
+\end{opts}
+
+\item Consider the following linear regression model.
+\[\begin{aligned}
+lwage = \beta_0 + \beta_1(educ) + \beta_2(exper) + \beta_3(exper^2) + \beta_4(black) &+ \\
+\beta_5(smsa) + \beta_6(south) + \beta_7(momdad14) + \beta_8(KWW) &+ \varepsilon
+\end{aligned}\]
+The model includes controls for education, experience and experience squared, and a test score on knowledge of the world of work (\textit{KWW}). Finally, (\textit{black, smsa, south, momdad14}), indicator variables for race, living in a metropolitan area, living in the south, and living with both parents at age 14 are included in the model.\\
+Estimate the model above with OLS. What is the estimated coefficient on education?
+\begin{opts}
+\item 0.05482
+\item 0.06213
+\item \ca{0.05570}
+\item 0.04911
+\item 0.05823
+\end{opts}
+
+\item What is the sum of squared errors of the model?
+\begin{opts}
+\item 392.3281
+\item \ca{405.3401}
+\item 0.3704
+\item 410.1124
+\item None of the above
+\end{opts}
+
+\item Suppose we wanted to create a confidence interval for one of the parameters of the model. If we wanted to create a 90\% confidence interval, what critical value would we use?
+\begin{opts}
+\item 1.6449
+\item 1.2818
+\item 1.9608
+\item \ca{1.6454}
+\item None of the above
+\end{opts}
+
+\item Consider the null hypothesis that $H_0:\beta_{momdad14}=0$. What is the strongest conclusion we can draw about this null hypothesis?
+\begin{opts}
+\item Reject the null at the 0.1\% level
+\item Reject the null at the 1\% level
+\item Reject the null at the 5\% level
+\item Reject the null at the 10\% level
+\item \ca{Fail to reject the null at the 10\% level}
+\end{opts}
+
+\item Consider the null hypothesis that $H_0:\beta_{educ}=0.05$. What is the p-value associated with this hypothesis test?
+\begin{opts}
+\item 0.0925
+\item 0.8150
+\item 0.2533
+\item \ca{0.1850}
+\item None of the above
+\end{opts}
+
+\item What is the covariance between the estimate of the parameter on \textit{educ} and the parameter on \textit{KWW}?
+\begin{opts}
+\item $9.3490\times10^{-6}$
+\item \ca{$-2.7081\times10^{-6}$}
+\item $2.7081\times10^{-6}$
+\item $-2.6182\times10^{-6}$
+\item $-1.2120\times10^{-5}$
+\end{opts}
+
+\item \multipart{9}{15}
+The data set \code{mroz} contains data on married women in the US from the 1975 Panel Study of Income Dynamics. You can load the data into R using the \code{wooldridge} library using:
+
+\medskip
+\code{library(wooldridge)}\\
+\code{dat = wooldridge::mroz}
+\medskip
+
+We would like to study what are the main determinants of earning a high wage using a linear probability model. To answer this question you will need to add a new variable to the data set called \textit{highwage} which should equal 1 if the woman's hourly wage is above \$5 (i.e., \textit{wage} $>5$) and zero otherwise. Women who did not work have a missing wage, so \textit{highwage} should also be missing for them.\\
+Among women with a reported wage, what percent are \textit{highwage}?
+\begin{opts}
+\item 13.94\%
+\item 75.47\%
+\item \ca{24.53\%}
+\item 56.84\%
+\item None of the above
+\end{opts}
+
+\item Estimate a linear probability model on \textit{highwage}.\\
+Include in your model controls for years of education (\textit{educ}), years of work experience (\textit{exper}), \textit{age}, and an indicator for living in a city (\textit{city}). Your model should have 5 parameters including the intercept.\\
+How many observations are used to estimate the model?
+\begin{opts}
+\item 753
+\item \ca{428}
+\item 325
+\item 423
+\item None of the above
+\end{opts}
+
+\item What is the correct interpretation of the parameter on \textit{educ}? Holding fixed the variables in the model, one additional year of education increases the probability of earning a high wage by \dots
+\begin{opts}
+\item 7.7463 percent
+\item 0.0775 percentage points
+\item 0.7746 percentage points
+\item \ca{7.7463 percentage points}
+\item None of the above
+\end{opts}
+
+\item What is the estimate of the lower bound of the 90\% confidence interval for the intercept of the model?
+\begin{opts}
+\item $-1.1335$
+\item $-0.5772$
+\item \ca{$-1.0847$}
+\item $-1.0613$
+\item None of the above
+\end{opts}
+
+\item Consider the null hypothesis that $H_0:\beta_{city}=0$. What is the strongest conclusion we can draw about this null hypothesis?
+\begin{opts}
+\item Reject the null at the 0.1\% level
+\item Reject the null at the 1\% level
+\item Reject the null at the 5\% level
+\item Reject the null at the 10\% level
+\item \ca{Fail to reject the null at the 10\% level}
+\end{opts}
+
+\item Re-estimate the model adding husband's years of education (\textit{huseduc}) as an additional control. What is the percentage change in the parameter on \textit{educ} when we control for husband's education?
+\begin{opts}
+\item $-8.63\%$
+\item \ca{8.63\%}
+\item 7.95\%
+\item 108.63\%
+\item None of the above
+\end{opts}
+
+\item Re-estimate the model adding husband's years of education (\textit{huseduc}) as an additional control. What is the variance inflation factor for the parameter on \textit{educ} when we control for husband's education? (note: if you are calculating the variance inflation factor from the formula you need to ensure that the same observations are used in the different regressions)
+\begin{opts}
+\item 1.6279
+\item 1.6137
+\item 0.6441
+\item \ca{1.5525}
+\item None of the above
+\end{opts}
+\end{enumerate}
+
+\keyheader
+\begin{keytable}
+\krow{1}{e}{6.2618}{\code{mean(dat\$lwage)}; not listed}
+\krow{2}{b}{949}{\code{sum(is.na(dat\$IQ))}; 47 = \textit{KWW}, 690 = \textit{fatheduc}}
+\krow{3}{c}{0.05570}{lm drops the 47 rows with missing \textit{KWW}, $n=2963$}
+\krow{4}{b}{405.3401}{\code{sum(resid(m)\^{}2)}; 0.3704 is $\hat\sigma$}
+\krow{5}{d}{1.6454}{\code{qt(0.95, df.residual(m))}, df $=2954$; 1.6449 is \code{qnorm}, 1.2818 uses 0.90}
+\krow{6}{e}{$p=0.1134$}{$p>0.10$}
+\krow{7}{d}{0.1850}{$t=(0.05570-0.05)/0.004298=1.326$; 0.0925 is one-sided}
+\krow{8}{b}{$-2.71\times10^{-6}$}{\code{vcov(m)["educ","KWW"]}; $9.35\times10^{-6}$ is (\textit{educ}, \textit{exper})}
+\krow{9}{c}{24.53\%}{\code{mean(dat\$highwage, na.rm=TRUE)}; 13.94\% divides by all 753 women}
+\krow{10}{b}{428}{\code{nobs(m1)}: the 325 non-workers have NA outcome and are dropped}
+\krow{11}{d}{0.0775}{LPM: $\times100$ = percentage points}
+\krow{12}{c}{$-1.0847$}{\code{confint(m1, level=0.90)}; $-1.1335$ is the 95\% bound}
+\krow{13}{e}{$p=0.2229$}{$p>0.10$}
+\krow{14}{b}{8.63\%}{$100(0.084150/0.077463-1)$}
+\krow{15}{d}{1.5525}{\code{car::vif(m2)}. By hand on all 753 rows (wrong sample) gives 1.6279; 1.6137 is the VIF of \textit{huseduc}}
+\end{keytable}
+
+\subsection*{R code}
+\lstinputlisting{../key_practiceC.r}
+\end{document}

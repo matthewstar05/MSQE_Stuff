@@ -1,0 +1,187 @@
+\def\examid{26101200001}
+\begin{document}
+\begin{enumerate}
+\item \multipart{1}{8}
+The data set \code{fertil1} contains data from women in the US between the ages of 35 and 54. You can load the data into R using the \code{wooldridge} library using:
+
+\medskip
+\code{library(wooldridge)}\\
+\code{dat = wooldridge::fertil1}
+\medskip
+
+The main outcome of interest is the variable \textit{kids}, which is the number of children the women has given birth to.\\
+What is the mean of the variable \textit{kids} in the dataset?
+\begin{opts}
+\item \ca{2.7431}
+\item 1.8002
+\item 3.8678
+\item 2.5798
+\item None of the above
+\end{opts}
+
+\item How many missing values or NA's are there for the variable \textit{age} in the dataset?
+\begin{opts}
+\item \ca{0}
+\item 265
+\item 20
+\item 33
+\item None of the above
+\end{opts}
+
+\item Consider the following linear regression model.
+\[\begin{aligned}
+kids = \beta_0 + \beta_1(educ) + \beta_2(age) + \beta_3(age^2) + \beta_4(year) &+ \\
+\beta_5(east) + \beta_6(northcen) + \beta_7(west) &+ \varepsilon
+\end{aligned}\]
+The model includes controls for education, age and age squared. The model also controls for \textit{year}, which is year. Finally, (\textit{east, northcen, west}), indicator variables for regional areas are included in the model.\\
+Estimate the model above with OLS. What is the estimated coefficient on education?
+\begin{opts}
+\item $-0.06932$
+\item $-0.13712$
+\item $-0.15261$
+\item $-0.17425$
+\item \ca{$-0.12260$}
+\end{opts}
+
+\item What is the sum of squared errors of the model?
+\begin{opts}
+\item 6632.205
+\item \ca{2809.876}
+\item 5223.497
+\item 861.390
+\item None of the above
+\end{opts}
+
+\item Suppose we wanted to create a confidence interval for one of the parameters of the model. If we wanted to create a 97.50\% confidence interval, what critical value would we use?
+\begin{opts}
+\item 2.4559
+\item 3.1180
+\item \ca{2.2444}
+\item 2.2664
+\item None of the above
+\end{opts}
+
+\item Consider the null hypothesis that $H_0:\beta_{northcen}=0$. What is the strongest conclusion we can draw about this null hypothesis?
+\begin{opts}
+\item Reject the null at the 0.1\% level
+\item Reject the null at the 1\% level
+\item \ca{Reject the null at the 5\% level}
+\item Reject the null at the 10\% level
+\item Fail to reject the null at the 10\% level
+\end{opts}
+
+\item Consider the null hypothesis that $H_0:\beta_{educ}=-0.15$. What is the p-value associated with this hypothesis test?
+\begin{opts}
+\item 0.1998
+\item 0.1639
+\item 0.1882
+\item 0.1510
+\item \ca{None of the above}
+\end{opts}
+
+\item What is the covariance between the estimate of the parameter on \textit{(Intercept)} and the parameter on \textit{west}?
+\begin{opts}
+\item $-0.03627$
+\item $-0.04409$
+\item $-0.04026$
+\item \ca{$-0.02994$}
+\item $-0.02254$
+\end{opts}
+
+\item \multipart{9}{15}
+The data set \code{catholic} contains data on students that have recently left high school. You can load the data into R using the \code{wooldridge} library using:
+
+\medskip
+\code{library(wooldridge)}\\
+\code{dat = wooldridge::catholic}
+\medskip
+
+The variable of interest is \textit{hsgrad} which indicates if the student graduated high school. We would like to study what are the main determinants of high school graduation using a linear probability model. To answer this question you will need to add a new variable to the data set called \textit{nonwhite} which should equal 1 if the student is non-white (i.e., asian, hispanic, or black) and zero otherwise.\\
+What percent of the population are \textit{nonwhite}?
+\begin{opts}
+\item 16.48\%
+\item \ca{22.58\%}
+\item 16.18\%
+\item 15.43\%
+\item None of the above
+\end{opts}
+
+\item Estimate a linear probability model on high school graduation \textit{hsgrad}.\\
+Include in your model controls for if the student attended a Catholic high school (\textit{cathhs}), \textit{nonwhite}, and both the 12th grade reading and math scores. Your model should have 5 parameters including the intercept.\\
+What is the R-squared from the estimated model?
+\begin{opts}
+\item 0.03834
+\item 0.04439
+\item 0.04080
+\item \ca{0.07493}
+\item 0.05675
+\end{opts}
+
+\item What is the correct interpretation of the parameter on \textit{cathhs}? Holding fixed the variables in the model, attending a Catholic high school increases the probability of high school graduation by \dots
+\begin{opts}
+\item 3.0198 percent
+\item 0.3020 percent
+\item \ca{3.0198 percentage points}
+\item 0.0302 percent
+\item None of the above
+\end{opts}
+
+\item What is the estimate of the lower bound of the 90\% confidence interval for the intercept of the model?
+\begin{opts}
+\item 0.3342
+\item 0.2780
+\item 0.4815
+\item \ca{0.5120}
+\item None of the above
+\end{opts}
+
+\item Consider the null hypothesis that $H_0:\beta_{math12}=0$. What is the strongest conclusion we can draw about this null hypothesis?
+\begin{opts}
+\item \ca{Reject the null at the 0.1\% level}
+\item Reject the null at the 1\% level
+\item Reject the null at the 5\% level
+\item Reject the null at the 10\% level
+\item Fail to reject the null at the 10\% level
+\end{opts}
+
+\item Re-estimate the model adding log family income (\textit{lfaminc}) as an additional control. What is the percentage change in the parameter on \textit{cathhs} when we control for family income?
+\begin{opts}
+\item $-53.62\%$
+\item $-51.42\%$
+\item 47.80\%
+\item $-54.01\%$
+\item \ca{None of the above}
+\end{opts}
+
+\item Re-estimate the model adding log family income (\textit{lfaminc}) as an additional control. What is the variance inflation factor for the parameter on \textit{cathhs} when we control for family income? (note: if you are calculating the variance inflation factor from the formula you need to ensure that the same observations are used in the different regressions)
+\begin{opts}
+\item \ca{1.0249}
+\item 1.2479
+\item 1.2946
+\item 0.9104
+\item None of the above
+\end{opts}
+\end{enumerate}
+
+\keyheader
+\begin{keytable}
+\krow{1}{a}{2.7431}{\code{mean(dat\$kids)}}
+\krow{2}{a}{0}{\code{sum(is.na(dat\$age))}}
+\krow{3}{e}{$-0.12260$}{\code{lm(kids \textasciitilde\ educ + age + I(age\^{}2) + year + east + northcen + west)}}
+\krow{4}{b}{2809.876}{SSR = \code{sum(resid(m)\^{}2)}}
+\krow{5}{c}{2.2444}{\code{qt(1-0.025/2, df.residual(m))}, df $=1129-8=1121$}
+\krow{6}{c}{$p=0.0237$}{$0.01<p<0.05$ $\Rightarrow$ reject at 5\%}
+\krow{7}{e}{0.1351}{$t=(\hat\beta+0.15)/se$, two-sided \code{2*pt(-|t|, df)}}
+\krow{8}{d}{$-0.02994$}{\code{vcov(m)["(Intercept)","west"]}}
+\krow{9}{b}{22.58\%}{\code{nonwhite = asian|hispan|black}, then \code{mean}}
+\krow{10}{d}{0.07493}{$n=5970$; \textit{hsgrad} has 1460 NAs (lm drops them)}
+\krow{11}{c}{0.0302}{LPM coefficient $\times100$ = percentage points}
+\krow{12}{d}{0.5120}{\code{confint(m1, level=0.90)}}
+\krow{13}{a}{$p\approx10^{-43}$}{$p<0.001$}
+\krow{14}{e}{$-39.46\%$}{\code{100*(b\_new/b\_old - 1)}}
+\krow{15}{a}{1.0249}{\code{car::vif(m2)}; by hand only on rows with non-NA \textit{hsgrad} (full sample gives 1.0167)}
+\end{keytable}
+
+\subsection*{R code}
+\lstinputlisting{../key_original.r}
+\end{document}
