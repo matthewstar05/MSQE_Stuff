@@ -6,3 +6,12 @@
 .RData
 **/.RData
 
+
+# LaTeX build byproducts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls

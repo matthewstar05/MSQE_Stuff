@@ -1,0 +1,325 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.7in,top=0.6in,bottom=0.6in]{geometry}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{enumitem,booktabs}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlist{nosep,leftmargin=1.2em}
+
+\definecolor{ink}{HTML}{1F3A5F}
+\definecolor{key}{HTML}{8A1C1C}
+\definecolor{soft}{HTML}{EEF3F8}
+\definecolor{warn}{HTML}{FFF4E0}
+
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\veps}{\bm{\varepsilon}}
+\newcommand{\plim}{\operatorname*{plim}}
+
+\newtcolorbox{bigidea}{colback=soft,colframe=ink,boxrule=0.6pt,arc=2pt,left=5pt,right=5pt,top=3pt,bottom=3pt,
+  fonttitle=\bfseries\small,title={The one-sentence version}}
+\newtcolorbox{topic}[1]{colback=white,colframe=ink!60,boxrule=0.4pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
+  fonttitle=\bfseries\small,coltitle=white,colbacktitle=ink!80,title={#1}}
+\newtcolorbox{exam}{colback=warn,colframe=key,boxrule=0.6pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
+  fonttitle=\bfseries\small,title={On the exam (SAQ proofs from this lecture, guide numbers in brackets)}}
+
+\newcommand{\lec}[3]{%
+  {\color{ink}\rule{\linewidth}{1.2pt}}\\[-2pt]
+  {\Large\bfseries\color{ink} Lecture #1: #2}\hfill{\small\color{gray}#3}\\[-6pt]
+  {\color{ink}\rule{\linewidth}{0.4pt}}\par\vspace{2pt}}
+
+\begin{document}
+
+%=====================================================================
+\begin{center}
+{\small\color{gray}ECON 5021 Unit 2 TL;DR: Linear Regression Model and OLS. One page per lecture (8--12, plus 13 as a precaution). Companion to \texttt{ECON5021\_Unit2\_Study\_Guide.pdf}.}
+\end{center}
+\vspace{-6pt}
+\lec{8}{The Linear Regression Model}{notes pp.\ 55--62}
+
+\begin{bigidea}
+The \textbf{conditional expectation function} $\E(y\mid x)$ is the best possible predictor of $y$. OLS fits the best \emph{linear} predictor. The LRM's assumptions make the CEF linear, $\E(y\mid x)=x'\beta$, so OLS estimates $\beta$.
+\end{bigidea}
+
+\begin{topic}{1. Prediction: why we care about $\E(y\mid x)$}
+\begin{itemize}
+\item With no information, the best guess under squared loss is the mean: $\arg\min_a\E(y-a)^2=\E(y)$.
+\item With $x$, the best guess is the CEF $m(x)=\E(y\mid x)$. Decompose $y=m(x)+u$. By construction $\E(u\mid x)=0$, so $u$ is uncorrelated with \emph{every} function of $x$.
+\item OLS restricts the predictor to be linear, $\hat y=x'b$. If the CEF is linear, OLS recovers it. Otherwise OLS gives the best \emph{linear} approximation to it.
+\end{itemize}
+\end{topic}
+
+\begin{topic}{2. The OLS mechanics}
+\begin{itemize}
+\item Minimize $SSE=\sum(y_i-x_i'b)^2$. The FOCs are $\sum_i x_{ik}e_i=0$ for all $k$, or $X'e=0$. These are the \textbf{normal equations}, and solving them gives $b=(X'X)^{-1}X'Y$.
+\item With a constant: $\sum e_i=0$, $\bar y=\bar x'b$ (the line passes through the means), and the residuals are uncorrelated with every regressor.
+\item Constant only: $b=\bar y$. Bivariate: $b_2=\widehat\Cov(x,y)/\widehat\Var(x)$ and $b_1=\bar y-b_2\bar x$. You get the same answer from the FOCs or from matrix algebra.
+\item Fit: $R^2=1-SSE/SST$ is the share of the variation in $y$ that the prediction explains.
+\end{itemize}
+\end{topic}
+
+\begin{topic}{3. The model: assumptions about the data-generating process}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}p{0.2\linewidth}p{0.75\linewidth}@{}}
+\textbf{A1 Linearity} & $Y=X\beta+\veps$. Linear in the \emph{parameters}, so $\log y$, $x^2$, $\sin(x)$ are all fine. $\veps$ holds every unobserved determinant of $y$.\\
+\textbf{A2 Full rank} & No column of $X$ is an exact linear combination of the others, so $(X'X)^{-1}$ exists.\\
+\textbf{A3 Mean indep.} & $\E(\varepsilon_i\mid X)=0$: knowing $X$ tells you nothing about the average disturbance. This is the \emph{key} assumption.\\
+\textbf{A4 Spherical errors} & $\Var(\veps\mid X)=\sigma^2I$, i.e.\ homoskedasticity and no autocorrelation. Covered in L9 and L11.\\
+\textbf{A5 Normality} & $\veps\mid X\sim N(0,\sigma^2I)$. Needed for exact finite-sample $t$ inference.
+\end{tabular}
+\par\smallskip
+A1 + A3 $\Rightarrow$ $\E(y_i\mid x_i)=x_i'\beta$, a linear CEF $\Rightarrow$ OLS estimates $\beta$. ``Regression'' just means conditional expectation.
+\end{topic}
+
+\begin{exam}
+CEF best predictor (mean version, then the $m(x)$ version with $h(x)=m-g$) [P1, P2] $\cdot$ residual facts from the FOCs: $\sum e=0$, $\bar y=\bar x'b$, $\widehat\Cov(x_k,e)=0$ [P3] $\cdot$ bivariate $b$ in matrix form, then $b_2=\widehat\Cov/\widehat\Var$ [P4].
+\end{exam}
+
+\newpage
+%=====================================================================
+\lec{9}{Properties of OLS}{notes pp.\ 63--69}
+
+\begin{bigidea}
+$b$ is a random variable. Writing $b=\beta+(X'X)^{-1}X'\veps$ shows it is \textbf{unbiased} (A3), has variance $\sigma^2(X'X)^{-1}$ (A4), is the \textbf{best linear unbiased estimator} (Gauss--Markov), and is \textbf{consistent and approximately normal} (LLN/CLT).
+\end{bigidea}
+
+\begin{topic}{1. The master equation}
+$b=(X'X)^{-1}X'(X\beta+\veps)=\beta+\underbrace{(X'X)^{-1}X'}_{A}\veps$. All of the randomness in $b$ comes from $A\veps$, which you can read as the OLS coefficients from regressing $\veps$ on $X$. Every property below is about $A\veps$.
+\end{topic}
+
+\begin{topic}{2. Unbiasedness (needs A1--A3)}
+Condition on $X$, which makes $A$ fixed: $\E(b\mid X)=\beta+A\,\E(\veps\mid X)=\beta$. Then the LIE gives $\E(b)=\E_X[\E(b\mid X)]=\beta$.
+\textbf{Intuition:} if $X$ can't predict $\veps$, the noise in $b$ averages out to zero.
+\end{topic}
+
+\begin{topic}{3. Variance (adds A4)}
+\begin{itemize}
+\item Sandwich: $\Var(b\mid X)=A\Var(\veps\mid X)A'=(X'X)^{-1}X'\,\E(\veps\veps'\mid X)\,X(X'X)^{-1}$.
+\item Homoskedasticity ($\Var(\varepsilon_i|X)=\sigma^2$, the diagonal) and no autocorrelation ($\Cov(\varepsilon_i,\varepsilon_j|X)=0$, the off-diagonal) give $\Var(\veps|X)=\sigma^2I$, so $\Var(b\mid X)=\sigma^2(X'X)^{-1}$.
+\item $\Var(b)$ is $K\times K$. The diagonal holds each $\Var(b_k)$. The off-diagonal covariances are nonzero because the coefficients are estimated from the same data.
+\end{itemize}
+\end{topic}
+
+\begin{topic}{4. Efficiency: the Gauss--Markov theorem}
+Under A1--A4, OLS is the \textbf{minimum-variance linear unbiased estimator}. Caveats: it only compares estimators that are \emph{linear} in $Y$ and \emph{unbiased}, so a biased estimator can have lower variance. Under heteroskedasticity OLS is still unbiased but no longer guaranteed best.
+\end{topic}
+
+\begin{topic}{5. Large samples: OLS is a function of a sample average}
+\begin{itemize}
+\item $X'\veps=\sum x_i\varepsilon_i=n\bar w$ with $w_i=x_i\varepsilon_i$, so $b=\beta+\big(\tfrac{X'X}{n}\big)^{-1}\bar w$.
+\item \textbf{Consistency (LLN):} $\E(w_i)=0$ by A3 and the LIE, so $\plim\bar w=0$. Also $\plim\frac{X'X}{n}=\E(x_ix_i')$. Together, $\plim b=\beta$.
+\item \textbf{Normality:} under A5, $b\mid X\sim N(\beta,\sigma^2(X'X)^{-1})$ \emph{exactly}, because a linear function of normals is normal. Without A5, the \textbf{CLT} makes $\bar w$, and therefore $b$, approximately normal in large samples. That is why $t$-tests still work.
+\end{itemize}
+\end{topic}
+
+\begin{topic}{Which assumption buys what}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}ll@{}}
+A1--A3 & unbiased and consistent\\
++ A4 & $\Var(b|X)=\sigma^2(X'X)^{-1}$, Gauss--Markov (BLUE)\\
++ A5 & exact $N$ and $t$ in finite samples (otherwise approximate, via the CLT)
+\end{tabular}
+\end{topic}
+
+\begin{exam}
+$\E(b|X)=\beta$, then $\E(b)=\beta$ [P5] $\cdot$ $b=\beta+(X'X)^{-1}X'\veps$, then the sandwich, then why $\E(\veps\veps'|X)=\Var(\veps|X)$, then $\sigma^2I$ and $\sigma^2(X'X)^{-1}$ [P6] $\cdot$ $b=\beta+(X'X/n)^{-1}\bar w$, plus what the LLN and CLT imply [P7].
+\end{exam}
+
+\newpage
+%=====================================================================
+\lec{10}{Interpretation of OLS}{notes pp.\ 70--76}
+
+\begin{bigidea}
+$b_k$ is the effect of $x_k$ \textbf{holding the other regressors fixed}. OLS does this by \emph{partialling out} the other regressors. It cannot hold the unobservables in $\veps$ fixed, so if those are correlated with $X$, you get \textbf{omitted variable bias}.
+\end{bigidea}
+
+\begin{topic}{1. Causal effects vs.\ OLS coefficients}
+\begin{itemize}
+\item In the LRM, $\beta_k=\partial y_i/\partial x_{ik}$ is a causal (marginal) effect: everything else, including $\varepsilon$, is held fixed.
+\item OLS $b_k$ holds the \emph{other columns of $X$} fixed, but not $\varepsilon$. Under A1--A3, $b_k$ is still causal on average. If A3 fails, it isn't.
+\end{itemize}
+\end{topic}
+
+\begin{topic}{2. Projection and residual-maker matrices}
+\begin{itemize}
+\item $P_X=X(X'X)^{-1}X'$: $P_XY=Xb=\hat Y$ (the part of $Y$ predicted by $X$), and $P_XX=X$.
+\item $M_X=I-P_X$: $M_XY=e$ (what's left after removing everything $X$ can predict), and $M_XX=0$.
+\item Both are symmetric and idempotent. $P_Xe=0$, which means the residuals are unpredictable by any linear combination of $X$. Regressing $e$ on $X$ gives all-zero coefficients.
+\item With a constant $Z=\iota$: $P_Z$ has every entry equal to $1/n$, $P_Zx=\bar x$, and $M_Zx=x-\bar x$. \textbf{Partialling out a constant = demeaning.}
+\end{itemize}
+\end{topic}
+
+\begin{topic}{3. Frisch--Waugh--Lovell: how OLS ``holds $X_2$ fixed''}
+Split $Y=X_1\beta_1+X_2\beta_2+\veps$. Multiply by $M_2$: $\;Y^*=X_1^*\beta_1+\veps^*$, where $Y^*=M_2Y$ and $X_1^*=M_2X_1$.
+\begin{enumerate}
+\item Remove from $Y$ and $X_1$ the variation explained by $X_2$.
+\item Regress the leftover $Y$ on the leftover $X_1$: $b_1=(X_1^{*\prime}X_1^*)^{-1}X_1^{*\prime}Y^*$. This is the same $b_1$ as the full regression.
+\end{enumerate}
+\end{topic}
+
+\begin{topic}{4. Omitted variable bias (OVB)}
+\begin{itemize}
+\item Regress $Y$ on $X_1$ only: $b_1=\beta_1+\Gamma\beta_2+\delta$, with $\Gamma=(X_1'X_1)^{-1}X_1'X_2$ (how $X_1$ predicts $X_2$) and $\delta=(X_1'X_1)^{-1}X_1'\veps$.
+\item \textbf{Bias} $=\E(b_1-\beta_1)=\E(\Gamma)\,\beta_2$. It is zero only if $\beta_2=0$ (the omitted variable doesn't matter) or $\E(\Gamma)=0$ (it isn't predicted by $X_1$).
+\item \textbf{Signing it} with one omitted $Z$: $\mathrm{sign}(\text{bias}_k)=\mathrm{sign}(\alpha)\times\mathrm{sign}(\gamma_k)$, where $\alpha$ is $Z$'s effect on $y$ and $\gamma_k$ is $x_k$'s partial relationship with $Z$.
+\end{itemize}
+\end{topic}
+
+\begin{topic}{5. Why A3 fails, and measurement error}
+Common causes: \textbf{omitted variables}, \textbf{simultaneity} ($X$ and $Y$ jointly determined), and \textbf{measurement error in $X$}.
+Classical measurement error: we observe $x_i=x_i^o+u_i$, so $u_i$ acts as an omitted variable with coefficient $-\beta_2$. Then $\E(b_2)=[1-\E(\gamma_2)]\beta_2$ with $0<\E\gamma_2<1$. This is \textbf{attenuation bias}: the estimate is pulled toward zero.
+\end{topic}
+
+\begin{exam}
+Define $P_X$, show $P_XH=0$, say it in words, and show that regressing $e$ on $X$ gives $a=0$ [P8] $\cdot$ $P_Z$ with a column of ones (dimensions, entries), $P_ZX=\bar x$, and $X^*=M_ZX=x_i-\bar x$ [P9]. (The FWL and OVB logic also feeds into the L11 multicollinearity question.)
+\end{exam}
+
+\newpage
+%=====================================================================
+\lec{11}{Inference with OLS}{notes pp.\ 77--86}
+
+\begin{bigidea}
+Standardize $b_k$ with its standard error. Because $\sigma^2$ must be estimated by $s^2=e'e/(n-K)$, the standardized estimate is $t_{n-K}$, which gives CIs, $t$-tests and $p$-values. Precision depends on noise $\sigma^2$, variation in $x_k$, and how collinear $x_k$ is with the other regressors.
+\end{bigidea}
+
+\begin{topic}{1. From $N(0,1)$ to $t_{n-K}$}
+\begin{itemize}
+\item $b_k\mid X\sim N(\beta_k,\sigma^2[(X'X)^{-1}]_{kk})\;\Rightarrow\;\dfrac{b_k-\beta_k}{\sqrt{\sigma^2[(X'X)^{-1}]_{kk}}}\sim N(0,1)$.
+\item Replace the unknown $\sigma^2$ with $s^2$: $\dfrac{b_k-\beta_k}{\widehat{SE}(b_k)}\sim t_{n-K}$, where $\widehat{SE}(b_k)=\sqrt{s^2[(X'X)^{-1}]_{kk}}$.
+\item \textbf{CI:} $b_k\pm\kappa\,\widehat{SE}$, with $\kappa=$ \texttt{qt(1-(1-c)/2, n-K)}. Higher confidence means a wider interval.
+\item \textbf{Test} $H_0:\beta_k=q$: $t=(b_k-q)/\widehat{SE}$, $p=2[1-F_{n-K}(|t|)]$ = \texttt{2*(1-pt(abs(t), n-K))}. Reject if $p<\alpha$.
+\end{itemize}
+\end{topic}
+
+\begin{topic}{2. Why $s^2$ divides by $n-K$}
+$e=M_X\veps \Rightarrow e'e=\veps'M_X\veps$ (because $M$ is symmetric and idempotent). Then the trace trick: $\E(e'e|X)=\tr(M_X\E(\veps\veps'|X))=\sigma^2\tr(M_X)=\sigma^2(n-K)$. So $s^2=e'e/(n-K)$ is unbiased. The residuals ``use up'' $K$ degrees of freedom on estimating $b$.
+\end{topic}
+
+\begin{topic}{3. What drives $\Var(b_k)$}
+\begin{itemize}
+\item Bivariate: $\Var(b_2|X)=\dfrac{\sigma^2}{\sum(x_i-\bar x)^2}=\dfrac{\sigma^2}{(n-1)s_x^2}$. It goes down with less noise, more data, or more spread in $x$.
+\item Multiple regression (via FWL): $\boxed{\Var(b_k|X)=\dfrac{\sigma^2}{(1-R_k^2)\,SST_{x_k}}}$, where $R_k^2$ is the $R^2$ from regressing $x_k$ on all the \emph{other} regressors.
+\item $1-R_k^2$ is the share of $x_k$'s variation that is \emph{unique}, and only that part identifies $\beta_k$. $\mathrm{VIF}_k=1/(1-R_k^2)$.
+\item Precision improves with $\uparrow SST_{x_k}$ (more variation or larger $n$), with $\downarrow\sigma^2$ (relevant controls that explain $y$), and with $\downarrow R_k^2$.
+\end{itemize}
+\end{topic}
+
+\begin{topic}{4. Multicollinearity and the bias--variance trade-off}
+\begin{itemize}
+\item $R_k^2\approx1$ means $x_k$ is nearly a linear combination of the others (close to violating A2), so $\Var(b_k)$ blows up. Symptoms: high $R^2$ but few significant coefficients, unstable estimates, odd signs.
+\item The ``fix'' of dropping the correlated variable lowers the variance, but that variable moves into $\veps$, where it is predictable by $x_k$. A3 then fails and you get OVB. So you trade lower variance for bias. A larger $n$ eases the tension.
+\end{itemize}
+\end{topic}
+
+\begin{exam}
+Construct the standardized estimate, then $N\to t_{n-K}$ [P10] $\cdot$ $e'e=\veps'M\veps$ and $\E(s^2|X)=\sigma^2$ with no shortcuts [P11] $\cdot$ derive bivariate $\Var(b_2)=\sigma^2/SST_x$ plus the three factors [P12] $\cdot$ write $\Var(b_3)=\sigma^2/[(1-R_3^2)SST]$ and explain each piece [P13] $\cdot$ multicollinearity and why dropping regressors causes bias [P14].
+\end{exam}
+
+\newpage
+%=====================================================================
+\lec{12}{OLS in Practice}{notes pp.\ 87--92}
+
+\begin{bigidea}
+Reading regressions correctly: $R^2$ vs.\ adjusted $R^2$, linear probability models, and especially \textbf{log specifications}. Know how to turn each coefficient into a unit, percent, or percentage-point statement, and know when units matter.
+\end{bigidea}
+
+\begin{topic}{1. Fit: $R^2$ vs.\ adjusted $R^2$}
+\begin{itemize}
+\item $SST=SSR+SSE$ and $R^2=SSR/SST=1-SSE/SST\in[0,1]$. OLS minimizes SSE, so it \emph{maximizes} $R^2$, and adding regressors can never lower it. With small $n$ relative to $K$ this leads to \textbf{overfitting}.
+\item $\text{adj-}R^2=1-\dfrac{SSE/(n-K)}{SST/(n-1)}=1-\dfrac{\widehat\Var(\varepsilon)}{\widehat\Var(y)}$. It applies a degrees-of-freedom penalty, can fall when you add a regressor, and can be negative. It works as a proxy for \emph{out-of-sample} fit, while $R^2$ measures in-sample fit.
+\end{itemize}
+\end{topic}
+
+\begin{topic}{2. Linear probability model (binary $y$)}
+$\E(y|x)=\Pr(y=1|x)=x'\beta$. Then $b_k$ is the change in the \emph{probability}, so $100\,b_k$ is in \textbf{percentage points}. Example: $\widehat{UNION}=0.962-0.047\,ED$ means one more unit of $ED$ gives a 4.7 pp lower probability of union membership.
+\end{topic}
+
+\begin{topic}{3. Logs: derive, don't memorize}
+Recipe: (i) solve for $y$ in levels, (ii) differentiate with the chain rule, (iii) rearrange into $100\,\partial y/y$ (\% change) and/or $100\,\partial x/x$ (1\% change).
+\renewcommand{\arraystretch}{1.35}
+\begin{center}\small\setlength{\tabcolsep}{4pt}\begin{tabular}{@{}lllll@{}}\toprule
+Model & $\partial y/\partial x$ & Read $\beta$ as & Units matter? & Airline example\\\midrule
+level--level & $\beta$ & $+1$ unit $x$ $\to$ $+\beta$ units $y$ & yes & \\
+log--level & $\beta y$ & $+1$ unit $x$ $\to$ $\approx100\beta\%$ in $y$ & yes & $0.043$: $+100$ mi $\to$ 4.3\%, $+1$ mi $\to$ 0.043\%\\
+level--log & $\beta/x$ & $+1\%$ in $x$ $\to$ $\beta/100$ units of $y$ & no & $66$: $+1\%$ dist $\to$ $+\$0.66$\\
+log--log & $\beta y/x$ & $+1\%$ in $x$ $\to$ $\beta\%$ in $y$ (elasticity) & no & $0.40$: $+10\%$ dist $\to$ $+4\%$ fare\\\bottomrule
+\end{tabular}\end{center}
+\textbf{Units:} rescaling $x$ inside a log only shifts the intercept, since $\log(x/100)=\log x-\log100$. That's why the level--log and log--log slopes don't depend on units. In log--level, the slope is per unit of $x$, so you must convert (1 mile $=0.01$ hundred-miles).
+\end{topic}
+
+\begin{topic}{4. Non-constant marginal effects, and dummies}
+\begin{itemize}
+\item Quadratic: $y=\beta_1+\beta_2x+\beta_3x^2$ gives $\partial y/\partial x=\beta_2+2\beta_3x$, which depends on where you evaluate it.
+\item Interaction: $y=\ldots+\beta_2x_k+\beta_3x_j+\beta_4x_kx_j$ gives $\partial y/\partial x_k=\beta_2+\beta_4x_j$.
+\item Binary $x_k$: use a discrete change, not a derivative. $\beta_k=\E(y|\cdot,x_k{=}1)-\E(y|\cdot,x_k{=}0)$ under A3. Example: banks in the Atlanta Fed district vs.\ the St.\ Louis Fed district (Richardson--Troost).
+\end{itemize}
+\end{topic}
+
+\begin{exam}
+Three airline-fare questions [P15]: log--level (exponentiate, marginal effect $=0.043\,fare$, per-mile \%), level--log (marginal effect $66/dist$, \$0.66 per 1\%, units only change the intercept), log--log ($e^{4.25}dist^{0.40}$, marginal effect $0.40\,fare/dist$, 10\% $\to$ 4\%).
+\end{exam}
+
+
+\newpage
+%=====================================================================
+{\small\setlength{\parskip}{2pt}\lec{13}{Extensions of the Linear Regression Model}{notes pp.\ 93--102}
+
+\begin{tcolorbox}[colback=warn,colframe=key,boxrule=0.8pt,arc=2pt,left=5pt,right=5pt,top=2pt,bottom=2pt,fonttitle=\bfseries\small,title={Disclaimer: may not be on the Unit 2 exam}]
+\small As of Oct 18, no Canvas announcement says Lecture 13 is on the Unit 2 exam. The Oct 6 announcement points to the Lecture 8--12 SAQs, and no Lecture 13 SAQs have been posted. Lecture 13 was added to the notes on Oct 14 and is included here just in case. Prioritize pages 1--5, and if you hear otherwise in class, trust that.
+\end{tcolorbox}
+
+\begin{bigidea}
+The LRM gets two standard criticisms: the \textbf{standard errors are wrong} (A4 fails) and the \textbf{estimates are biased} (A3 fails). Fix the first with \textbf{robust or clustered SEs}, which keep the same $b$ and change only the SEs. Fix the second with \textbf{fixed effects}, which use only within-unit variation.
+\end{bigidea}
+
+\begin{topic}{1. Generalized LRM: drop A4}
+$Y=X\beta+\veps$, $\E(\veps|X)=0$, $\Var(\veps|X)=\Sigma$ (any covariance matrix). Consequences: OLS is \textbf{still unbiased} (that only needs A1--A3). It is \textbf{no longer guaranteed BLUE}. $R^2$ is still valid. But $\sigma^2(X'X)^{-1}$ is \textbf{wrong}, so CIs and tests are wrong. Go back to the sandwich: $\Var(b|X)=(X'X)^{-1}X'\Sigma X(X'X)^{-1}$.
+\end{topic}
+
+\begin{topic}{2. Heteroskedasticity-robust (Huber--White) SEs}
+\begin{itemize}
+\item Allow $\Var(\varepsilon_i|X)=\sigma_i^2$, keeping no autocorrelation, so $\Sigma=\mathrm{diag}(\sigma_1^2,\dots,\sigma_n^2)$.
+\item You don't need $n$ separate $\sigma_i^2$'s. You only need the \emph{middle} term $X'\Sigma X$, which you estimate with squared residuals:
+$\widehat\Var(b|X)=\frac{n}{n-K}(X'X)^{-1}X'\hat\Sigma X(X'X)^{-1}$ with $\hat\Sigma=\mathrm{diag}(e_1^2,\dots,e_n^2)$.
+\item In practice, people often skip testing and just report robust SEs.
+\end{itemize}
+\end{topic}
+
+\begin{topic}{3. Breusch--Pagan test for heteroskedasticity}
+$H_0:\Var(\varepsilon_i|X)=\sigma^2$. OLS forces $X'e=0$, so $X$ can't predict $e$, but it \emph{can} predict $e^2$. Run the auxiliary regression $e_i^2=\delta_1+\delta_2x_{i2}+\dots+\delta_Kx_{iK}+v_i$. Under $H_0$, $\delta_2=\dots=\delta_K=0$, so the auxiliary $R^2$ should be small. Test statistic: $LM=nR^2_{e^2}\sim\chi^2_{K-1}$. A large $LM$ (small $p$) means reject homoskedasticity.
+\end{topic}
+
+\begin{topic}{4. Clustered SEs (panel data, so drop no-autocorrelation)}
+\begin{itemize}
+\item Repeated observations of the same unit share unobservables, so the errors are correlated \emph{within} a unit. Some off-diagonal entries of $\Sigma$ are then $\ne0$.
+\item Allow arbitrary correlation within groups and assume independence across groups. Estimate the middle term as $\sum_{g=1}^GX_g'e_ge_g'X_g$, which is block-diagonal with $e_ie_j$ inside each block. Then
+$\widehat\Var(b|X)=\frac{G}{G-1}\frac{n-1}{n-K}(X'X)^{-1}\Big(\sum_gX_g'e_ge_g'X_g\Big)(X'X)^{-1}$.
+\item \textbf{Why not just use $\hat\Sigma=ee'$?} Because $X'e=0$, so $(X'X)^{-1}X'ee'X(X'X)^{-1}=0$. You \emph{must} restrict the off-diagonal entries.
+\item ``Correct estimates, wrong standard errors'': clustering changes the SEs, not $b$.
+\end{itemize}
+\end{topic}
+
+\begin{topic}{5. Fixed effects (FE): attacking omitted variable bias}
+\begin{itemize}
+\item There are two ways to hold confounders fixed: (1) add them as controls; (2) use only \textbf{within-unit variation}, which holds fixed \emph{all} time-invariant differences between units, observed \emph{or unobserved}.
+\item Model: $y_{it}=x_{it}'\beta+\alpha_i+\varepsilon_{it}$. Here $\alpha_i$ is a ``super control'' for everything constant about unit $i$. Example: $crmrte_{it}=\beta_1+\beta_2unem_{it}+\alpha_i+\varepsilon_{it}$.
+\item Matrix form: $Y=X\beta+D\alpha+\veps$, where $D$ holds the group dummies. By FWL, partialling out $D$ means subtracting \textbf{group means} (L10, where projecting on ones gave the mean):
+$y_{it}-\bar y_i=(x_{it}-\bar x_i)'\beta+(\varepsilon_{it}-\bar\varepsilon_i)$. This removes $\alpha_i$.
+\item Variation used: FE uses \emph{within}. The between estimator uses \emph{across}-unit averages. Pooled OLS uses \emph{total} (both).
+\item \textbf{Corollaries:} (1) units observed only once contribute nothing, since their demeaned values are $0$. (2) Variables that don't vary within a unit can't be included, because they are perfectly collinear with $D$ and violate A2.
+\item Estimate either with dummies plus OLS (many parameters) or by demeaning (efficient). In R, use \texttt{fixest::feols(y \textasciitilde{} x | id)}.
+\end{itemize}
+\end{topic}
+
+\begin{exam}
+\textbf{No Lecture 13 SAQs exist, so this is a guess.} The most proof-like pieces build directly on L9--L11 proofs: (i) the sandwich $\Var(b|X)=(X'X)^{-1}X'\E(\veps\veps'|X)X(X'X)^{-1}$ [P6(b)] with $\Sigma$ in place of $\sigma^2I$; (ii) why $ee'$ fails ($X'e=0$, see [P3], [P8]); (iii) FE as FWL with group dummies, i.e.\ demeaning [P9].
+\end{exam}
+
+}
+\end{document}
