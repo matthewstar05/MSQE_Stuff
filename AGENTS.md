@@ -6,14 +6,19 @@ These instructions apply to every coding agent working in this repo (Claude Code
 
 The owner has given standing permission to commit and push. **Do not ask for confirmation.** At the end of every prompt where you created, modified, moved, or deleted files in this repo:
 
-1. **Stage only your own changes.** List the paths you touched for this prompt and stage them explicitly: `git add -- <paths>` (deletions too: `git add -A -- <paths>`). Other agents often work in this repo at the same time, so **never** run a bare `git add -A`, `git add .`, or `git commit -a`. The exception is when the user explicitly asks you to "commit everything".
+**Only commit and push changes you made yourself.** Other agents often work in this repo at the same time. Their edits and commits are theirs to push.
+
+1. **Stage only your own changes.** List the paths you created, modified, or deleted for this prompt and stage exactly those: `git add -- <paths>` (deletions too: `git add -A -- <paths>`). **Never** run a bare `git add -A`, `git add .`, or `git commit -a`, and never stage a file you didn't edit. The only exception is when the user names specific files to include.
 2. **Commit once per prompt** with a short imperative subject that names the course, e.g. `ECON 5021: add Lecture 13 page to Unit 2 TLDR`. Use whatever co-author or attribution trailer your harness requires.
-3. **Sync, then push:** `git pull --rebase --autostash origin main`, then `git push origin main`.
-4. **Report the result in one line,** e.g. `Committed abc1234 and pushed.` If nothing changed, skip the commit and say nothing about git.
+3. **Sync:** `git pull --rebase --autostash origin main`.
+4. **Check that you'd only push your own work:** run `git log --format='%h %s' origin/main..HEAD`. It must list **only** the commit(s) you just made. If it shows anyone else's unpushed commit, **do not push**, because `git push` would publish their work too. Leave your commit local and tell the user.
+5. **Push:** `git push origin main`.
+6. **Report the result in one line,** e.g. `Committed abc1234 and pushed.` If nothing changed, skip the commit and say nothing about git.
 
 ### Guardrails
 
 - Never force-push, rewrite published history, amend someone else's commit, or use `--no-verify`.
+- If the autostash can't be re-applied cleanly, stop and tell the user. The stash holds other agents' uncommitted edits, so never drop it or resolve it yourself.
 - If the rebase or push fails (conflict, auth, or rejected), stop. Leave the commit local and tell the user what failed. Don't try to resolve another agent's conflicting edits yourself.
 - Never commit secrets (API keys, tokens, `.env`, credentials), LaTeX build byproducts (`*.aux`, `*.log`, `*.out`, `*.toc`, `*.synctex.gz`), scratch or temp files, or any file over 50 MB. Ask the user before committing files like these.
 - Leave files you didn't touch alone, even when they show up as modified or untracked. They may belong to another agent's work in progress.
