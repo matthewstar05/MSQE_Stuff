@@ -18,103 +18,104 @@
 \newcommand{\XXi}{(X'X)^{-1}}
 
 \newcounter{card}
-% #1 = source tag, #2 = one-line hook, #3 = minimal answer
+% #1 = source tag, #2 = full question, #3 = 1-2 line answer
 \newcommand{\card}[3]{\refstepcounter{card}%
 \begin{tcolorbox}[enhanced,colback=white,colframe=ink,boxrule=0.7pt,arc=2pt,
   left=6pt,right=6pt,top=2pt,bottom=3pt,
   title={\bfseries \thecard.\ #1},fonttitle=\small,coltitle=white]
-{\color{key}\small\textbf{Hook:} #2}\par\smallskip
-#3
+{\small #2}
+\tcbline
+{\color{key}#3}
 \end{tcolorbox}\vspace{1pt}}
 
 \begin{document}
 
 \begin{center}
 {\Large\bfseries\color{ink} ECON 5021 Unit 2: SAQ Flashcards (Short)}\\[1pt]
-{\small Bare minimum per SAQ: memorize the \textbf{hook}, then the 1--3 lines under it. Longer versions are in \texttt{ECON5021\_Unit2\_SAQ\_Flashcards.pdf}.}
+{\small Full question on top; the bare-minimum answer to recall is in red. Longer versions are in \texttt{ECON5021\_Unit2\_SAQ\_Flashcards.pdf}.}
 \end{center}
 \vspace{-4pt}
 
 %===================== L8 =====================
-\card{L8 Q1: $\mu$ minimizes $\E(y-a)^2$}
-{add and subtract $\mu$; the cross term is 0.}
-{$\E(y-a)^2=\E(y-\mu)^2+(\mu-a)^2$ (cross term $2(\mu-a)\E(y-\mu)=0$). Minimized at $a=\mu$. $\blacksquare$}
+\card{L8 Q1}
+{$\E(y)=\mu$. Show the $a$ that minimizes $\E[(y-a)^2]$ is $\mu$.}
+{$\E(y-a)^2=\E(y-\mu)^2+(\mu-a)^2$, because the cross term is $2(\mu-a)\E(y-\mu)=0$. Minimized at $a=\mu$.}
 
-\card{L8 Q2: CEF is the best predictor}
-{(a) definition, (b) LIE, (c) Card 1 trick with $h=m-g$.}
-{(a) $\E(u|x)=m-m=0$.\quad (b) $\E(hu)=\E[h\,\E(u|x)]=0$.\\
-(c) $\E(y-g)^2=\E u^2+2\E[u(m-g)]+\E(m-g)^2=\E u^2+\E(m-g)^2$, minimized at $g=m$. $\blacksquare$}
+\card{L8 Q2}
+{$m(x)=\E(y|x)$, $y=m(x)+u$. (a) Show $\E(u|x)=0$. (b) Show $\E(h(x)u)=0$. (c) Show $g(x)=m(x)$ minimizes $\E[(y-g(x))^2]$.}
+{(a) $\E(u|x)=m-m=0$. (b) LIE: $\E(hu)=\E[h\,\E(u|x)]=0$.\\
+(c) $\E(y-g)^2=\E u^2+2\underbrace{\E[u(m-g)]}_{0\text{ by (b)}}+\E(m-g)^2$, minimized at $g=m$.}
 
-\card{L8 Q3: residual facts}
-{FOC is $\sum x_{ik}e_i=0$; then $k=1$; average; Cov.}
-{(a) $k=1$: $\sum e_i=0$.\quad (b) $\bar e=\bar y-\bar x'b=0$.\quad (c) $\widehat\Cov(x_k,e)=\tfrac1n\sum x_{ik}e_i-\bar x_k\bar e=0-0$. $\blacksquare$}
+\card{L8 Q3}
+{FOCs $-2\sum_i x_{ik}(y_i-x_i'b)=0$ $\forall k$, $e_i=y_i-x_i'b$, $x_{i1}=1$. Show (a) $\sum e_i=0$, (b) $\bar y=\bar x'b$, (c) $\widehat\Cov(x_k,e)=0$.}
+{FOC: $\sum x_{ik}e_i=0$. (a) Take $k=1$. (b) $0=\bar e=\bar y-\bar x'b$. (c) $\widehat\Cov=\tfrac1n\sum x_{ik}e_i-\bar x_k\bar e=0-0$.}
 
-\card{L8 Q4: bivariate $b_2=\Cov/\Var$}
-{factor out $n$; the $n$'s cancel; $2\times2$ inverse; row 2.}
-{(a) $X'X=n\begin{bmatrix}1&\bar e\\ \bar e&\overline{ee}\end{bmatrix}$, $X'Y=n\begin{bmatrix}\bar w\\ \overline{ew}\end{bmatrix}$, so the $n$'s cancel in $\XXi X'Y$.\\
-(b) Inverse $=\frac{1}{\overline{ee}-\bar e^2}\begin{bmatrix}\overline{ee}&-\bar e\\-\bar e&1\end{bmatrix}$; row 2: $b_2=\dfrac{\overline{ew}-\bar e\bar w}{\overline{ee}-\bar e^2}=\dfrac{\widehat\Cov(e,w)}{\widehat\Var(e)}$. $\blacksquare$}
+\card{L8 Q4}
+{$X=[\iota\;\; e]$ (education), $Y=w$. (a) Show $b=\begin{bmatrix}1&\bar e\\ \bar e&\overline{ee}\end{bmatrix}^{-1}\begin{bmatrix}\bar w\\ \overline{ew}\end{bmatrix}$, showing the multiplication. (b) Show $b_2=\widehat\Cov(e,w)/\widehat\Var(e)$.}
+{(a) $X'X=n\begin{bmatrix}1&\bar e\\ \bar e&\overline{ee}\end{bmatrix}$ and $X'Y=n\begin{bmatrix}\bar w\\ \overline{ew}\end{bmatrix}$, so the $n$'s cancel.\\
+(b) $2\times2$ inverse $=\frac{1}{\overline{ee}-\bar e^2}\begin{bmatrix}\overline{ee}&-\bar e\\-\bar e&1\end{bmatrix}$; row 2: $b_2=\frac{\overline{ew}-\bar e\bar w}{\overline{ee}-\bar e^2}=\frac{\widehat\Cov}{\widehat\Var}$.}
 
 %===================== L9 =====================
-\card{L9 Q1: OLS is unbiased}
-{substitute $Y$; A3; LIE.}
-{$b=\beta+\XXi X'\veps\Rightarrow\E(b|X)=\beta+\XXi X'\underbrace{\E(\veps|X)}_0=\beta$;\; $\E b=\E[\E(b|X)]=\beta$. $\blacksquare$}
+\card{L9 Q1}
+{$Y=X\beta+\veps$, $\E(\veps|X)=0$, $b=\XXi X'Y$. Show (a) $\E(b|X)=\beta$, (b) $\E(b)=\beta$.}
+{(a) $b=\beta+\XXi X'\veps$, so $\E(b|X)=\beta+\XXi X'\E(\veps|X)=\beta$. (b) LIE: $\E b=\E[\E(b|X)]=\beta$.}
 
-\card{L9 Q2: $\Var(b|X)=\sigma^2\XXi$}
-{$b-\beta=A\veps$; $A\,\E(\veps\veps')A'$; $\sigma^2I$; cancel.}
-{(a) $b=\beta+\XXi X'\veps$.\quad (b) $\Var(b|X)=\XXi X'\E(\veps\veps'|X)X\XXi$.\\
-(c) $\Var(\veps|X)=\E(\veps\veps'|X)-0$ since $\E(\veps|X)=0$.\\
-(d) Homoskedastic (diagonal $\sigma^2$) + no autocorrelation (off-diagonal 0) $=\sigma^2I$, so $\sigma^2\XXi X'X\XXi=\sigma^2\XXi$. $\blacksquare$}
+\card{L9 Q2}
+{(a) Show $b=\beta+\XXi X'\veps$. (b) Show $\Var(b|X)=\XXi X'\E[\veps\veps'|X]X\XXi$. (c) Why is $\E[\veps\veps'|X]=\Var(\veps|X)$? (d) Homoskedasticity + no autocorrelation $\Rightarrow\sigma^2I$ $\Rightarrow\Var(b|X)=\sigma^2\XXi$.}
+{(a) Substitute $Y$. (b) $b-\beta=A\veps\Rightarrow A\,\E(\veps\veps'|X)A'$. (c) $\Var=\E(\veps\veps')-\E\veps\,\E\veps'$, and $\E(\veps|X)=0$.\\
+(d) Diagonal $\sigma^2$, off-diagonal 0, so $\sigma^2\XXi X'X\XXi=\sigma^2\XXi$.}
 
-\card{L9 Q3: LLN and CLT}
-{$X'\veps=n\bar w$; LLN $\Rightarrow$ consistent; CLT $\Rightarrow$ normal.}
-{(a) $b=\beta+(X'X/n)^{-1}\bar w$.\quad (b) LLN: $\bar w\to0$, so $b\to\beta$ (consistent).\\
-(c) CLT: $\bar w$ is approximately normal, so $b\overset{a}{\sim}N(\beta,\sigma^2\XXi)$ even without normal errors.}
+\card{L9 Q3}
+{$b=\beta+\XXi X'\veps$, $w_i=x_i\varepsilon_i$. (a) Show $b=\beta+(X'X/n)^{-1}\bar w$. (b) What does the LLN imply? (c) What does the CLT imply?}
+{(a) $X'\veps=n\bar w$. (b) LLN: $\bar w\to0$, so $b\to\beta$ (consistent).\\
+(c) CLT: $b\overset{a}{\sim}N(\beta,\sigma^2\XXi)$ even without normal errors.}
 
 %===================== L10 =====================
-\card{L10 Q1: $P_XH=0$ and $a=0$}
-{$Xb-Xb$; then $b-b$.}
-{(a) $P_X=X\XXi X'$.\quad (b) $P_X(Y-Xb)=Xb-Xb=0$.\\
-(c) Residuals are orthogonal to every column of $X$.\quad (d) $a=\XXi X'(Y-Xb)=b-b=0$. $\blacksquare$}
+\card{L10 Q1}
+{$H=(e_1,\dots,e_n)'$. (a) Define $P_X$. (b) Show $P_XH=0$. (c) Say (b) in words. (d) Regress $e$ on $X$; show $a=0$.}
+{(a) $P_X=X\XXi X'$. (b) $P_X(Y-Xb)=Xb-Xb=0$. (c) Residuals are orthogonal to $X$.\\
+(d) $a=\XXi X'(Y-Xb)=b-b=0$.}
 
-\card{L10 Q2: projecting on a column of ones}
-{every entry $1/n$, then $\bar x$, then $x_i-\bar x$.}
-{(a) $P_Z$: $n\times n$, every entry $1/n$.\quad (b) $P_ZX$: $n\times1$, every entry $\bar x$.\quad (c) $X^*=M_ZX$: $n\times1$, entry $i$ is $x_i-\bar x$.}
+\card{L10 Q2}
+{$Y=\tau Z+\kappa X+\veps$ with $Z$ a column of ones. Describe completely (dimensions, every element): (a) $P_Z=Z(Z'Z)^{-1}Z'$, (b) $P_ZX$, (c) $X^*$ in $M_ZY=\kappa M_ZX+M_Z\veps$.}
+{(a) $n\times n$, every entry $1/n$. (b) $n\times1$, every entry $\bar x$. (c) $n\times1$, entry $i$ is $x_i-\bar x$.}
 
 %===================== L11 =====================
-\card{L11 Q1: standardized estimate}
-{$N(0,1)$ with $\sigma$; $t_{n-K}$ with $s$.}
-{$\dfrac{b_k-\beta_k}{\sqrt{\sigma^2[\XXi]_{kk}}}\sim N(0,1)$; replacing $\sigma^2$ with $s^2=\dfrac{e'e}{n-K}$ gives $\dfrac{b_k-\beta_k}{\widehat{SE}(b_k)}\sim t_{n-K}$.}
+\card{L11 Q1}
+{$b|X\sim N(\beta,\sigma^2\XXi)$. Explain how the standardized estimate is built and give its distribution.}
+{$\frac{b_k-\beta_k}{\sqrt{\sigma^2[\XXi]_{kk}}}\sim N(0,1)$; swapping in $s^2=\frac{e'e}{n-K}$ gives $\frac{b_k-\beta_k}{\widehat{SE}}\sim t_{n-K}$.}
 
-\card{L11 Q2: $s^2$ is unbiased}
-{$M'=M$, $MM=M$, $\tr M=n-K$.}
+\card{L11 Q2}
+{$M_X=I-X\XXi X'$, $e=M_X\veps$. (a) Show $e'e=\veps'M_X\veps$. (b) Given $\E(e'e|X)=\tr(M_X\E(\veps\veps'|X))$, show $\E\big(\tfrac{e'e}{n-K}\big|X\big)=\sigma^2$.}
 {(a) $e'e=\veps'M'M\veps=\veps'M\veps$ (symmetric: $M'=M$; idempotent: $MM=I-2P+P=M$).\\
-(b) $\E(e'e|X)=\tr(M\sigma^2I)=\sigma^2[n-\tr(\XXi X'X)]=\sigma^2(n-K)$, so divide by $n-K$. $\blacksquare$}
+(b) $\tr(M\sigma^2I)=\sigma^2[n-\tr(\XXi X'X)]=\sigma^2(n-K)$; divide by $n-K$.}
 
-\card{L11 Q3: bivariate $\Var(b_2)$}
-{$(2,2)$ entry of $\XXi$; the determinant is $n\,SST_x$.}
-{$\Var(b_2|X)=\dfrac{\sigma^2 n}{n\sum x_i^2-(\sum x_i)^2}=\dfrac{\sigma^2}{\sum(x_i-\bar x)^2}$.\quad Factors: $\sigma^2\uparrow$ worse; $n\uparrow$ better; spread in $x\uparrow$ better.}
+\card{L11 Q3}
+{$y_i=\beta_1+\beta_2x_i+\varepsilon_i$, $\Var(b|X)=\sigma^2\XXi$. (a) Derive $\Var(b_2|X)$. (b) Name the three factors.}
+{(a) $(2,2)$ entry of $\XXi$: $\frac{\sigma^2 n}{n\sum x_i^2-(\sum x_i)^2}=\frac{\sigma^2}{\sum(x_i-\bar x)^2}$.\\
+(b) Larger $\sigma^2$ increases it; larger $n$ and more spread in $x$ decrease it.}
 
-\card{L11 Q4: multiple $\Var(b_3)$}
-{$\sigma^2$ over $(1-R_3^2)\,SST_3$.}
-{$\Var(b_3|X)=\dfrac{\sigma^2}{(1-R_3^2)SST_3}$. More precise with a smaller $\sigma^2$ (noise), a bigger $SST_3$ (variation, $n$), or a smaller $R_3^2$ (less correlation with the other $x$'s).}
+\card{L11 Q4}
+{$y_i=\beta_1+\beta_2x_{i2}+\dots+\beta_Kx_{iK}+\varepsilon_i$. (a) Write $\Var(b_3|X)$. (b) Explain each of the 3 components and when it improves precision.}
+{(a) $\frac{\sigma^2}{(1-R_3^2)SST_3}$. (b) More precise with a smaller $\sigma^2$ (noise), a bigger $SST_3$ (variation in $x_3$, $n$), or a smaller $R_3^2$ (less correlation with the other $x$'s).}
 
-\card{L11 Q5: multicollinearity}
-{$R_k^2\uparrow\Rightarrow\Var\uparrow$; dropping the variable $\Rightarrow$ OVB.}
-{(a) High $R_k^2$ makes $1-R_k^2\to0$, so the SE grows (still unbiased).\\
-(b) Dropping $x_j$ lowers the variance, but $x_j$ goes into $\varepsilon$, so $\E(\varepsilon|X)\neq0$: omitted variable bias. You trade bias for variance.}
+\card{L11 Q5}
+{(a) What is multicollinearity and how does it affect precision? (b) Why can dropping a highly correlated regressor improve precision but cause bias?}
+{(a) High $R_k^2$ makes $1-R_k^2\to0$, so the variance and SE grow (still unbiased).\\
+(b) Dropping the regressor lowers the variance, but it moves into $\varepsilon$, so $\E(\varepsilon|X)\neq0$: omitted variable bias.}
 
 %===================== L12 =====================
-\card{L12 Q1: log-level, $\log fare=4.666+0.043\,dist$}
-{exponentiate; $\beta\cdot fare$; 1 mile $=0.01$.}
-{$fare=e^{4.666+0.043dist}$;\; $\partial fare/\partial dist=0.043\,fare$;\; $100\tfrac{\partial fare}{fare}=4.3(0.01)=0.043\%$. $\blacksquare$}
+\card{L12 Q1}
+{$\log(fare)=4.666+0.043\,dist$ ($dist$ in 100s of miles). (a) Write $fare$ in terms of $dist$. (b) Find $\partial fare/\partial dist$. (c) Show 1 mile $\Rightarrow\approx0.043\%$ higher fare.}
+{(a) $fare=e^{4.666+0.043dist}$. (b) $0.043\,fare$. (c) $100\frac{\partial fare}{fare}=4.3\,\partial dist=4.3(0.01)=0.043\%$.}
 
-\card{L12 Q2: level-log, $fare=41+66\log dist$}
-{$\beta/x$; $\beta/100$ per 1\%; units only change the intercept.}
-{$\partial fare/\partial dist=66/dist$;\; $\partial fare=\tfrac{66}{100}(\%\Delta dist)=\$0.66$ per 1\%.\\
-Miles: $41+66\log(m/100)=(41-66\log100)+66\log m$, so the slope is unchanged. $\blacksquare$}
+\card{L12 Q2}
+{$fare=41+66\log(dist)$. (a) Find $\partial fare/\partial dist$. (b) Show a 1\% increase in $dist$ $\Rightarrow$ +\$0.66. (c) Show this does not depend on the units of $dist$ (e.g.\ miles).}
+{(a) $66/dist$. (b) $\partial fare=\frac{66}{100}(100\frac{\partial dist}{dist})=0.66$ per 1\%.\\
+(c) $41+66\log(m/100)=(41-66\log100)+66\log m$: only the intercept changes.}
 
-\card{L12 Q3: log-log, $\log fare=4.25+0.40\log dist$}
-{elasticity: $\%\Delta y=\beta\,\%\Delta x$.}
-{$fare=e^{4.25}dist^{0.40}$;\; $\partial fare/\partial dist=0.40\,fare/dist$;\; $\%\Delta fare=0.40\times10=4\%$. $\blacksquare$}
+\card{L12 Q3}
+{$\log(fare)=4.25+0.40\log(dist)$. (a) Write $fare$ in terms of $dist$. (b) Find $\partial fare/\partial dist$. (c) Show a 10\% increase in $dist$ $\Rightarrow\approx$4\% higher fare.}
+{(a) $fare=e^{4.25}dist^{0.40}$. (b) $0.40\,fare/dist$. (c) $\%\Delta fare=0.40\times\%\Delta dist=0.40\times10=4\%$.}
 
 \end{document}
