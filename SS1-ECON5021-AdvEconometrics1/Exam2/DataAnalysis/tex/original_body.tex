@@ -168,17 +168,17 @@ What is the R-squared from the estimated model?
 \krow{1}{a}{2.7431}{\code{mean(dat\$kids)}}
 \krow{2}{a}{0}{\code{sum(is.na(dat\$age))}}
 \krow{3}{e}{$-0.12260$}{\code{lm(kids \textasciitilde\ educ + age + I(age\^{}2) + year + east + northcen + west)}}
-\krow{4}{b}{2809.876}{SSR = \code{sum(resid(m)\^{}2)}}
-\krow{5}{c}{2.2444}{\code{qt(1-0.025/2, df.residual(m))}, df $=1129-8=1121$}
+\krow{4}{b}{2809.876}{SSR = \code{deviance(m)}}
+\krow{5}{c}{2.2444}{\code{qt(0.9875, df.residual(m))}, df $=1129-8=1121$}
 \krow{6}{c}{$p=0.0237$}{$0.01<p<0.05$ $\Rightarrow$ reject at 5\%}
-\krow{7}{e}{0.1351}{$t=(\hat\beta+0.15)/se$, two-sided \code{2*pt(-|t|, df)}}
+\krow{7}{e}{0.1351}{\code{linearHypothesis(m, "educ = -0.15")}, read \code{Pr(>F)} ($F=t^2$, same two-sided $p$)}
 \krow{8}{d}{$-0.02994$}{\code{vcov(m)["(Intercept)","west"]}}
 \krow{9}{b}{22.58\%}{\code{nonwhite = asian|hispan|black}, then \code{mean}}
 \krow{10}{d}{0.07493}{$n=5970$; \textit{hsgrad} has 1460 NAs (lm drops them)}
 \krow{11}{c}{0.0302}{LPM coefficient $\times100$ = percentage points}
-\krow{12}{d}{0.5120}{\code{confint(m1, level=0.90)}}
+\krow{12}{d}{0.5120}{\code{confint(m1, "(Intercept)", level=0.90)}}
 \krow{13}{a}{$p\approx10^{-43}$}{$p<0.001$}
-\krow{14}{e}{$-39.46\%$}{\code{100*(b\_new/b\_old - 1)}}
+\krow{14}{e}{$-39.46\%$}{\code{(new - old) / old * 100}}
 \krow{15}{a}{1.0249}{\code{car::vif(m2)}; by hand only on rows with non-NA \textit{hsgrad} (full sample gives 1.0167)}
 \end{keytable}
 

@@ -168,17 +168,17 @@ What is the R-squared from the estimated model?
 \krow{1}{b}{118.6996}{\code{mean(dat\$bwght)}; 120 is the median}
 \krow{2}{c}{196}{\code{sum(is.na(dat\$fatheduc))}}
 \krow{3}{b}{$-0.5950$}{lm drops 197 rows (196 \textit{fatheduc} + 1 \textit{motheduc}), $n=1191$}
-\krow{4}{e}{456161.5}{\code{sum(resid(m)\^{}2)}; not listed}
+\krow{4}{e}{456161.5}{\code{deviance(m)}; not listed}
 \krow{5}{c}{2.5800}{\code{qt(0.995, df.residual(m))}, df $=1191-9=1182$; 2.5758 is \code{qnorm}}
 \krow{6}{a}{$p=0.00077$}{$p<0.001$}
-\krow{7}{b}{0.3871}{$t=(\hat\beta+0.5)/se=-0.866$; two-sided. 0.1935 is one-sided}
+\krow{7}{b}{0.3871}{\code{linearHypothesis(m, "cigs = -0.5")}, \code{Pr(>F)}. 0.1935 is one-sided}
 \krow{8}{c}{$-1.6775$}{\code{vcov(m)["(Intercept)","white"]}}
 \krow{9}{d}{31.69\%}{\code{young = as.numeric(age < 35)}; \code{<=35} gives 35.11\%}
 \krow{10}{b}{0.07394}{0.07355 is adjusted $R^2$}
 \krow{11}{c}{$-0.0406$}{LPM: $\times100$ = percentage points}
-\krow{12}{d}{0.0057}{\code{confint(m1, level=0.99)}; 0.0092 is the 95\% upper bound on \textit{male}, $-0.0015$ the 95\% upper on \textit{marr}}
+\krow{12}{d}{0.0057}{\code{confint(m1, "marr", level=0.99)}; 0.0092 is the 95\% upper bound on \textit{male}, $-0.0015$ the 95\% upper on \textit{marr}}
 \krow{13}{c}{$p=0.0367$}{$0.01<p<0.05$}
-\krow{14}{a}{$-41.27\%$}{$100(-0.014287/-0.024325-1)$}
+\krow{14}{a}{$-41.27\%$}{\code{(new - old) / old * 100} $=(-0.014287+0.024325)/(-0.024325)\times100$}
 \krow{15}{c}{1.8029}{\code{car::vif(m2)}; 0.5547 is $1-R_j^2$}
 \end{keytable}
 

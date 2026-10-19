@@ -38,17 +38,17 @@ Q & Type & One-liner & Main trap\\ \midrule
 1 & Summary stat & \code{mean(dat\$y)} & mean vs median; \code{na.rm=TRUE}\\
 2 & Count NAs & \code{sum(is.na(dat\$x))} & the right variable\\
 3 & OLS coefficient & \code{m = lm(y \textasciitilde\ ..., dat)} & \code{I(x\^{}2)}; the answer may be (e)\\
-4 & SSR & \code{sum(resid(m)\^{}2)} & SSR vs $\hat\sigma$ vs $\hat\sigma^2$\\
-5 & Critical value & \code{qt(1-a/2, df.residual(m))} & \code{qnorm}; df from the full $n$ when NAs were dropped\\
+4 & SSR & \code{deviance(m)} & SSR vs $\hat\sigma$ vs $\hat\sigma^2$\\
+5 & Critical value & \code{qt(0.975, df.residual(m))} (table below) & \code{qnorm}; df from the full $n$ when NAs were dropped\\
 6 & Strongest conclusion & p-value from \code{summary(m)} & map $p$ to a level (table below)\\
-7 & p-value, $H_0:\beta=c$ & $t=(\hat\beta-c)/se$ & two-sided; $c\neq0$, so you can't read it off \code{summary}\\
+7 & p-value, $H_0:\beta=c$ & \code{linearHypothesis(m, "x = c")} & read \code{Pr(>F)}; $c\neq0$, so not \code{summary}\\
 8 & Cov of two estimates & \code{vcov(m)["a","b"]} & name is \code{"(Intercept)"}, \code{"I(age\^{}2)"}\\ \midrule
 9 & Make a dummy, \% & \code{mean(new)*100} & include every group; NAs\\
 10 & LPM $R^2$ & \code{summary(m1)\$r.squared} & $R^2$ vs adjusted; the NA rows lm drops\\
 11 & Interpretation & coef $\times 100$ & \textbf{percentage points}, not percent\\
-12 & CI bound & \code{confint(m1, level=.90)} & level; which row; lower or upper\\
+12 & CI bound & \code{confint(m1, "x", level=.90)} & level; which row; lower or upper\\
 13 & Strongest conclusion & same as Q6 & \\
-14 & \% change in coef & \code{100*(new/old-1)} & sign; the ratio alone is not the answer\\
+14 & \% change in coef & \code{(new-old)/old*100} & sign; the ratio alone is not the answer\\
 15 & VIF & \code{car::vif(m2)} & by hand you need the \textbf{same rows}\\ \bottomrule
 \end{tabular}
 \end{center}
@@ -73,10 +73,9 @@ sum(is.na(dat$<x>))                            # Q2
 m = lm(<y> ~ <x1> + <x2> + I(<x2>^2) + <...>, data = dat)
 summary(m)                                     # Q3 coef, Q6 p-value (Pr(>|t|))
 nobs(m); df.residual(m)                        # check: were rows dropped?
-sum(resid(m)^2)                                # Q4 SSR
-qt(1 - <alpha>/2, df = df.residual(m))         # Q5  alpha = 1 - level  (97.5% -> 0.025)
-b = coef(m)["<x>"]; se = sqrt(vcov(m)["<x>", "<x>"])
-2 * pt(-abs((b - <c>) / se), df = df.residual(m))   # Q7  H0: beta_x = c
+deviance(m)                                    # Q4 SSR
+qt(<p>, df.residual(m))                        # Q5  p = 1 - (1 - level)/2  (95% -> 0.975)
+linearHypothesis(m, "<x> = <c>")               # Q7  H0: beta_x = c -> read Pr(>F)
 vcov(m)["(Intercept)", "<x>"]                  # Q8
 
 # ================= BLOCK 2 (Q9-15) =================
@@ -86,9 +85,10 @@ dat$<new> = as.numeric(<condition>)            # e.g. asian == 1 | hispan == 1 |
 m1 = lm(<ybin> ~ <new> + <x1> + <x2> + <x3>, data = dat)   # 5 parameters incl. intercept
 summary(m1)                                    # Q10 R^2 (bottom), Q13 p-value
 100 * coef(m1)["<x>"]                          # Q11 -> "percentage points"
-confint(m1, level = <0.90>)                    # Q12
+confint(m1, "<x>", level = <0.90>)             # Q12
 m2 = lm(<ybin> ~ <new> + <x1> + <x2> + <x3> + <extra>, data = dat)
-100 * (coef(m2)["<x>"] / coef(m1)["<x>"] - 1)  # Q14
+old = coef(m1)["<x>"]; new = coef(m2)["<x>"]
+(new - old) / old * 100                        # Q14
 vif(m2)                                        # Q15
 \end{lstlisting}
 
@@ -109,7 +109,7 @@ $0.01\le p<0.05$ & (c) reject at 5\% (\code{*}) & & \\ \bottomrule
 \end{center}
 The significance stars in \code{summary()} map one-to-one onto (a)--(d), and no star means (e). \code{"e-05"} means $10^{-5}$, so that's (a).
 
-\textbf{Critical value (Q5).} Confidence level $L$, so $\alpha = 1-L$, and the value is \code{qt(1 - alpha/2, df.residual(m))}.
+\textbf{Critical value (Q5).} For confidence level $L$, use \code{qt(p, df.residual(m))} with $p = 1-(1-L)/2$. Memorize the row below.
 \begin{center}\small
 \begin{tabular}{@{}l*{6}{c}@{}}\toprule
 Level & 90\% & 95\% & 97.5\% & 98\% & 99\% & 99.5\%\\
@@ -121,7 +121,7 @@ Level & 90\% & 95\% & 97.5\% & 98\% & 99\% & 99.5\%\\
 \textbf{df trap.} Always use \code{df.residual(m)}, which equals $n_{\text{used}} - k$. When the model has a variable with NAs, lm silently drops those rows, so $n_{\text{used}} < $ \code{nrow(dat)}. The wrong-df answer and the \code{qnorm} answer are both planted as distractors. In practice B the correct value is not even listed, so the answer is (e).
 \end{trap}
 
-\textbf{p-value for $H_0:\beta=c$ (Q7).} $t = (\hat\beta - c)/se(\hat\beta)$, then $p = 2\,P(T_{df} > |t|)$ = \code{2*pt(-abs(t), df)}. The \code{summary()} p-value tests $c=0$ only. \textbf{Watch the sign of $c$:} for $H_0:\beta=-0.15$ the numerator is $\hat\beta + 0.15$. The one-sided value (half the answer) is a planted distractor.
+\textbf{p-value for $H_0:\beta=c$ (Q7).} One line: \code{linearHypothesis(m, "educ = -0.15")} (from \code{car}), then read \code{Pr(>F)}. With one restriction $F=t^2$, so this is exactly the two-sided $t$-test $p$-value. The \code{summary()} p-value tests $c=0$ only. Type the null with its sign as printed (\code{"educ = -0.15"}). The one-sided value (half the answer) is a planted distractor. By hand, if needed: $t=(\hat\beta-c)/se$, $p=$\code{2*pt(-abs(t), df)}.
 
 \textbf{Percent vs percentage points (Q11).} In an LPM (0/1 outcome) $\hat\beta=0.0302$ means the probability goes up by $0.0302 \times 100 = 3.02$ \textbf{percentage points}. ``3.02 percent'' is wrong.
 \begin{center}\small
@@ -193,9 +193,9 @@ b + c(-1, 1) * qt(.95, df) * se
 \item Type the setup and \code{dat = wooldridge::...}. Run \code{names(dat)} and \code{nrow(dat)}.
 \item Q1--Q2: one line each. Q2 just counts; it doesn't change the data.
 \item Write the model \textbf{exactly} as printed. Squares are \code{I(age\^{}2)} (or an existing \code{agesq} column; both give identical estimates). Run \code{summary(m)} once.
-\item Read Q3, Q6 and the SE for Q7 from that one output. Q4 \code{sum(resid(m)\^{}2)}, Q5 \code{qt}, Q8 \code{vcov}.
+\item Read Q3, Q6 and the SE for Q7 from that one output. Q4 \code{deviance(m)}, Q5 \code{qt}, Q7 \code{linearHypothesis}, Q8 \code{vcov}.
 \item Block 2: create the dummy \textbf{before} fitting. Count the parameters (the question says ``5 parameters including the intercept'').
-\item Q11: multiply by 100 and say \emph{percentage points}. Q12: \code{confint} at the stated level.
+\item Q11: multiply by 100 and say \emph{percentage points}. Q12: \code{confint(m1, "x", level = ...)} at the stated level.
 \item Q14--Q15: fit \code{m2} = \code{m1} + the extra control. Use \code{vif(m2)}.
 \item None of the above is a real answer, used about 2--3 times per exam. If your number is computed correctly and isn't listed, pick (e). Don't round toward the nearest option.
 \end{enumerate}

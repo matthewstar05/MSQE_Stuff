@@ -168,17 +168,17 @@ What is the adjusted R-squared from the estimated model?
 \krow{1}{b}{905}{\code{median(dat\$wage)}; 957.95 is the mean}
 \krow{2}{d}{78}{\code{sum(is.na(dat\$meduc))}; 83 = \textit{brthord}, 194 = \textit{feduc}}
 \krow{3}{c}{0.06313}{\code{log(wage)} or \code{lwage}; lm drops 78 rows, $n=857$}
-\krow{4}{b}{0.3623}{\code{summary(m)\$sigma}; 0.1312 $=\hat\sigma^2$, 111.152 = SSR}
+\krow{4}{b}{0.3623}{\code{summary(m)\$sigma}; 0.1312 $=\hat\sigma^2$, 111.152 = SSR (\code{deviance(m)})}
 \krow{5}{e}{2.3308}{\code{qt(0.99, df.residual(m))}, df $=857-10=847$. 2.3304 uses $935-10$; 2.3263 is \code{qnorm}}
 \krow{6}{b}{$p=0.0048$}{$0.001<p<0.01$}
-\krow{7}{b}{0.0531}{$t=(0.06313-0.05)/0.00678=1.936$; 0.0266 is one-sided}
+\krow{7}{b}{0.0531}{\code{linearHypothesis(m, "educ = 0.05")}, \code{Pr(>F)}; 0.0266 is one-sided}
 \krow{8}{a}{$-7.42\times10^{-6}$}{\code{vcov(m)["exper","I(exper\^{}2)"]}}
 \krow{9}{c}{27.71\%}{\code{arrested = as.numeric(narr86 > 0)}}
 \krow{10}{b}{0.05915}{\code{summary(m1)\$adj.r.squared}; 0.06053 is $R^2$}
 \krow{11}{c}{$-0.0382$}{LPM: $\times100$ = percentage points}
-\krow{12}{d}{$-0.04878$}{\code{confint(m1)}; $-0.04707$ is the 90\% bound}
+\krow{12}{d}{$-0.04878$}{\code{confint(m1, "qemp86")}; $-0.04707$ is the 90\% bound}
 \krow{13}{a}{$p\approx10^{-13}$}{$p<0.001$}
-\krow{14}{a}{$-92.23\%$}{$100(-0.002966/-0.038155-1)$; 7.77\% is just the ratio}
+\krow{14}{a}{$-92.23\%$}{\code{(new - old) / old * 100}; 7.77\% is just the ratio}
 \krow{15}{c}{2.1398}{\code{car::vif(m2)}; 2.0362 is the VIF of \textit{inc86}}
 \end{keytable}
 

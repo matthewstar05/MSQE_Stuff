@@ -168,17 +168,17 @@ How many observations are used to estimate the model?
 \krow{1}{e}{6.2618}{\code{mean(dat\$lwage)}; not listed}
 \krow{2}{b}{949}{\code{sum(is.na(dat\$IQ))}; 47 = \textit{KWW}, 690 = \textit{fatheduc}}
 \krow{3}{c}{0.05570}{lm drops the 47 rows with missing \textit{KWW}, $n=2963$}
-\krow{4}{b}{405.3401}{\code{sum(resid(m)\^{}2)}; 0.3704 is $\hat\sigma$}
+\krow{4}{b}{405.3401}{\code{deviance(m)}; 0.3704 is $\hat\sigma$}
 \krow{5}{d}{1.6454}{\code{qt(0.95, df.residual(m))}, df $=2954$; 1.6449 is \code{qnorm}, 1.2818 uses 0.90}
 \krow{6}{e}{$p=0.1134$}{$p>0.10$}
-\krow{7}{d}{0.1850}{$t=(0.05570-0.05)/0.004298=1.326$; 0.0925 is one-sided}
+\krow{7}{d}{0.1850}{\code{linearHypothesis(m, "educ = 0.05")}, \code{Pr(>F)}; 0.0925 is one-sided}
 \krow{8}{b}{$-2.71\times10^{-6}$}{\code{vcov(m)["educ","KWW"]}; $9.35\times10^{-6}$ is (\textit{educ}, \textit{exper})}
 \krow{9}{c}{24.53\%}{\code{mean(dat\$highwage, na.rm=TRUE)}; 13.94\% divides by all 753 women}
 \krow{10}{b}{428}{\code{nobs(m1)}: the 325 non-workers have NA outcome and are dropped}
 \krow{11}{d}{0.0775}{LPM: $\times100$ = percentage points}
-\krow{12}{c}{$-1.0847$}{\code{confint(m1, level=0.90)}; $-1.1335$ is the 95\% bound}
+\krow{12}{c}{$-1.0847$}{\code{confint(m1, "(Intercept)", level=0.90)}; $-1.1335$ is the 95\% bound}
 \krow{13}{e}{$p=0.2229$}{$p>0.10$}
-\krow{14}{b}{8.63\%}{$100(0.084150/0.077463-1)$}
+\krow{14}{b}{8.63\%}{\code{(new - old) / old * 100}}
 \krow{15}{d}{1.5525}{\code{car::vif(m2)}. By hand on all 753 rows (wrong sample) gives 1.6279; 1.6137 is the VIF of \textit{huseduc}}
 \end{keytable}
 
