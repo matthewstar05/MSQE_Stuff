@@ -3,6 +3,16 @@
 # MCQ: 1e 2b 3c 4b 5d 6e 7d 8b 9c 10b 11d 12c 13e 14b 15d
 # FRQ: the number in each comment is the answer; the letter is the MCQ choice.
 
+# Syntax to memorize
+#   SSE                       deviance(m)                       (= sum(resid(m)^2))
+#   critical value, C% CI     qt(1 - (1 - C)/2, df.residual(m))  e.g. 95% -> qt(0.975, ...)
+#   test b = v (v != 0)       linearHypothesis(m, "educ = -0.15")  Pr(>F) = two-sided t p-value
+#   test b = 0                summary(m)  -> read the Pr(>|t|) column
+#   coefficient covariance    vcov(m)["(Intercept)", "west"]
+#   one CI                    confint(m, "educ", level = 0.90)
+#   percent change            (new - old) / old * 100
+#   VIF                       vif(m)["cathhs"]                  (car)
+
 library(wooldridge)
 library(car)
 
@@ -20,17 +30,16 @@ m = lm(lwage ~ educ + exper + I(exper^2) + black + smsa + south + momdad14 + KWW
 summary(m)                                       # 0.05570 (c)   n = 2963 (KWW has 47 NAs)
 
 # Q4. What is the sum of squared errors of the model?
-sum(resid(m)^2)                                  # 405.3401 (b)
+deviance(m)                                      # 405.3401 (b)
 
 # Q5. Critical value for a 90% confidence interval?
-qt(1 - 0.10/2, df = df.residual(m))              # 1.6454  (d)   qnorm gives 1.6449
+qt(0.95, df.residual(m))                         # 1.6454  (d)   qnorm gives 1.6449
 
 # Q6. H0: b_momdad14 = 0. Strongest conclusion?
 summary(m)$coefficients["momdad14", ]            # p = 0.1134 -> fail to reject at 10% (e)
 
 # Q7. H0: b_educ = 0.05. p-value?
-t = (coef(m)["educ"] - 0.05) / sqrt(vcov(m)["educ", "educ"])
-2 * pt(-abs(t), df = df.residual(m))             # 0.1850  (d)
+linearHypothesis(m, "educ = 0.05")               # Pr(>F) 0.1850  (d)   F = t^2, same p as the t-test
 
 # Q8. Covariance between the estimates on educ and KWW?
 vcov(m)["educ", "KWW"]                           # -2.7081e-06 (b)
@@ -50,14 +59,16 @@ nobs(m1)                                         # 428     (b)
 coef(m1)["educ"]                                 # 0.077463 -> 7.7463 percentage points (d)
 
 # Q12. Lower bound of the 90% CI for the intercept?
-confint(m1, level = 0.90)                        # -1.0847 (c)
+confint(m1, "(Intercept)", level = 0.90)         # -1.0847 (c)
 
 # Q13. H0: b_city = 0. Strongest conclusion?
 summary(m1)$coefficients["city", ]               # p = 0.2229 -> fail to reject at 10% (e)
 
 # Q14. Add huseduc. Percentage change in the parameter on educ?
 m2 = lm(highwage ~ educ + exper + age + city + huseduc, data = dat)
-100 * (coef(m2)["educ"] / coef(m1)["educ"] - 1)  # 8.63%   (b)
+old = coef(m1)["educ"]
+new = coef(m2)["educ"]
+(new - old) / old * 100                          # 8.63%   (b)
 
 # Q15. VIF for educ when we control for huseduc?
 vif(m2)["educ"]                                  # 1.5525  (d)

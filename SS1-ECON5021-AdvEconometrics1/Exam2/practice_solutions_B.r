@@ -3,6 +3,16 @@
 # MCQ: 1b 2d 3c 4b 5e 6b 7b 8a 9c 10b 11c 12d 13a 14a 15c
 # FRQ: the number in each comment is the answer; the letter is the MCQ choice.
 
+# Syntax to memorize
+#   SSE                       deviance(m)                       (= sum(resid(m)^2))
+#   critical value, C% CI     qt(1 - (1 - C)/2, df.residual(m))  e.g. 95% -> qt(0.975, ...)
+#   test b = v (v != 0)       linearHypothesis(m, "educ = -0.15")  Pr(>F) = two-sided t p-value
+#   test b = 0                summary(m)  -> read the Pr(>|t|) column
+#   coefficient covariance    vcov(m)["(Intercept)", "west"]
+#   one CI                    confint(m, "educ", level = 0.90)
+#   percent change            (new - old) / old * 100
+#   VIF                       vif(m)["cathhs"]                  (car)
+
 library(wooldridge)
 library(car)
 
@@ -23,14 +33,13 @@ summary(m)                                       # 0.06313 (c)   n = 857
 summary(m)$sigma                                 # 0.3623  (b)
 
 # Q5. Critical value for a 98% confidence interval?
-qt(1 - 0.02/2, df = df.residual(m))              # 2.3308  (e)   df = 847; 2.3304 uses the wrong df (935 - 10)
+qt(0.99, df.residual(m))                         # 2.3308  (e)   df = 847; 2.3304 uses the wrong df (935 - 10)
 
 # Q6. H0: b_south = 0. Strongest conclusion?
 summary(m)$coefficients["south", ]               # p = 0.0048 -> reject at 1% (b)
 
 # Q7. H0: b_educ = 0.05. p-value?
-t = (coef(m)["educ"] - 0.05) / sqrt(vcov(m)["educ", "educ"])
-2 * pt(-abs(t), df = df.residual(m))             # 0.0531  (b)
+linearHypothesis(m, "educ = 0.05")               # Pr(>F) 0.0531  (b)   F = t^2, same p as the t-test
 
 # Q8. Covariance between the estimates on exper and exper^2?
 vcov(m)["exper", "I(exper^2)"]                   # -7.4233e-06 (a)
@@ -50,14 +59,16 @@ summary(m1)$adj.r.squared                        # 0.05915 (b)
 coef(m1)["qemp86"]                               # -0.038155 -> -3.8155 percentage points (c)
 
 # Q12. Lower bound of the 95% CI for the parameter on qemp86?
-confint(m1, level = 0.95)                        # -0.04878 (d)
+confint(m1, "qemp86", level = 0.95)              # -0.04878 (d)
 
 # Q13. H0: b_pcnv = 0. Strongest conclusion?
 summary(m1)$coefficients["pcnv", ]               # p ~ 6e-13 -> reject at 0.1% (a)
 
 # Q14. Add inc86. Percentage change in the parameter on qemp86?
 m2 = lm(arrested ~ pcnv + ptime86 + qemp86 + black + inc86, data = dat)
-100 * (coef(m2)["qemp86"] / coef(m1)["qemp86"] - 1)   # -92.23% (a)
+old = coef(m1)["qemp86"]
+new = coef(m2)["qemp86"]
+(new - old) / old * 100                          # -92.23% (a)
 
 # Q15. VIF for qemp86 when we control for inc86?
 vif(m2)["qemp86"]                                # 2.1398  (c)
