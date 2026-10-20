@@ -1,0 +1,117 @@
+% Shared TikZ figures for the ECON 5040 midterm study guide and sample midterm.
+% Each \fig... macro draws one self-contained tikzpicture.
+
+% 1. Intertemporal budget line: R is minus the slope
+\newcommand{\figIntertemporal}{%
+\begin{tikzpicture}[scale=0.85,>=stealth]
+  \draw[->] (0,0) -- (5.2,0) node[below] {$c_0$};
+  \draw[->] (0,0) -- (0,4.6) node[left] {$c_1$};
+  % endowment e = (2,2); budget with R = 1 (slope -1) and R' > R (slope -1.8)
+  \draw[thick,ink] (0,4) -- (4,0) node[below] {$e_0+\tfrac{e_1}{R}$};
+  \node[left,ink] at (0,4) {$Re_0+e_1$};
+  \draw[thick,key,dashed] (0.9,3.98) -- (3.11,0);
+  \node[key,right] at (0.95,4.2) {$R'>R$: steeper};
+  \fill (2,2) circle (2pt) node[above right] {$e$};
+  % indifference curve tangent to the original line at (1.6,2.4)
+  \draw[gray] (0.55,4.4) .. controls (1.0,2.9) and (1.6,2.4) .. (4.6,1.25);
+  \fill[ink] (1.6,2.4) circle (1.6pt);
+  \node[gray,right] at (4.6,1.25) {IC};
+  \node[ink] at (3.5,2.6) {\small slope $=-R$};
+\end{tikzpicture}}
+
+% 2. Concave utility, expected utility, certainty equivalent
+\newcommand{\figCE}{%
+\begin{tikzpicture}[xscale=0.032,yscale=1.25,>=stealth]
+  \draw[->] (0,2.8) -- (175,2.8) node[below] {$c$};
+  \draw[->] (0,2.8) -- (0,5.3) node[left] {$u(c)$};
+  \draw[thick,ink,domain=25:170,samples=60] plot (\x,{ln(\x)});
+  \draw[key] (50,{ln(50)}) -- (150,{ln(150)});
+  \fill (50,{ln(50)}) circle (1.4pt); \fill (150,{ln(150)}) circle (1.4pt);
+  % E[C]=100, E[u]=0.5(ln50+ln150)=4.4637, CE=86.6, u(100)=4.6052
+  \fill[key] (100,4.4637) circle (1.6pt);
+  \fill[ink] (100,4.6052) circle (1.6pt);
+  \draw[dashed] (100,2.8) node[below] {$\E C$} -- (100,4.6052);
+  \draw[dashed] (86.6,2.8) node[below left=-1pt] {$CE$} -- (86.6,4.4637) -- (100,4.4637);
+  \draw[dashed] (50,2.8) node[below] {$c_L$} -- (50,{ln(50)});
+  \draw[dashed] (150,2.8) node[below] {$c_H$} -- (150,{ln(150)});
+  \node[ink,above left] at (100,4.62) {\small $u(\E C)$};
+  \node[key,right] at (101,4.40) {\small $\E u(C)$};
+  \draw[<->,thick] (86.6,3.05) -- node[above] {\scriptsize $RP$} (100,3.05);
+\end{tikzpicture}}
+
+% 3. Two-state Markov chain
+\newcommand{\figMarkov}{%
+\begin{tikzpicture}[>=stealth,node distance=3cm,every node/.style={font=\small}]
+  \node[circle,draw,thick,ink,minimum size=9mm] (E) {$E$};
+  \node[circle,draw,thick,ink,minimum size=9mm,right of=E] (U) {$U$};
+  \draw[->,thick] (E) to[bend left] node[above] {$P_{EU}=0.10$} (U);
+  \draw[->,thick] (U) to[bend left] node[below] {$P_{UE}=0.40$} (E);
+  \draw[->,thick] (E) to[loop left] node[left] {$0.90$} (E);
+  \draw[->,thick] (U) to[loop right] node[right] {$0.60$} (U);
+\end{tikzpicture}}
+
+% 4. Bellman decomposition / timing
+\newcommand{\figBellman}{%
+\begin{tikzpicture}[>=stealth,every node/.style={font=\small}]
+  \node[draw,rounded corners,ink,thick] (x) at (0,0) {state $x$};
+  \node[draw,rounded corners,thick] (u) at (2.6,0) {choose $u$};
+  \node[draw,rounded corners,key,thick] (r) at (5.4,0.7) {reward $r(x,u)$};
+  \node[draw,rounded corners,ink,thick] (xp) at (5.4,-0.7) {$x'\sim g(x,u)$};
+  \node[draw,rounded corners,thick] (v) at (8.6,-0.7) {$\beta\,\E[V(x')]$};
+  \draw[->] (x) -- (u); \draw[->] (u) -- (r); \draw[->] (u) -- (xp); \draw[->] (xp) -- (v);
+\end{tikzpicture}}
+
+% 5. Solow: sf(k) vs delta k, with a rise in s
+\newcommand{\figSolow}{%
+\begin{tikzpicture}[xscale=0.55,yscale=1.6,>=stealth]
+  \draw[->] (0,0) -- (10.5,0) node[below] {$k$};
+  \draw[->] (0,0) -- (0,2.4);
+  \draw[thick] (0,0) -- (10,2) node[below right] {$\delta k$};
+  \draw[thick,ink,domain=0:10,samples=60] plot (\x,{0.4*sqrt(\x)*1.25}) node[right] {$sf(k)$};
+  \draw[thick,key,dashed,domain=0:10,samples=60] plot (\x,{0.55*sqrt(\x)*1.25}) node[above] {$s'f(k)$};
+  % k* where 0.5 sqrt k = 0.2 k -> k = 6.25 ; k*' where 0.6875 sqrt k = 0.2k -> k = 11.8 (off-axis) so use 0.55*1.25=0.6875
+  \draw[dashed] (6.25,0) node[below] {$k^*$} -- (6.25,1.25);
+  \fill[ink] (6.25,1.25) circle (1.6pt);
+  \draw[->,key] (6.6,0.15) -- (9.3,0.15) node[midway,above] {\scriptsize $s\uparrow\Rightarrow k^*\uparrow$};
+  
+\end{tikzpicture}}
+
+% 6. Level effect vs growth effect
+\newcommand{\figLevelGrowth}{%
+\begin{tikzpicture}[xscale=0.7,yscale=0.7,>=stealth]
+  \draw[->] (0,0) -- (8.3,0) node[below] {$t$};
+  \draw[->] (0,0) -- (0,5.2) node[left] {$\log y_t$};
+  \draw[thick] (0,1) -- (8,2.6) node[right] {\scriptsize slope $g$};
+  \draw[thick,ink] (3,1.6) .. controls (4,2.4) and (5,2.7) .. (6,2.95) -- (8,3.35) node[right] {\scriptsize level};
+  \draw[thick,key,dashed] (3,1.6) -- (8,5.0) node[right] {\scriptsize growth};
+  \draw[dotted] (3,0) node[below] {$t_0$} -- (3,1.6);
+\end{tikzpicture}}
+
+% 7. Convex marginal utility -> precautionary saving
+\newcommand{\figPrecaution}{%
+\begin{tikzpicture}[xscale=0.6,yscale=0.9,>=stealth]
+  \draw[->] (0,0) -- (9,0) node[below] {$c_1$};
+  \draw[->] (0,0) -- (0,4.4) node[left] {$u'(c_1)$};
+  \draw[thick,ink,domain=1:8.5,samples=60] plot (\x,{4/\x});
+  \draw[key] (1.5,2.667) -- (7.5,0.533);
+  \fill (1.5,2.667) circle (1.5pt); \fill (7.5,0.533) circle (1.5pt);
+  \draw[dashed] (1.5,0) node[below] {$c_1^L$} -- (1.5,2.667);
+  \draw[dashed] (7.5,0) node[below] {$c_1^H$} -- (7.5,0.533);
+  \draw[dashed] (4.5,0) node[below] {$\E c_1$} -- (4.5,1.6);
+  \fill[key] (4.5,1.6) circle (1.6pt); \fill[ink] (4.5,0.889) circle (1.6pt);
+  \node[key,right] at (4.6,1.75) {\scriptsize $\E[u'(c_1)]$};
+  \node[ink,below left] at (4.45,0.85) {\scriptsize $u'(\E c_1)$};
+\end{tikzpicture}}
+
+% 8. McCall reservation wage
+\newcommand{\figMcCall}{%
+\begin{tikzpicture}[xscale=0.55,yscale=0.7,>=stealth]
+  \draw[->] (0,0) -- (8.3,0) node[below] {$w$};
+  \draw[->] (0,0) -- (0,5.6) node[left] {value};
+  \draw[thick,ink] (0,0) -- (8,5.2) node[above left] {$A(w)=\frac{w}{1-\beta}$};
+  \draw[thick,key] (0,2.6) -- (8,2.6) node[below left] {$C$};
+  \draw[dashed] (4,0) node[below] {$\bar w$} -- (4,2.6);
+  \draw[line width=2.2pt,opacity=0.25] (0,2.6) -- (4,2.6) -- (8,5.2);
+  \node[gray] at (1.9,3.0) {\scriptsize reject};
+  \node[gray] at (6.3,3.4) {\scriptsize accept};
+\end{tikzpicture}}

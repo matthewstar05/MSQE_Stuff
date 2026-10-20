@@ -1,0 +1,118 @@
+\documentclass[11pt]{article}
+\input{econ5040_preamble}
+\input{econ5040_figs}
+
+\newcounter{qn}
+\newcommand{\question}[1]{\refstepcounter{qn}\par\medskip
+{\bfseries\color{ink}Question \theqn.\ #1}\par\smallskip}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries\color{ink} ECON 5040 Sample Midterm, with Model Answers}\\[3pt]
+{\small Closed book, closed notes. Ten questions, one per study-guide topic. Answer each in a short paragraph (3--4 sentences); a graph may help.\\
+The questions follow the official study guide's bullets closely. Each model answer is written to earn a 10/10: idea, equation, mechanism, graph.}
+\end{center}
+
+\question{Inter-temporal prices}
+Explain how the real interest rate determines the relative price of consumption today and consumption in the future. Then explain the substitution incentive created by an increase in the real interest rate.
+
+\begin{answer}
+\begin{minipage}[t]{0.56\textwidth}\vspace{0pt}
+Consumption today and consumption next period are different commodities, and the gross real interest rate $R=1+r$ is their relative price. Giving up one unit of $c_0$ buys $R$ units of $c_1$, so the price of future consumption in today's units is $1/R$ and the intertemporal budget line $c_0+c_1/R=e_0+e_1/R$ has slope $-R$. At an optimum the household sets its MRS equal to this price: $u'(c_0)/[\beta u'(c_1)]=R$. When $R$ rises, future consumption becomes cheaper relative to current consumption (the budget line pivots through the endowment and steepens). The \textbf{substitution effect} therefore always pushes the household to consume less today and save more. The total effect can be offset by an income effect for lenders, who become richer when $R$ rises.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.4\textwidth}\vspace{0pt}\centering
+\figIntertemporal
+\end{minipage}
+\end{answer}
+
+\question{Choice under uncertainty}
+A consumer with $u(c)=\log c$ faces a gamble paying $c=50$ or $c=150$ with equal probability. Compute and interpret the certainty equivalent, and explain how the curvature of $u$ affects the value of this risky prospect.
+
+\begin{answer}
+\begin{minipage}[t]{0.56\textwidth}\vspace{0pt}
+Under expected utility the gamble is worth $\E u(C)=\tfrac12\log50+\tfrac12\log150$. The certainty equivalent solves $u(CE)=\E u(C)$, so $CE=\exp(\tfrac12\log50+\tfrac12\log150)=\sqrt{7500}\approx\mathbf{86.60}$. The consumer is indifferent between the gamble and 86.60 for sure, even though $\E C=100$, so the risk premium is $100-86.60=13.40$. This happens because $\log$ is concave: diminishing marginal utility makes the loss from the bad outcome hurt more than the equal gain from the good outcome helps. Jensen's inequality then gives $\E u(C)<u(\E C)$. The more curved $u$ is (higher $\rho=-cu''/u'$), the lower the $CE$ and the larger the risk premium; a risk-neutral consumer (linear $u$) would value the gamble at $\E C=100$.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.4\textwidth}\vspace{0pt}\centering
+\figCE
+\end{minipage}
+\end{answer}
+
+\question{Markov processes}
+State the Markov property. For a worker whose status follows $P=\begin{bmatrix}0.90&0.10\\0.40&0.60\end{bmatrix}$ (state 1 = employed, state 2 = unemployed), interpret the element $P_{21}$ and the first row of $P$.
+
+\begin{answer}
+\begin{minipage}[t]{0.6\textwidth}\vspace{0pt}
+A process is Markov if, conditional on the current state, the past gives no additional information about the distribution of the next state: $\Pr(X_{t+1}=j\mid X_t=i,X_{t-1},\dots)=\Pr(X_{t+1}=j\mid X_t=i)$. History can still matter, but only through the state it produced. Element $P_{ij}=\Pr(X_{t+1}=j\mid X_t=i)$, so $P_{21}=0.40$ is the probability that a worker unemployed today is employed next period: the \textbf{job-finding rate}. The first row $(0.90,\,0.10)$ is the entire conditional distribution of tomorrow's status for someone employed today: a 90\% chance of keeping the job and a 10\% separation rate. Each row is non-negative and sums to one. The population distribution evolves as $\psi_{t+1}=\psi_tP$, with stationary distribution $\psi^*=(0.8,0.2)$.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.36\textwidth}\vspace{6pt}\centering
+\figMarkov
+\end{minipage}
+\end{answer}
+
+\question{Introduction to dynamic programming}
+Write the Bellman equation and explain how it decomposes a dynamic problem. For the optimal growth problem ($c_t+k_{t+1}=Ak_t^\alpha$, utility $\sum\beta^t\log c_t$), identify the state variable, choice variable, current payoff, and next-period state.
+
+\begin{answer}
+The Bellman equation is $V(x)=\max_{u}\{r(x,u)+\beta\,\E[V(x')\mid x,u]\}$ with $x'\sim g(x,u)$. It turns an infinite-horizon sequence problem into a choice of one action today. That action is valued as the \textbf{current reward} $r(x,u)$ plus the \textbf{discounted expected continuation value} of the state it leads to, where $V$ already embodies optimal behavior from tomorrow on. The control can matter in both places: through today's reward and through the distribution of tomorrow's state. In the growth model the \textbf{state} is current capital $k_t$, the \textbf{choice} is next period's capital $k_{t+1}$ (equivalently $c_t$), the \textbf{current payoff} is $\log(Ak_t^\alpha-k_{t+1})$, and the \textbf{next state} is $k'=k_{t+1}$. So $V(k)=\max_{k'}\{\log(Ak^\alpha-k')+\beta V(k')\}$, whose solution is the policy $k'=\alpha\beta Ak^\alpha$.
+\end{answer}
+
+\question{Value functions and policy functions}
+Distinguish the value function from the policy function. What economic information does each provide, and how is the optimal policy related to the Bellman equation?
+
+\begin{answer}
+The \textbf{value function} $V(x)$ answers ``how good is it to be in state $x$, knowing I will behave optimally from now on?'' It is the maximized expected discounted lifetime payoff, a number for each state. The \textbf{policy function} $h(x)$ answers ``what should I do in state $x$?'' It is a contingent plan assigning an action to every state, which is what a solution must be when future states are random. $V$ provides welfare and shadow values (e.g.\ $V'(x)=u'(c)$ is the value of one more unit of wealth), while $h$ provides behavior: the saving rule, the reservation-wage rule, and the law of motion $x_{t+1}\sim g(x_t,h(x_t))$. The two are linked by the Bellman equation: $h(x)=\arg\max_u\{r(x,u)+\beta\E[V(x')\mid x,u]\}$, and $V$ is the value of following $h$ forever. For example, in McCall $V(w)=\max\{w/(1-\beta),C\}$, while the policy is ``accept iff $w\ge\bar w$.''
+\end{answer}
+
+\question{Howard's method versus value function iteration}
+Explain the logic of value function iteration and of Howard's policy-improvement method. Why can Howard's method be much faster?
+
+\begin{answer}
+\textbf{Value function iteration} starts with a guess $V_0$ (e.g.\ zeros) and repeatedly applies the Bellman operator $V_{n+1}(x)=\max_u\{r(x,u)+\beta\sum_{x'}M_u(x,x')V_n(x')\}$. Each step adds one more period of future rewards. It stops when $V$ stops changing and then reads off $h=\arg\max$; since $T$ is a contraction with modulus $\beta$, the error shrinks only by about a factor $\beta$ per step, which is slow when $\beta$ is near 1. \textbf{Howard's method} starts with a guessed \emph{policy} and separates two steps. \emph{Policy evaluation:} with the policy fixed the max disappears, so solve the linear system $V_h=(I-\beta P_h)^{-1}r_h$ for the exact value of following $h$ forever. \emph{Policy improvement:} choose the best action in each state given $V_h$; stop when the policy no longer changes. It is faster because each evaluation does in one linear solve what VFI would need infinitely many iterations to do. Since there are finitely many policies and each round improves, it typically converges in just a few iterations.
+\end{answer}
+
+\question{The Solow model}
+Explain how saving and capital accumulation determine steady-state capital and output in the Solow model. Does a permanent increase in the saving rate permanently raise the growth rate of output per worker?
+
+\begin{answer}
+\begin{minipage}[t]{0.54\textwidth}\vspace{0pt}
+With an exogenous saving rate $s$, capital per worker evolves as $k_{t+1}=sf(k_t)+(1-\delta)k_t$. Because $f$ has diminishing returns, investment $sf(k)$ exceeds depreciation $\delta k$ at low $k$ (capital grows) and falls short at high $k$ (capital shrinks). The economy therefore converges to the steady state $sf(k^*)=\delta k^*$; with Cobb--Douglas, $k^*=(sA/\delta)^{1/(1-\alpha)}$ and $y^*=A(k^*)^\alpha$. A permanent rise in $s$ shifts $sf(k)$ up, raising $k^*$ and $y^*$: a \textbf{level effect}. Growth is faster only temporarily, during the transition. It does \emph{not} permanently raise growth, because diminishing returns mean the extra capital eventually only covers depreciation. Long-run growth of output per worker equals the rate of technological progress $g$, which is exogenous in Solow.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.43\textwidth}\vspace{0pt}\centering
+\figSolow\\[4pt]
+\figLevelGrowth
+\end{minipage}
+\end{answer}
+
+\question{Optimal saving}
+Interpret the Euler equation $u'(c_t)=\beta R\,\E_t[u'(c_{t+1})]$. How does a household adjust if $u'(c_t)>\beta R\,\E_t[u'(c_{t+1})]$?
+
+\begin{answer}
+The left side is the marginal utility of consuming one more unit today. The right side is the value of saving that unit instead: it grows to $R$ units tomorrow, each worth $u'(c_{t+1})$ in expectation, discounted by $\beta$. At an optimum the household is indifferent at the margin, so the two must be equal; this holds every period along the optimal path (MRS $=R$). If $u'(c_t)>\beta R\E_tu'(c_{t+1})$, a unit consumed today is worth more than the same unit saved, so the household should \textbf{consume more today and save less}. Doing so lowers $u'(c_t)$ and, because $c_{t+1}$ falls, raises $u'(c_{t+1})$, until the equation holds. (In the opposite case it saves more.) The only exception is a binding borrowing constraint: then the household wants to consume more but cannot, and the strict inequality persists.
+\end{answer}
+
+\question{Income fluctuations}
+Explain why uncertainty about future income can increase saving even when expected future income is unchanged, and why assets provide self-insurance.
+
+\begin{answer}
+\begin{minipage}[t]{0.56\textwidth}\vspace{0pt}
+Saving is set by $u'(c_0)=\beta R\E[u'(c_1)]$. When marginal utility is convex ($u'''>0$, as with log or CRRA utility), Jensen's inequality implies $\E[u'(c_1)]>u'(\E c_1)$. A mean-preserving spread in future income therefore raises the expected marginal value of saving at every asset level, so the household saves more. This is \textbf{precautionary saving}, and it happens even though expected income is unchanged. Economically, low-income states have very high marginal utility, so a dollar carried into them is especially valuable. The asset pays $R$ in every state, so it is not insurance, but consumption is chosen after income is observed: the household runs down its buffer when income is low. That transfers resources toward the future states where consumption and wealth are low, which is \textbf{self-insurance} when insurance markets are incomplete.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.4\textwidth}\vspace{0pt}\centering
+\figPrecaution
+\end{minipage}
+\end{answer}
+
+\question{Putting the ideas together: job search}
+Explain why job search is a dynamic decision problem. Formulate the McCall problem in terms of the state variable, choice variable, transition, and continuation value, and explain the reservation wage.
+
+\begin{answer}
+\begin{minipage}[t]{0.56\textwidth}\vspace{0pt}
+Job search is dynamic because rejecting an offer affects both today's payoff (unemployment benefit $c$ instead of $w$) and tomorrow's opportunities (the chance to draw a better offer). Accepting ends the search forever, so it is an \textbf{optimal stopping} problem. The \textbf{state} is the current offer $w$, the \textbf{choice} is accept or reject, and the \textbf{transition} is: accept means you earn $w$ forever, reject means a new offer $W'\sim F$ (IID) next period. The Bellman equation is $V(w)=\max\{w/(1-\beta),\ c+\beta\E V(W')\}$, where the \textbf{continuation value} $C=c+\beta\E V(W')$ is the value of not stopping yet and keeping the option to choose again. Since $A(w)=w/(1-\beta)$ rises with $w$ while $C$ is constant (offers are IID), there is a \textbf{reservation wage} $\bar w=(1-\beta)C$: accept iff $w\ge\bar w$. Higher $c$ or higher $\beta$ raises $\bar w$.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.4\textwidth}\vspace{0pt}\centering
+\figMcCall
+\end{minipage}
+\end{answer}
+
+\end{document}
