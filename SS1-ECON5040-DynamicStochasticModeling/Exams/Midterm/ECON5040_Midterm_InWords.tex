@@ -34,7 +34,7 @@ The exam rewards the words; the math box is there so the words make sense to you
 \end{itemize}
 
 \begin{resp}
-The gross real rate $R=1+r$ is the relative price of $c_0$ in units of $c_1$: giving up one unit today buys $R$ units tomorrow, so future consumption costs $1/R$ and the budget line $c_0+c_1/R=e_0+e_1/R$ has slope $-R$. At the optimum $\text{MRS}=u'(c_0)/\beta u'(c_1)=R$. A higher $R$ makes $c_1$ cheaper, so the substitution effect always moves the household toward lower $c_0$ and more saving.
+The gross real interest rate $R=1+r$ is the relative price of consumption today $c_0$ in terms of consumption tomorrow $c_1$: giving up one unit today buys $R$ units tomorrow, so future consumption costs $1/R$ in today's units. The household chooses where its marginal rate of substitution between $c_0$ and $c_1$ equals $R$. When $R$ rises, future consumption becomes cheaper, so the substitution effect always pushes the household to lower $c_0$ and save more.
 \end{resp}
 \begin{intu}
 \textbf{Where the price comes from.} Saving $a$ today gives $Ra$ tomorrow: $c_0=e_0-a$, $c_1=e_1+Ra$. Eliminating $a$ gives $c_0+\frac{c_1}{R}=e_0+\frac{e_1}{R}$, so the prices are $(p_0,p_1)=(1,1/R)$ and $R=p_0/p_1$.\\
@@ -52,7 +52,7 @@ The gross real rate $R=1+r$ is the relative price of $c_0$ in units of $c_1$: gi
 
 \begin{resp}
 \begin{minipage}[t]{0.62\textwidth}\vspace{0pt}
-Lotteries are ranked by $\E[u(C)]=\sum_s\pi_su(c_s)$, and a concave $u$ ($u''<0$) means risk aversion: $u(\E C)>\E u(C)$. The certainty equivalent solves $u(CE)=\E u(C)$; here $CE=\sqrt{50\cdot150}\approx86.60<\E C=100$, so the risk premium is $RP\approx13.40$. More curvature gives a lower $CE$ and a higher $RP$.
+Under expected utility, a gamble is valued by the probability-weighted average of the utility $u$ of each outcome, and a concave $u$ means risk aversion: the sure average is preferred to the gamble. The certainty equivalent $CE$ is the sure amount that gives the same expected utility; for the 50/150 gamble with log utility, $CE\approx86.60$ even though the mean is 100, so the risk premium $RP\approx13.40$. The more curved $u$ is, the lower the $CE$ and the larger the $RP$.
 \end{minipage}\hfill
 \begin{minipage}[t]{0.34\textwidth}\vspace{0pt}\centering
 \scalebox{0.75}{\figCE}
@@ -76,7 +76,7 @@ For log, $A=1/c$ and $\rho=1$; for CRRA, $\rho$ is constant. Check: $\tfrac12\cd
 
 \begin{resp}
 \begin{minipage}[t]{0.64\textwidth}\vspace{0pt}
-Markov means $\Pr(X_{t+1}=j\mid X_t=i,X_{t-1},\dots)=\Pr(X_{t+1}=j\mid X_t=i)$: given today's state, the past adds nothing to the forecast. $P_{ij}$ is the probability of moving from $i$ today to $j$ tomorrow (e.g.\ $P_{UE}=0.4$ is the job-finding rate), and row $i$ is the full conditional distribution of tomorrow's state, which sums to 1.
+A process is Markov if, once you know today's state $X_t$, the earlier history adds nothing to the forecast of tomorrow's state $X_{t+1}$. The element $P_{ij}$ is the probability of moving to state $j$ tomorrow given state $i$ today (for example, the unemployed-to-employed entry is the job-finding rate), and row $i$ is the entire distribution of tomorrow's state starting from $i$, so its entries sum to one.
 \end{minipage}\hfill
 \begin{minipage}[t]{0.32\textwidth}\vspace{4pt}\centering
 \scalebox{0.75}{\figMarkov}
@@ -97,7 +97,7 @@ Markov means $\Pr(X_{t+1}=j\mid X_t=i,X_{t-1},\dots)=\Pr(X_{t+1}=j\mid X_t=i)$: 
 \end{itemize}
 
 \begin{resp}
-The Bellman equation $V(x)=\max_u\{r(x,u)+\beta\E[V(x')\mid x,u]\}$, with $x'\sim g(x,u)$, splits the problem into today's reward plus the discounted expected value of tomorrow's state, assuming optimal behavior from then on. In optimal growth the state is $k$, the choice is $k'$, the payoff is $\log(Ak^\alpha-k')$, and the next state is $k'$.
+The Bellman equation says the value $V(x)$ of being in state $x$ equals the best choice $u$ of today's reward $r(x,u)$ plus the discounted ($\beta$) expected value of tomorrow's state $x'$, assuming optimal behavior from then on. In the growth model, the state is current capital $k$, the choice is next period's capital $k'$, the current payoff is the utility of consuming whatever output is not saved, and the next-period state is $k'$.
 \end{resp}
 \begin{intu}
 \textbf{Why it works (principle of optimality).} Separate out the $t=0$ term of the sequence problem:
@@ -115,7 +115,7 @@ The tail problem starting at $x_1$ has the same form, so its value is $V(x_1)$; 
 \end{itemize}
 
 \begin{resp}
-$V(x)$ is the value of starting in state $x$ and behaving optimally (welfare), while $h(x)$ is the action to take in each state (a contingent plan, $u_t=h(x_t)$). The policy is the argmax of the Bellman equation, $h(x)=\arg\max_u\{r(x,u)+\beta\E[V(x')\mid x,u]\}$, and $V$ is the value of following $h$ forever.
+The value function $V(x)$ tells you how good it is to start in state $x$ and act optimally from then on, which is a measure of welfare. The policy function $h(x)$ tells you which action to take in each state, a complete contingent plan. The optimal policy is the choice that maximizes the right-hand side of the Bellman equation, and following $h$ forever delivers exactly $V$.
 \end{resp}
 \begin{intu}
 \textbf{From $V$ to $h$:} a single maximization in each state. \textbf{From $h$ to $V_h$:} with the policy fixed there's no max, so $V_h=r_h+\beta P_hV_h\Rightarrow V_h=(I-\beta P_h)^{-1}r_h=\sum_{t\ge0}\beta^tP_h^tr_h$ (a Neumann series: the expected discounted reward stream).\\
@@ -131,7 +131,7 @@ $V(x)$ is the value of starting in state $x$ and behaving optimally (welfare), w
 \end{itemize}
 
 \begin{resp}
-VFI guesses $V_0$ and iterates $V_{n+1}=TV_n$ until $V$ converges, then reads off $h=\arg\max$. Howard guesses a policy $h$, \emph{evaluates} it exactly with $V_h=(I-\beta P_h)^{-1}r_h$, \emph{improves} it with $\arg\max_u Q(x,u;V_h)$, and stops when $h$ is unchanged. Howard is faster because each evaluation equals infinitely many VFI steps at a fixed policy, so it needs only a few iterations.
+Value function iteration starts from a guessed value function $V_0$ and repeatedly applies the Bellman operator $T$, adding one more period of future rewards each round, until $V$ stops changing; the policy $h$ is read off at the end. Howard's method starts from a guessed policy $h$, evaluates it exactly (the value of following $h$ forever, one linear solve), then improves it by picking the best action in each state, and stops when $h$ no longer changes. Howard is faster because each evaluation does the work of infinitely many VFI steps, so it finishes in a few rounds.
 \end{resp}
 \begin{intu}
 \textbf{VFI convergence.} $T$ is a contraction: $\|TV-TW\|_\infty\le\beta\|V-W\|_\infty$ (Blackwell: monotonicity plus discounting). So $\|V_n-V^*\|\le\beta^n\|V_0-V^*\|$. To cut the error by $10^{-6}$ you need $n\approx\frac{\ln10^{-6}}{\ln\beta}$: about 270 steps at $\beta=.95$ and about 1{,}400 at $\beta=.99$.\\
@@ -148,7 +148,7 @@ VFI guesses $V_0$ and iterates $V_{n+1}=TV_n$ until $V$ converges, then reads of
 
 \begin{resp}
 \begin{minipage}[t]{0.62\textwidth}\vspace{0pt}
-Capital per worker evolves as $k_{t+1}=sf(k_t)+(1-\delta)k_t$; diminishing returns make investment eventually just replace depreciation, so the economy converges to $sf(k^*)=\delta k^*$, i.e.\ $k^*=(sA/\delta)^{1/(1-\alpha)}$. A higher $s$ raises $k^*$ and $y^*$ (a \textbf{level effect}), but long-run growth of $y$ per worker equals the rate of technological progress $g$, so saving doesn't change it.
+In Solow, a fixed fraction $s$ of output is invested and a fraction $\delta$ of capital depreciates. Because of diminishing returns, investment eventually just replaces depreciation, so capital per worker converges to a steady state $k^*$ with output $y^*$. A higher $s$ raises $k^*$ and $y^*$ (a \textbf{level effect}), but long-run growth of output per worker equals the rate of technological progress $g$, so saving does not change it.
 \end{minipage}\hfill
 \begin{minipage}[t]{0.34\textwidth}\vspace{0pt}\centering
 \scalebox{0.7}{\figSolow}\\[2pt]
@@ -171,7 +171,7 @@ Capital per worker evolves as $k_{t+1}=sf(k_t)+(1-\delta)k_t$; diminishing retur
 \end{itemize}
 
 \begin{resp}
-The LHS $u'(c_t)$ is the marginal utility of eating one more unit today; the RHS $\beta R\E_t[u'(c_{t+1})]$ is the discounted expected marginal utility of saving it, since it becomes $R$ units tomorrow. If $\text{LHS}>\text{RHS}$, the household consumes more and saves less (and the reverse if $\text{LHS}<\text{RHS}$) until the two are equal, unless a borrowing constraint binds.
+The left side is the marginal utility of consuming one more unit today, $c_t$; the right side is the value of saving it instead: it grows to $R$ units, is valued at tomorrow's expected marginal utility of $c_{t+1}$, and is discounted by $\beta$. If the left side is bigger, the household consumes more today and saves less; if it is smaller, it saves more. Either adjustment continues until the two sides are equal, unless a borrowing constraint binds.
 \end{resp}
 \begin{intu}
 \textbf{Perturbation argument.} Cut $c_t$ by $\varepsilon$ and save it, then raise $c_{t+1}$ by $R\varepsilon$. The utility change is $\Delta\approx\varepsilon\,[-u'(c_t)+\beta R\E_tu'(c_{t+1})]$. At an optimum no $\varepsilon$ can help, so the bracket is $0$. If the bracket is $<0$ (LHS $>$ RHS), $\varepsilon<0$ helps: consume more now.\\
@@ -189,7 +189,7 @@ The LHS $u'(c_t)$ is the marginal utility of eating one more unit today; the RHS
 
 \begin{resp}
 \begin{minipage}[t]{0.62\textwidth}\vspace{0pt}
-From the Euler equation $u'(c_0)=\beta R\E[u'(c_1)]$: if $u'$ is convex ($u'''>0$), a mean-preserving spread in $Y_1$ raises $\E[u'(c_1)]$, so the household saves more. This is \textbf{precautionary saving}. The asset pays $R$ in every state, but because consumption is chosen after income is realized, the buffer $a$ is drawn down in low-$y$ states, which moves resources to where marginal utility is high (\textbf{self-insurance}).
+When future income $Y_1$ is risky, low-income states have very high marginal utility, so a unit saved is especially valuable as protection, and the household saves more than it would with the same average income for sure. This is \textbf{precautionary saving}. Assets $a$ pay the same return $R$ in every state, but since consumption is chosen after income is known, the household draws down its buffer when income is low, moving resources to the states where consumption and wealth are low (\textbf{self-insurance}).
 \end{minipage}\hfill
 \begin{minipage}[t]{0.34\textwidth}\vspace{0pt}\centering
 \scalebox{0.75}{\figPrecaution}
@@ -211,7 +211,7 @@ From the Euler equation $u'(c_0)=\beta R\E[u'(c_1)]$: if $u'$ is convex ($u'''>0
 
 \begin{resp}
 \begin{minipage}[t]{0.62\textwidth}\vspace{0pt}
-Rejecting an offer trades today's wage for $c$ plus the option of a new draw $W'\sim F$ tomorrow, so today's choice changes both today's payoff and tomorrow's opportunities. The state is $w$, the choice is accept or reject, and $V(w)=\max\{\frac{w}{1-\beta},\,C\}$ with continuation value $C=c+\beta\E V(W')$. Since $A(w)=\frac{w}{1-\beta}$ rises in $w$ while $C$ is flat (IID offers), the worker accepts iff $w\ge\bar w=(1-\beta)C$.
+Job search is dynamic because rejecting an offer gives up today's wage for unemployment compensation $c$ but keeps the option of a new random offer tomorrow. The state is the current offer $w$, the choice is accept or reject, and the transition is: accept means earning $w$ forever, reject means drawing a new offer next period. The continuation value $C$ is the value of rejecting and searching optimally again; since the value of accepting rises with $w$ while $C$ doesn't depend on $w$, the worker accepts any offer above the reservation wage $\bar w$.
 \end{minipage}\hfill
 \begin{minipage}[t]{0.34\textwidth}\vspace{0pt}\centering
 \scalebox{0.75}{\figMcCall}
