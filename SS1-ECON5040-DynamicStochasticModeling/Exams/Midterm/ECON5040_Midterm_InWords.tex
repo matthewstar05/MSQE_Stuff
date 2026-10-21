@@ -27,8 +27,11 @@ The exam rewards the words; the math box is there so the words make sense to you
 \end{tcolorbox}
 
 %------------------------------------------------------------
-\question{Inter-temporal prices}
-\textit{How does the real interest rate set the price of consumption today vs.\ the future? What substitution incentive does a higher rate create?}
+\question{Inter-temporal Prices}
+\begin{itemize}[leftmargin=1.2em,itemsep=0pt]\itshape
+\item Understand how the real interest rate determines the relative price of consumption today and consumption in the future.
+\item Be able to explain the substitution incentive created by a change in the real interest rate.
+\end{itemize}
 
 \begin{resp}
 The gross real rate $R=1+r$ is the relative price of $c_0$ in units of $c_1$: giving up one unit today buys $R$ units tomorrow, so future consumption costs $1/R$ and the budget line $c_0+c_1/R=e_0+e_1/R$ has slope $-R$. At the optimum $\text{MRS}=u'(c_0)/\beta u'(c_1)=R$. A higher $R$ makes $c_1$ cheaper, so the substitution effect always moves the household toward lower $c_0$ and more saving.
@@ -41,8 +44,11 @@ The gross real rate $R=1+r$ is the relative price of $c_0$ in units of $c_1$: gi
 \end{intu}
 
 %------------------------------------------------------------
-\question{Choice under uncertainty}
-\textit{Expected utility, risk aversion, and the CE of a 50/50 gamble over $\{50,150\}$ with $u=\log c$.}
+\question{Choice Under Uncertainty}
+\begin{itemize}[leftmargin=1.2em,itemsep=0pt]\itshape
+\item Understand expected utility, risk aversion, and how the curvature of the utility function affects the value of a risky prospect.
+\item Be able to compute and interpret the certainty equivalent of a simple gamble.
+\end{itemize}
 
 \begin{resp}
 \begin{minipage}[t]{0.62\textwidth}\vspace{0pt}
@@ -62,8 +68,11 @@ For log, $A=1/c$ and $\rho=1$; for CRRA, $\rho$ is constant. Check: $\tfrac12\cd
 \end{intu}
 
 %------------------------------------------------------------
-\question{Markov processes}
-\textit{The Markov property; interpret $P_{ij}$ and a row of $P$.}
+\question{Markov Processes}
+\begin{itemize}[leftmargin=1.2em,itemsep=0pt]\itshape
+\item Understand the meaning of the Markov property: conditional on the current state, the past provides no additional information about the distribution of the next state.
+\item Know how to interpret a transition matrix $P$, including the economic meaning of an element $P_{ij}$ and of an entire row.
+\end{itemize}
 
 \begin{resp}
 \begin{minipage}[t]{0.64\textwidth}\vspace{0pt}
@@ -81,8 +90,11 @@ Markov means $\Pr(X_{t+1}=j\mid X_t=i,X_{t-1},\dots)=\Pr(X_{t+1}=j\mid X_t=i)$: 
 \end{intu}
 
 %------------------------------------------------------------
-\question{Introduction to dynamic programming}
-\textit{Explain the Bellman equation; identify state, choice, current payoff, next state.}
+\question{Introduction to Dynamic Programming}
+\begin{itemize}[leftmargin=1.2em,itemsep=0pt]\itshape
+\item Understand the Bellman equation as a decomposition of a dynamic problem into a current reward and a discounted expected continuation value.
+\item Be able to identify the state variable, choice variable, current payoff, and next-period state in a dynamic economic problem.
+\end{itemize}
 
 \begin{resp}
 The Bellman equation $V(x)=\max_u\{r(x,u)+\beta\E[V(x')\mid x,u]\}$, with $x'\sim g(x,u)$, splits the problem into today's reward plus the discounted expected value of tomorrow's state, assuming optimal behavior from then on. In optimal growth the state is $k$, the choice is $k'$, the payoff is $\log(Ak^\alpha-k')$, and the next state is $k'$.
@@ -96,8 +108,11 @@ The tail problem starting at $x_1$ has the same form, so its value is $V(x_1)$; 
 \end{intu}
 
 %------------------------------------------------------------
-\question{Value functions and policy functions}
-\textit{Distinguish them; what does each tell you; how is $h$ tied to the Bellman equation?}
+\question{Value Functions and Policy Functions}
+\begin{itemize}[leftmargin=1.2em,itemsep=0pt]\itshape
+\item Understand the distinction between a value function and a policy function.
+\item Know what economic information each function provides and how the optimal policy is related to the Bellman equation.
+\end{itemize}
 
 \begin{resp}
 $V(x)$ is the value of starting in state $x$ and behaving optimally (welfare), while $h(x)$ is the action to take in each state (a contingent plan, $u_t=h(x_t)$). The policy is the argmax of the Bellman equation, $h(x)=\arg\max_u\{r(x,u)+\beta\E[V(x')\mid x,u]\}$, and $V$ is the value of following $h$ forever.
@@ -109,8 +124,11 @@ $V(x)$ is the value of starting in state $x$ and behaving optimally (welfare), w
 \end{intu}
 
 %------------------------------------------------------------
-\question{Howard's method vs.\ value function iteration}
-\textit{The logic of each, and why Howard can be much faster.}
+\question{Howard's Method versus Value Function Iteration}
+\begin{itemize}[leftmargin=1.2em,itemsep=0pt]\itshape
+\item Understand the basic logic of value function iteration: repeatedly applying the Bellman operator until the value function converges.
+\item Understand how Howard's method separates policy evaluation from policy improvement, and why this can make computation much faster.
+\end{itemize}
 
 \begin{resp}
 VFI guesses $V_0$ and iterates $V_{n+1}=TV_n$ until $V$ converges, then reads off $h=\arg\max$. Howard guesses a policy $h$, \emph{evaluates} it exactly with $V_h=(I-\beta P_h)^{-1}r_h$, \emph{improves} it with $\arg\max_u Q(x,u;V_h)$, and stops when $h$ is unchanged. Howard is faster because each evaluation equals infinitely many VFI steps at a fixed policy, so it needs only a few iterations.
@@ -122,8 +140,11 @@ VFI guesses $V_0$ and iterates $V_{n+1}=TV_n$ until $V$ converges, then reads of
 \end{intu}
 
 %------------------------------------------------------------
-\question{The Solow model}
-\textit{How saving and capital accumulation pin down $k^*,y^*$; level vs.\ growth effect.}
+\question{The Solow Model}
+\begin{itemize}[leftmargin=1.2em,itemsep=0pt]\itshape
+\item Understand how saving and capital accumulation determine the steady-state levels of capital and output.
+\item Be able to distinguish a change in the level of steady-state output from a permanent change in the long-run growth rate.
+\end{itemize}
 
 \begin{resp}
 \begin{minipage}[t]{0.62\textwidth}\vspace{0pt}
@@ -143,8 +164,11 @@ Capital per worker evolves as $k_{t+1}=sf(k_t)+(1-\delta)k_t$; diminishing retur
 \end{intu}
 
 %------------------------------------------------------------
-\question{Optimal saving}
-\textit{Interpret $u'(c_t)=\beta R\E_t[u'(c_{t+1})]$; how does the household react when the two sides differ?}
+\question{Optimal Saving}
+\begin{itemize}[leftmargin=1.2em,itemsep=0pt]\itshape
+\item Understand the Euler equation $u'(c_t)=\beta R\,\E_t[u'(c_{t+1})]$ as a comparison between the marginal value of consuming today and the expected discounted marginal value of saving for tomorrow.
+\item Be able to explain how a household changes consumption and saving when the two sides of the Euler equation are not equal.
+\end{itemize}
 
 \begin{resp}
 The LHS $u'(c_t)$ is the marginal utility of eating one more unit today; the RHS $\beta R\E_t[u'(c_{t+1})]$ is the discounted expected marginal utility of saving it, since it becomes $R$ units tomorrow. If $\text{LHS}>\text{RHS}$, the household consumes more and saves less (and the reverse if $\text{LHS}<\text{RHS}$) until the two are equal, unless a borrowing constraint binds.
@@ -157,8 +181,11 @@ The LHS $u'(c_t)$ is the marginal utility of eating one more unit today; the RHS
 \end{intu}
 
 %------------------------------------------------------------
-\question{Income fluctuations}
-\textit{Why risk raises saving with $\E Y_1$ fixed; why assets self-insure.}
+\question{Income Fluctuations}
+\begin{itemize}[leftmargin=1.2em,itemsep=0pt]\itshape
+\item Understand precautionary saving: uncertainty about future income can increase desired saving even when expected future income is unchanged.
+\item Understand why assets provide self-insurance by transferring resources toward future states in which consumption and wealth are low.
+\end{itemize}
 
 \begin{resp}
 \begin{minipage}[t]{0.62\textwidth}\vspace{0pt}
@@ -176,8 +203,11 @@ From the Euler equation $u'(c_0)=\beta R\E[u'(c_1)]$: if $u'$ is convex ($u'''>0
 \end{intu}
 
 %------------------------------------------------------------
-\question{Job search (McCall)}
-\textit{Why it is dynamic; state, choice, transition, continuation value; reservation wage.}
+\question{Putting the Ideas Together: Job Search}
+\begin{itemize}[leftmargin=1.2em,itemsep=0pt]\itshape
+\item Understand why job search is a dynamic decision problem: today's decision affects both today's payoff and the opportunities available tomorrow.
+\item Be able to formulate a job-search problem in terms of state variables, a choice variable, the transition to tomorrow's state, and a continuation value.
+\end{itemize}
 
 \begin{resp}
 \begin{minipage}[t]{0.62\textwidth}\vspace{0pt}
