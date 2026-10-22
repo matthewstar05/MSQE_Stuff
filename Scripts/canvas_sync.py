@@ -317,8 +317,14 @@ def run_sync(dry_run=False, push=False):
             canvas_size = meta.get("size")
             canvas_url = meta.get("url")
 
-            # Check if file exists locally
+            # Check if file exists locally by filename or exact byte size
             matched_local = local_filenames_lower.get(filename.lower())
+            if not matched_local and canvas_size and canvas_size > 5000:
+                # Avoid re-downloading files that were simply renamed locally
+                local_sizes = {item["size"]: item for item in local_files}
+                if canvas_size in local_sizes:
+                    matched_local = local_sizes[canvas_size]
+
             if matched_local:
                 # If notebook or code was executed locally, size differences are normal — skip overwriting
                 continue
