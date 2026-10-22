@@ -8,29 +8,21 @@
 #
 # library(wooldridge)
 # dat = wooldridge::bwght
-
-
-
-
-
-
-
-
+library(wooldridge)
+data = wooldridge::bwght
 
 # The main outcome of interest is the variable bwght, which is the birth weight of the child
 # in ounces.
 # What is the mean of the variable bwght in the dataset?
 # a. 120.0000   b. 118.6996   c. 116.9325   d. 119.5121   e. None of the above
-
-
-
+mean(data$bwght)
+# B
 
 # 2. Given the information above.
 # How many missing values or NA's are there for the variable fatheduc in the dataset?
 # a. 0   b. 1   c. 196   d. 197   e. None of the above
-
-
-
+sum(is.na(data$fatheduc))
+# C
 
 # 3. Given the information above.
 # Consider the following linear regression model.
@@ -42,24 +34,22 @@
 # indicator variables for the sex and race of the child are included in the model.
 # Estimate the model above with OLS. What is the estimated coefficient on cigs?
 # a. -0.4634   b. -0.5950   c. -0.5137   d. -0.6211   e. -0.4772
-
-
-
+m = lm(bwght ~ cigs + faminc + I(faminc^2) + parity + motheduc + fatheduc + male + white, data = dat)
+summary(m)
+# B
 
 # 4. Given the information above.
 # What is the sum of squared errors of the model?
 # a. 461992.3   b. 13340.2   c. 390114.8   d. 511023.7   e. None of the above
-
-
-
+sum(resid(m)^2)
+# A
 
 # 5. Given the information above.
 # Suppose we wanted to create a confidence interval for one of the parameters of the model. If
 # we wanted to create a 99% confidence interval, what critical value would we use?
 # a. 2.5758   b. 2.3295   c. 2.5800   d. 1.9620   e. None of the above
-
-
-
+qt(1 - 0.01/2, df = df.residual(m))
+# A
 
 # 6. Given the information above.
 # Consider the null hypothesis that H0: b_male = 0. What is the strongest conclusion we can
@@ -69,25 +59,22 @@
 # c. Reject the null at the 5% level
 # d. Reject the null at the 10% level
 # e. Fail to reject the null at the 10% level
-
-
-
+summary(m)$coefficients["male", ]
+# A
 
 # 7. Given the information above.
 # Consider the null hypothesis that H0: b_cigs = -0.5. What is the p-value associated with
 # this hypothesis test?
 # a. 0.1935   b. 0.3871   c. 0.6129   d. 0.0000   e. None of the above
-
-
-
+linearHypothesis(m, "cigs = -0.5") 
+#B
 
 # 8. Given the information above.
 # What is the covariance between the estimate of the parameter on (Intercept) and the
 # parameter on white?
 # a. -0.9241   b. 2.6122   c. -1.6775   d. 1.6775   e. -0.0017
-
-
-
+vcov(m)["(Intercept)", "white"]
+#C
 
 # 9. This is the start of a multipart question. The information below pertains to question 9 to question 15.
 # The data set k401ksubs contains data on workers from the 1991 Survey of Income and Program
@@ -95,14 +82,8 @@
 #
 # library(wooldridge)
 # dat = wooldridge::k401ksubs
-
-
-
-
-
-
-
-
+library(wooldridge)
+dat = wooldridge::k401ksubs
 
 # The variable of interest is e401k which indicates if the worker is eligible for a 401(k)
 # plan through their employer. We would like to study what are the main determinants of 401(k)
@@ -111,9 +92,9 @@
 # 35 (i.e., age <35) and zero otherwise.
 # What percent of the population are young?
 # a. 28.42%   b. 68.31%   c. 35.11%   d. 31.69%   e. None of the above
-
-
-
+dat$young = as.numeric(dat$age < 35)
+mean(dat$young)
+# D
 
 # 10. Given the information above.
 # Estimate a linear probability model on 401(k) eligibility e401k.
@@ -122,9 +103,9 @@
 # 5 parameters including the intercept.
 # What is the R-squared from the estimated model?
 # a. 0.07355   b. 0.07394   c. 0.06112   d. 0.08227   e. 0.05930
-
-
-
+m1 = lm(e401k ~ young + inc + male + marr, data = dat)
+summary(m1)$r.squared
+# B
 
 # 11. Given the information above.
 # What is the correct interpretation of the parameter on young? Holding fixed the variables in
@@ -135,15 +116,15 @@
 # c. -4.0627 percentage points
 # d. -0.4063 percentage points
 # e. None of the above
-
-
-
+coef(m1)["young"]
+#C
 
 # 12. Given the information above.
 # What is the estimate of the upper bound of the 99% confidence interval for the parameter on
 # marr?
 # a. -0.0015   b. -0.0543   c. 0.0092   d. 0.0057   e. None of the above
-
+confint(m1, "marr", level = 0.99)
+#D
 
 
 
@@ -155,17 +136,18 @@
 # c. Reject the null at the 5% level
 # d. Reject the null at the 10% level
 # e. Fail to reject the null at the 10% level
-
-
-
+summary(m1)$coefficients["marr", ]
+# C 
 
 # 14. Given the information above.
 # Re-estimate the model adding family size (fsize) as an additional control. What is the
 # percentage change in the parameter on marr when we control for family size?
 # a. -41.27%   b. 41.27%   c. -29.12%   d. -70.27%   e. None of the above
-
-
-
+m2 = lm(e401k ~ young + inc + male + marr + fsize, data = dat)
+old = coef(m1)["marr"]
+new = coef(m2)["marr"]
+(new - old) / old * 100
+# A
 
 # 15. Given the information above.
 # Re-estimate the model adding family size (fsize) as an additional control. What is the
@@ -173,6 +155,6 @@
 # if you are calculating the variance inflation factor from the formula you need to ensure
 # that the same observations are used in the different regressions)
 # a. 1.5284   b. 1.1983   c. 1.8029   d. 0.5547   e. None of the above
-
-
+vif(m2)["marr"]
+# C
 

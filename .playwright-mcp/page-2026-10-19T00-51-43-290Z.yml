@@ -1,0 +1,151 @@
+- application [ref=e1]:
+  - iframe [aria-hidden] [ref=e2]
+  - iframe [aria-hidden] [ref=e3]
+  - iframe [ref=e4]
+  - banner "Menu bar" [ref=e5]:
+    - generic [ref=e8]:
+      - link "Slides home" [ref=e10] [cursor=pointer]:
+        - /url: https://docs.google.com/presentation/?usp=slides_web
+      - generic [ref=e17]:
+        - generic "5560 Presentation Draft" [ref=e19]:
+          - 'button "Document status: Saved to Drive." [ref=e25]':
+            - generic [ref=e26] [cursor=pointer]: Saved to Drive
+        - generic [ref=e33]:
+          - button "Matthew Suban" [ref=e39]:
+            - img "Matthew Suban" [ref=e44] [cursor=pointer]
+          - button "Show all comments" [ref=e46] [cursor=pointer]
+          - generic [ref=e49]:
+            - button "Start slideshow (⌘+Enter)" [ref=e50]: Slideshow
+            - button "Presentation options" [ref=e51] [cursor=pointer]
+          - generic [ref=e53]:
+            - button "Share. Anyone with the link. Anyone who has the link can access. No sign-in required." [disabled] [ref=e54]: Share
+            - button "Quick sharing actions" [disabled] [ref=e56]
+          - link "Sign in" [ref=e60] [cursor=pointer]:
+            - /url: https://accounts.google.com/ServiceLogin?service=wise&passive=1209600&osid=1&continue=https://docs.google.com/presentation/d/1NHJYmoRLHmEEU5IZ-_Gofi5OTj1U3-O_I3JVRu5jWD8/edit?usp%3Dsharing&followup=https://docs.google.com/presentation/d/1NHJYmoRLHmEEU5IZ-_Gofi5OTj1U3-O_I3JVRu5jWD8/edit?usp%3Dsharing&ltmpl=slides&ec=GAZAmQI
+    - generic [ref=e61]:
+      - menubar [ref=e63]:
+        - menuitem "File" [ref=e64] [cursor=pointer]
+        - menuitem "Edit" [ref=e65] [cursor=pointer]
+        - menuitem "View" [ref=e66] [cursor=pointer]
+        - menuitem "Insert" [ref=e67] [cursor=pointer]
+        - menuitem "Format" [ref=e68] [cursor=pointer]
+        - menuitem "Slide" [ref=e69] [cursor=pointer]
+        - menuitem "Arrange" [ref=e70] [cursor=pointer]
+        - menuitem "Tools" [ref=e71] [cursor=pointer]
+        - menuitem "Extensions" [ref=e72] [cursor=pointer]
+        - menuitem "Help" [ref=e73] [cursor=pointer]
+      - generic [ref=e74]:
+        - generic [ref=e75]:
+          - toolbar "Search the menus (Option+/)" [ref=e76]:
+            - combobox "Menus" [ref=e78]
+          - toolbar "Main" [ref=e79]:
+            - button "New slide (Ctrl+M)" [ref=e80] [cursor=pointer]
+            - separator [disabled] [ref=e85]
+            - button "Undo (⌘Z)" [ref=e86] [cursor=pointer]
+            - button "Redo (⌘Y)" [ref=e91] [cursor=pointer]
+            - button "Print (⌘P)" [ref=e96] [cursor=pointer]
+            - button "Paint format" [disabled] [ref=e101]
+            - button "Zoom in" [ref=e106] [cursor=pointer]
+            - combobox "Zoom" [ref=e111] [cursor=pointer]:
+              - option "Zoom list. Fit selected." [selected] [ref=e114]:
+                - textbox "Zoom" [ref=e115]: Fit
+            - separator [disabled] [ref=e119]
+            - button "Select (Esc)" [pressed] [ref=e120] [cursor=pointer]
+            - button "Text box" [ref=e125] [cursor=pointer]
+            - button "Shape" [ref=e130] [cursor=pointer]
+            - button "Line" [ref=e136] [cursor=pointer]
+            - button "Select line" [ref=e141] [cursor=pointer]
+            - separator [disabled] [ref=e147]
+            - button "Add comment (⌘+Option+M)" [ref=e148] [cursor=pointer]
+            - separator [disabled] [ref=e153]
+            - button "Change background" [ref=e154] [cursor=pointer]:
+              - generic [ref=e155]: Background
+            - separator [disabled] [ref=e157]
+            - button "Apply layout" [ref=e158] [cursor=pointer]:
+              - generic [ref=e159]: Layout
+            - separator [disabled] [ref=e162]
+            - button "Change theme" [ref=e163] [cursor=pointer]:
+              - generic [ref=e164]: Theme
+            - separator [disabled] [ref=e166]
+            - button "Change transition" [ref=e167] [cursor=pointer]:
+              - generic [ref=e168]: Transition
+        - toolbar "Mode and view" [ref=e170]:
+          - button "Your pointer is hidden (Ctrl+⌘L Ctrl+⌘M)" [ref=e171] [cursor=pointer]
+          - button "Live pointer settings" [ref=e176] [cursor=pointer]
+          - button "Hide the menus (Ctrl+Shift+F)" [ref=e182] [cursor=pointer]
+  - generic [ref=e188]:
+    - generic [ref=e189]:
+      - navigation [ref=e190]:
+        - img [ref=e193]:
+          - generic [ref=e195]:
+            - generic [ref=e197]: "1"
+            - img [ref=e199]:
+              - generic [ref=e201]: …
+          - generic [ref=e222]:
+            - generic [ref=e224]: "2"
+            - img [ref=e226]:
+              - generic [ref=e228]: background
+          - generic [ref=e249]:
+            - generic [ref=e251]: "3"
+            - img [ref=e253]:
+              - generic [ref=e255]: data1
+          - generic [ref=e276]:
+            - generic [ref=e278]: "4"
+            - img [ref=e280]:
+              - generic [ref=e282]: data2
+        - generic [ref=e304]:
+          - button "Grid view" [ref=e306]
+          - button "Hide filmstrip" [ref=e312]
+      - generic [ref=e318]:
+        - generic [ref=e321]:
+          - generic:
+            - list
+          - img [ref=e324]:
+            - generic [ref=e327]:
+              - generic [ref=e333]: …
+              - generic [ref=e354]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: Click
+                          - generic: to
+                          - generic: add
+                          - generic: subtitle
+        - complementary "Speaker notes" [ref=e362]:
+          - textbox "Speaker notes" [ref=e363]:
+            - img [ref=e364]:
+              - generic [ref=e366]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic: Click
+                          - generic: to
+                          - generic: add
+                          - generic: speaker
+                          - generic: notes
+      - toolbar "Insertion" [ref=e372]:
+        - button "Templates" [ref=e373] [cursor=pointer]
+        - button "Building blocks" [ref=e380] [cursor=pointer]:
+          - generic [ref=e381]: Blocks
+        - button "Stock and web" [disabled] [ref=e387]:
+          - generic [ref=e388]: Media
+        - button "Drive and Photos" [disabled] [ref=e394]:
+          - generic [ref=e395]: Uploads
+        - button "Turn into video" [disabled] [ref=e401]:
+          - generic [ref=e402]: Transform
+    - link "HTML view of the presentation" [ref=e408] [cursor=pointer]:
+      - /url: https://docs.google.com/presentation/d/1NHJYmoRLHmEEU5IZ-_Gofi5OTj1U3-O_I3JVRu5jWD8/htmlpresent
+  - iframe [ref=e409]
+  - iframe [active] [ref=e410]:
+    - textbox "Document content" [active] [ref=f3e1]
+    - group
+  - link "Turn on screen reader support" [ref=e411] [cursor=pointer]:
+    - /url: "#"
+  - generic [ref=e412]: Banner hidden
+  - region
+  - region [ref=e413]: To enable screen reader support, press ⌘+Option+Z To learn about keyboard shortcuts, press ⌘slash
+  - iframe [ref=e415]

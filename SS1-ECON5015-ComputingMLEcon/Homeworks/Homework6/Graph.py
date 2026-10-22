@@ -33,10 +33,8 @@ class Graph:
         return -1
 
     # Homework 7, shortest_path method
-    def shortest_path(self, n1, n2):
+    # def shortest_path(self, n1, n2):
         # compute the shortest path from n1 to n2
-        
-        
 
 class Node:
     def __init__(self, name):
