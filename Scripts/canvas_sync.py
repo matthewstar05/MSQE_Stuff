@@ -35,6 +35,24 @@ COURSE_MAP = {
 # Browser Communication (Arc AppleScript)
 # ----------------------------------------------------------------------
 
+def ensure_canvas_tab_selected():
+    """Finds and selects the Canvas tab in Arc so background Chromium processes stay responsive."""
+    applescript = '''
+    tell application "Arc"
+        repeat with w in windows
+            repeat with t in tabs of w
+                if (URL of t) starts with "https://canvas.calpoly.edu" then
+                    tell t to select
+                    return URL of t
+                end if
+            end repeat
+        end repeat
+        return "NOT_FOUND"
+    end tell
+    '''
+    p = subprocess.run(['osascript'], input=applescript, capture_output=True, text=True)
+    return p.stdout.strip()
+
 def arc_eval(js_code):
     """Executes JavaScript inside the active Canvas tab in Arc."""
     applescript = f'''
@@ -220,6 +238,12 @@ def run_sync(dry_run=False, push=False):
     print("=" * 60)
 
     # 1. Verify Canvas tab in Arc
+    tab_status = ensure_canvas_tab_selected()
+    if "NOT_FOUND" in tab_status:
+        print("[ERROR] Canvas tab is not currently open or logged in within Arc.")
+        print("Please ensure https://canvas.calpoly.edu is loaded in an Arc tab.")
+        sys.exit(1)
+
     user = canvas_api_get('/api/v1/users/self')
     if not user or not user.get('id'):
         print("[ERROR] Canvas tab is not currently open or logged in within Arc.")
