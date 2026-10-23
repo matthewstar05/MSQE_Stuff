@@ -5,9 +5,8 @@ Matthew Suban
 """
 import pandas as pd
 
-# Part A
-full_data = pd.DataFrame()
-for i in range(1, 52): # 50 states + DC, crime_1 to crime_51
+full_data = pd.DataFrame() 
+for i in range(1, 52): # 50 states+dc loaded into crime_1 to crime_51
     df = pd.read_csv("http://ashafran.github.io/crime_" + str(i) + ".csv")
     full_data = pd.concat([full_data, df], ignore_index=True) # stack under the previous states
 
