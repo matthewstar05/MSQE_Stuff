@@ -20,11 +20,14 @@
 \newtcolorbox{defbox}[1]{colback=blue!4,colframe=blue!45!black,fonttitle=\bfseries,title={#1},breakable}
 \newtcolorbox{tipbox}{colback=orange!7,colframe=orange!70!black,fonttitle=\bfseries,title={Exam tip},breakable}
 \newtcolorbox{workbox}[1]{colback=green!4,colframe=green!40!black,fonttitle=\bfseries,title={#1},breakable}
+\newtcolorbox{examq}[1]{colback=purple!3,colframe=purple!55!black,fonttitle=\bfseries,
+  title={Expected exam question: #1},breakable,segmentation style={dashed,purple!55!black}}
+\newcommand{\soln}{\tcblower\textbf{Solution.}\ }
 \newtcolorbox{timebox}[1]{colback=gray!8,colframe=gray!60!black,fonttitle=\bfseries,title={#1},breakable}
 
 \tikzset{dec/.style={circle,fill,inner sep=1.5pt}}
 
-\title{ECON 5030 Midterm Study Guide\\[3pt]\large A 4-hour plan, including Cournot from scratch}
+\title{ECON 5030 Midterm Study Guide\\[3pt]\large A 4-hour plan, including Cournot from scratch,\\ with expected exam questions and solutions}
 \author{Built from the 10/22 review, the course notes (Ch.\ 1--3, Ch.\ 5), PS1--PS3, and last year's midterm}
 \date{}
 
@@ -69,6 +72,8 @@
 
 \begin{tipbox}
 Grading is ``long, just show what you've learnt.'' On every question: \textbf{state the definition first}, then apply it. Definitions are free points, and the professor explicitly rewards them.
+
+Each topic ends with purple \textbf{Expected exam question} boxes in last year's style. Cover the solution (below the dashed line), answer on paper, then check. Budget about a third of each time block for them.
 \end{tipbox}
 
 %=====================================================================
@@ -120,6 +125,31 @@ So if either property fails, the answer is ``no, because\ldots''
 Points to make: pairs like $x=(1,0)$, $x'=(0,1)$ ($x_1>x_1'$ but equal sums) are ranked by no rule, so the preferences are \emph{not complete}. The first two lines as printed give both $x\succ x'$ and $x'\succ x$ for the same pair, which contradicts the definition of strict preference. Say so explicitly. Either way there is \emph{no utility function}. When an exam relation looks contradictory, the grader wants you to notice it.
 \end{workbox}
 
+
+\subsection*{Expected exam questions}
+\begin{examq}{preferences that \emph{do} have a utility function}
+Consider preferences over $X=[0,1]^2$ defined by $x\succsim y$ if and only if $\min\{x_1,x_2\}\ge\min\{y_1,y_2\}$.
+(a) Define completeness and show whether these preferences are complete.
+(b) Define transitivity and show whether they are transitive.
+(c) Does a utility function exist that represents them? Explain.
+\soln
+(a) Complete means for all $x,y$, $x\succsim y$ or $y\succsim x$. Here $\min\{x_1,x_2\}$ and $\min\{y_1,y_2\}$ are real numbers, and any two real numbers can be compared with $\ge$. So for every pair one of the two rankings holds: \textbf{complete}.
+
+(b) Transitive means $x\succsim y$ and $y\succsim z$ imply $x\succsim z$. From $\min x\ge\min y\ge\min z$ we get $\min x\ge\min z$ by transitivity of $\ge$ on the reals: \textbf{transitive}.
+
+(c) \textbf{Yes:} $u(x)=\min\{x_1,x_2\}$ represents them by construction, since $x\succsim y\iff u(x)\ge u(y)$. This is consistent with the theory: the preferences are complete, transitive and continuous ($\min$ is a continuous function, so weak rankings survive limits). These are perfect complements, like PS1 \#5.
+\end{examq}
+
+\begin{examq}{why an extra assumption on infinite sets?}
+Explain why complete and transitive preferences can always be represented by a utility function on a finite set $S$, but not on $X=[0,1]^2$. What additional assumption is used, and what is the standard counterexample?
+\soln
+On a finite $S$, completeness and transitivity sort the alternatives into finitely many indifference classes ranked from worst to best. Setting $u(x)=$ the rank of $x$'s class gives $x\succsim y\iff u(x)\ge u(y)$.
+
+On $[0,1]^2$ there are uncountably many alternatives, and an ordering can be too ``fine'' for the real line. The extra assumption is \textbf{continuity}: if $x^n\succsim y^n$ for all $n$, $x^n\to x$ and $y^n\to y$, then $x\succsim y$. Complete, transitive and continuous preferences have a continuous utility representation.
+
+Counterexample: \textbf{lexicographic} preferences ($x\succ y$ if $x_1>y_1$, or $x_1=y_1$ and $x_2>y_2$) are complete and transitive but not continuous ($(1/n,0)\succ(0,1)$, yet $(0,0)\prec(0,1)$), and no utility function represents them.
+\end{examq}
+
 %=====================================================================
 \section{Expected utility and independence (20 min)}
 
@@ -144,6 +174,24 @@ Points to make: pairs like $x=(1,0)$, $x'=(0,1)$ ($x_1>x_1'$ but equal sums) are
 \end{enumerate}
 
 \textbf{Allais (a violation example):} people prefer \$1M for sure over \{10\%: \$5M, 89\%: \$1M, 1\%: \$0\}, yet prefer \{10\%: \$5M, 90\%: \$0\} over \{11\%: \$1M, 89\%: \$0\}. The two pairs differ only by a common 89\% branch, so independence says the ranking cannot flip.
+
+
+\subsection*{Expected exam question}
+\begin{examq}{independence with numbers}
+A person has vNM utility index $u(z)=\sqrt z$. Let $L_1=\$100$ for sure and $L_2=$ \{50\%: \$0, 50\%: \$400\}.
+(a) Compute the expected utility of each lottery. Which does the person prefer?
+(b) State the independence axiom. Mix each lottery with $L''=\$0$ for sure using $\alpha=\tfrac12$, and verify that the ranking is unchanged.
+(c) Is this person risk averse? Explain.
+\soln
+(a) $EU(L_1)=\sqrt{100}=10$ and $EU(L_2)=\tfrac12\sqrt0+\tfrac12\sqrt{400}=10$, so $L_1\sim L_2$.
+
+(b) Independence: $L\succsim L'\iff\alpha L+(1-\alpha)L''\succsim\alpha L'+(1-\alpha)L''$ for all $L''$ and $\alpha\in(0,1)$.\\
+$M_1=\tfrac12L_1+\tfrac12\$0=$ \{50\%: \$100, 50\%: \$0\}, so $EU=5$.\\
+$M_2=\tfrac12L_2+\tfrac12\$0=$ \{25\%: \$400, 75\%: \$0\} after reducing the compound lottery, so $EU=\tfrac14(20)=5$.\\
+$M_1\sim M_2$, exactly as independence requires. EU is linear in probabilities, so mixing in the same $L''$ shifts both values identically.
+
+(c) \textbf{Yes.} $E[L_2]=\$200>\$100$, yet the person is indifferent between $L_2$ and \$100 for sure. The certainty equivalent (\$100) is below the expected value (\$200). Equivalently, $u$ is concave.
+\end{examq}
 
 %=====================================================================
 \section{Game theory (60 min)}
@@ -271,6 +319,66 @@ A \textbf{mixed strategy} $\sigma_i\in\Delta(S_i)$ is a probability distribution
 
 \textbf{Matching pennies:} P1 wins on a match. With $q=\Pr(\text{P2 plays }H)$: $U_1(H)=2q-1$ and $U_1(T)=1-2q$, so indifference gives $q=1/2$. By symmetry $p=1/2$. The mixed NE is $(1/2,1/2)$.
 
+
+\subsection{Expected exam questions}
+\begin{examq}{a full sequential game}
+Player 1 chooses $a_1$ or $b_1$. Player 2 observes the choice, then chooses $c_2$ or $d_2$. Payoffs: $u_1(a_1,c_2)=30$, $u_2=10$; $u_1(a_1,d_2)=0$, $u_2=20$; $u_1(b_1,c_2)=20$, $u_2=30$; $u_1(b_1,d_2)=10$, $u_2=25$.\\
+(a) Write the normal form. (b) Construct the game matrix. (c) Find the strategies that survive IDSDS. (d) Find all NE. (e) Draw the tree and find all SPE.
+\soln
+(a) $N=\{1,2\}$, $S_1=\{a_1,b_1\}$, $S_2=\{c_2c_2,c_2d_2,d_2c_2,d_2d_2\}$ (first letter after $a_1$, second after $b_1$). Payoffs $u_i(s_1,s_2)$ are those at the terminal node reached.
+
+(b)
+\begin{center}
+\begin{tabular}{c|cccc}
+ & $c_2c_2$ & $c_2d_2$ & $d_2c_2$ & $d_2d_2$\\\hline
+$a_1$ & 30, 10 & 30, 10 & 0, 20 & 0, 20\\
+$b_1$ & 20, 30 & 10, 25 & 20, 30 & 10, 25
+\end{tabular}
+\end{center}
+(c) P1: $a_1=(30,30,0,0)$ and $b_1=(20,10,20,10)$, so there is no dominance. P2's payoffs against $(a_1,b_1)$: $c_2c_2=(10,30)$, $c_2d_2=(10,25)$, $d_2c_2=(20,30)$, $d_2d_2=(20,25)$. $d_2c_2$ \emph{strictly} dominates $c_2d_2$ ($20>10$, $30>25$), so delete $c_2d_2$. Every other comparison has a tie. Next round, P1 against the remaining columns: $a_1=(30,0,0)$ and $b_1=(20,20,10)$, still no dominance. Survivors: $\{a_1,b_1\}\times\{c_2c_2,d_2c_2,d_2d_2\}$.
+
+(d) P1 best responses: $a_1,a_1,b_1,b_1$. P2 best responses: vs $a_1$, $\{d_2c_2,d_2d_2\}$; vs $b_1$, $\{c_2c_2,d_2c_2\}$. The only cell where both are best responding is $(b_1,d_2c_2)$, so $NE=\{(b_1,d_2c_2)\}$.
+
+(e) After $a_1$, P2 plays $d_2$ ($20>10$); after $b_1$, P2 plays $c_2$ ($30>25$). P1 compares $0$ with $20$ and plays $b_1$. $SPE=\{(b_1,d_2c_2)\}$, with outcome $(20,30)$.\\
+\emph{Lesson:} IDSDS left six cells, but NE picks out one. NE $\subseteq$ rationalizable, and NE is much sharper.
+\end{examq}
+
+\begin{examq}{simultaneous vs.\ sequential normal forms (PS2 \#3 style)}
+Each player picks 0 or 1. Player 1 gets \$1 if the actions match and \$0 otherwise. Player 2 gets \$1 if they don't match and \$0 otherwise. Players care only about their own money.
+(a) Give the normal form if the game is simultaneous. (b) Give the normal form if Player 1 moves first and Player 2 observes. (c) Find the SPE of (b). (d) What is the only difference between the two normal forms?
+\soln
+(a) $N=\{1,2\}$, $S_1=S_2=\{0,1\}$. Payoffs: $(1,0)$ on a match and $(0,1)$ on a mismatch. This is matching pennies: there is no pure NE, and the mixed NE has each player play 0 with probability $\tfrac12$.
+
+(b) $S_1=\{0,1\}$ and $S_2=\{00,01,10,11\}$ ($xy$: $x$ after 0, $y$ after 1).
+\begin{center}
+\begin{tabular}{c|cccc}
+ & $00$ & $01$ & $10$ & $11$\\\hline
+$0$ & 1, 0 & 1, 0 & 0, 1 & 0, 1\\
+$1$ & 0, 1 & 1, 0 & 0, 1 & 1, 0
+\end{tabular}
+\end{center}
+(c) P2 always mismatches: 1 after 0 and 0 after 1, which is the strategy $10$. P1 then gets 0 whatever she does, so she is indifferent. $SPE=\{(0,10),(1,10)\}$. The second mover wins.
+
+(d) Players and payoffs over outcomes are the same. Only the \textbf{strategy sets} differ: observing P1's move turns P2's 2 actions into 4 contingent plans.
+\end{examq}
+
+\begin{examq}{mixed strategy NE}
+Find all Nash equilibria (pure and mixed) of
+\[
+\begin{array}{c|cc}
+ & L & R\\\hline
+U & 3,1 & 0,0\\
+D & 0,0 & 1,3
+\end{array}
+\]
+\soln
+\emph{Pure:} $(U,L)$ has P1 at $3>0$ and P2 at $1>0$, so neither deviates: NE. $(D,R)$ has $1>0$ and $3>0$: NE. $(U,R)$ and $(D,L)$ are not NE.
+
+\emph{Mixed:} let $p=\Pr(U)$ and $q=\Pr(L)$. To make P2 indifferent: $1\cdot p=3(1-p)\Rightarrow p=\tfrac34$. To make P1 indifferent: $3q=1\cdot(1-q)\Rightarrow q=\tfrac14$.
+
+So there are \textbf{three NE}: $(U,L)$, $(D,R)$ and $\big((\tfrac34U,\tfrac14D),(\tfrac14L,\tfrac34R)\big)$. In the mixed NE each player expects $\tfrac34$, which is worse for both than either pure NE: another case where NE is not efficient.
+\end{examq}
+
 %=====================================================================
 \section{Games where money is not the payoff}
 This is last year's Section 2.2 format, and PS2 \#4 is the idea behind it.
@@ -287,6 +395,38 @@ This is last year's Section 2.2 format, and PS2 \#4 is the idea behind it.
 \end{workbox}
 
 \textbf{PS2 \#4 lesson (``third-party observation''):} seeing everyone play $M$ in a money game does \emph{not} reject game theory or rationality. We don't know players' preferences over money, so we can always build payoffs that make $(M_1,M_2)$ the unique NE. To test rationality you need to know preferences.
+
+
+\subsection*{Expected exam question}
+\begin{examq}{money game with an \emph{equity} case}
+The money each player gets (this is \emph{not} the game matrix): $(R_1,R_2)=\$5,\$5$; $(R_1,Q_2)=\$1,\$8$; $(Q_1,R_2)=\$8,\$1$; $(Q_1,Q_2)=\$3,\$3$. Player 1 moves first, and Player 2 observes and then moves.\\
+\emph{Case 1:} each player cares only about his or her own money.
+\emph{Case 2:} each player cares only about the \emph{smaller} of the two players' money amounts (a Rawlsian concern for equity).\\
+For each case, write the game matrix, find all NE and find the SPE.
+\soln
+$S_1=\{R_1,Q_1\}$ and $S_2=\{R_2R_2,R_2Q_2,Q_2R_2,Q_2Q_2\}$ (after $R_1$, after $Q_1$).
+
+\textbf{Case 1:}
+\begin{center}
+\begin{tabular}{c|cccc}
+ & $R_2R_2$ & $R_2Q_2$ & $Q_2R_2$ & $Q_2Q_2$\\\hline
+$R_1$ & 5, 5 & 5, 5 & 1, 8 & 1, 8\\
+$Q_1$ & 8, 1 & 3, 3 & 8, 1 & 3, 3
+\end{tabular}
+\end{center}
+P1 best responses: $Q_1,R_1,Q_1,Q_1$. P2 best responses: vs $R_1$, $\{Q_2R_2,Q_2Q_2\}$; vs $Q_1$, $\{R_2Q_2,Q_2Q_2\}$. $NE=\{(Q_1,Q_2Q_2)\}$. Backward induction: P2 plays $Q_2$ after both actions, and P1 compares $1$ with $3$ and plays $Q_1$. $SPE=(Q_1,Q_2Q_2)$, with outcome $(\$3,\$3)$, Pareto dominated by $(\$5,\$5)$.
+
+\textbf{Case 2:} both payoffs are $\min$ of the money: $RR\to5$, $RQ\to1$, $QR\to1$, $QQ\to3$.
+\begin{center}
+\begin{tabular}{c|cccc}
+ & $R_2R_2$ & $R_2Q_2$ & $Q_2R_2$ & $Q_2Q_2$\\\hline
+$R_1$ & 5, 5 & 5, 5 & 1, 1 & 1, 1\\
+$Q_1$ & 1, 1 & 3, 3 & 1, 1 & 3, 3
+\end{tabular}
+\end{center}
+P1 best responses: $R_1$, $R_1$, $\{R_1,Q_1\}$, $Q_1$. P2 best responses: vs $R_1$, $\{R_2R_2,R_2Q_2\}$; vs $Q_1$, $\{R_2Q_2,Q_2Q_2\}$. $NE=\{(R_1,R_2R_2),(R_1,R_2Q_2),(Q_1,Q_2Q_2)\}$. Backward induction: after $R_1$, $R_2$ ($5>1$); after $Q_1$, $Q_2$ ($3>1$). P1 plays $R_1$. $SPE=(R_1,R_2Q_2)$, with outcome $(\$5,\$5)$.\\
+\emph{Lesson:} the money is the same, but different preferences give a different game. $(Q_1,Q_2Q_2)$ is a NE only because of the incredible threat to play $Q_2$ after $R_1$.
+\end{examq}
 
 %=====================================================================
 \section{Cournot oligopoly from scratch (75 min with \S6)}
@@ -346,6 +486,25 @@ $P(Q)=100-Q$, $c(q_i)=10q_i$, $n=3$.
 \textbf{Why Cournot is inefficient:} when firm $i$ expands, the price falls on \emph{all} units, including rivals'. Firm $i$ counts only its own loss ($P'(Q)q_i$), so each firm restricts output to keep the price up, the market \textbf{underproduces}, and $p>MC$. This is a NE that is not Pareto efficient, just like the Prisoner's Dilemma. Firms ``make more gains from trade themselves'' by selling less at a high price.
 
 \textbf{Benchmarks to remember} (linear demand $a-bQ$, constant MC $c$): $q^c=\dfrac{a-c}{(n+1)b}$, $p^c=\dfrac{a+nc}{n+1}$. $n=1$ is monopoly; as $n\to\infty$, $p\to c$ (competitive). Ordering: $Q^m<Q^c_2<Q^c_3<\dots<Q^{PC}$ and $p^m>p^c_2>\dots>MC$. The Cournot markup is $\dfrac{p-MC_i}{p}=\dfrac{s_i}{|\varepsilon_D|}$ (a bigger market share or less elastic demand means a bigger markup).
+
+
+\subsection*{Expected exam question}
+\begin{examq}{Cournot duopoly with constant marginal cost}
+Two firms choose quantities simultaneously. $P(Q)=150-Q$ and $C(q_i)=30q_i$.
+(a) Write the normal form. (b) Find firm $i$'s best response. (c) Find $q^c$, $Q^c$, $p^c$. (d) Find each firm's profit and CS, PS, TS. (e) Find the efficient outcome and the DWL, and draw the $p$--$Q$ graph. (f) Compare with a monopolist that has the same costs, and explain the ranking.
+\soln
+(a) $N=\{1,2\}$, $S_i=[0,150]$, $\pi_i(q_i,q_j)=(150-q_i-q_j)q_i-30q_i$.
+
+(b) FOC: $150-2q_i-q_j-30=0\Rightarrow b_i(q_j)=\dfrac{120-q_j}{2}$. SOC: $-2<0$.
+
+(c) With symmetry \emph{after} the FOC: $q=\tfrac{120-q}{2}\Rightarrow3q=120\Rightarrow q^c=40$, $Q^c=80$, $p^c=70$.
+
+(d) $\pi_i=(70-30)(40)=1600$. $PS=3200$. $CS=\tfrac12(80)(150-70)=3200$. $TS=6400$.
+
+(e) Efficient: $p=MC=30\Rightarrow Q^*=120$, $TS^*=\tfrac12(120)(120)=7200$. $DWL=800=\tfrac12(120-80)(70-30)$. On the graph: demand runs from $(0,150)$ to $(150,0)$, MC is flat at $30$, CS the triangle above $p=70$, PS the rectangle from $30$ to $70$ over $[0,80]$, and DWL the triangle from $Q=80$ to $120$.
+
+(f) Monopoly: $\max(150-Q)Q-30Q\Rightarrow Q^m=60$, $p^m=90$, $\pi^m=3600$, $CS=1800$, $TS=5400$, $DWL=1800$. So $Q^m=60<Q^c=80<Q^*=120$ and $p^m>p^c>MC$. With two firms, each one ignores how its extra output lowers the \emph{rival's} revenue, so together they produce more than a monopolist. That is still less than efficient, because each firm still counts the price drop on its \emph{own} units.
+\end{examq}
 
 %=====================================================================
 \section{Problem Set 3, fully solved (Cournot parts)}
@@ -441,6 +600,24 @@ $\gamma$ measures how substitutable the goods are: $\gamma=0$ means independent 
 At $\gamma=0$ we get two monopolies ($q=p=9$); at $\gamma=1$, homogeneous Cournot ($q=p=6$). More differentiation (a lower $\gamma$) gives a higher price and profit, because there is less competition.
 \end{itemize}
 
+
+\subsection*{Expected exam questions}
+\begin{examq}{PS3 \#2 with numbers}
+In PS3 \#2 ($P=200-Q$, $C(q_i)=cq_i^2/2$, $n$ firms), let $c=1$ and $n=4$. Find $b_i(Q_{-i})$, $q^c$, $p^c$, each firm's profit, CS, TS and DWL. How does the DWL compare with the duopoly ($n=2$)?
+\soln
+$\pi_i=(200-q_i-Q_{-i})q_i-\tfrac12q_i^2$. The FOC $200-3q_i-Q_{-i}=0$ gives $b_i(Q_{-i})=\dfrac{200-Q_{-i}}{3}$.\\
+With symmetry, $Q_{-i}=3q$: $3q=200-3q\Rightarrow q^c=\tfrac{200}{6}=33.3$, $Q^c=133.3$, $p^c=66.7$.\\
+$\pi_i=p^cq^c-\tfrac12(q^c)^2=2222.2-555.6=1666.7$. $CS=\tfrac12(Q^c)^2=8888.9$. $PS=4\pi_i=6666.7$. $TS=15{,}555.6$.\\
+Efficient: $MC_i=q_i=Q/4$, so $200-Q=Q/4\Rightarrow Q^*=160$, $p^*=40$, $TS^*=16{,}000$. $DWL=444.4$.\\
+With $n=2$, $DWL=833.3$. Doubling the number of firms roughly halves the loss: more competition means less underproduction.
+\end{examq}
+
+\begin{examq}{product differentiation (PS3 \#3)}
+In PS3 \#3, equilibrium is $q_i=p_i=\dfrac{18}{2+\gamma}$. How do quantities, prices and profits change as $\gamma$ rises from 0 to 1? Interpret.
+\soln
+All three fall as $\gamma$ rises: from $q=p=9$ and $\pi=81$ at $\gamma=0$ to $q=p=6$ and $\pi=36$ at $\gamma=1$. $\gamma$ measures how close substitutes the goods are. At $\gamma=0$, each firm is a monopolist in its own market. As $\gamma\to1$, a rival's output cuts into my price more, so competition is fiercer and we approach homogeneous Cournot. Differentiation softens competition and protects markups.
+\end{examq}
+
 %=====================================================================
 \section{Market games, efficiency and equity (15 min)}
 
@@ -461,6 +638,26 @@ At $\gamma=0$ we get two monopolies ($q=p=9$); at $\gamma=1$, homogeneous Courno
 \item \textbf{Adding production} raises two questions: (1) \emph{what} each firm produces (which firms should produce) and (2) \emph{how much} each firm produces (the course focuses on this, using partial equilibrium for one industry). Oligopolies \textbf{underproduce} to raise price, and sometimes \textbf{the wrong (high-cost) firms produce}.
 \item \textbf{Asymmetric-cost Cournot example} ($P=120-Q$, $c_1=20$, $c_2=40$): $q_1=40$, $q_2=20$, $p=60$. Efficiently, firm 1 would make all $100$ units at $p=20$. $DWL=1200=800$ (underproduction) $+\,400$ (the wrong firm producing 20 units at $\$20$ extra cost each).
 \end{enumerate}
+
+
+\subsection*{Expected exam questions}
+\begin{examq}{efficiency and equity of a Cournot outcome}
+Using the definitions of efficiency and equity from class, evaluate the Cournot equilibrium. Is it Pareto efficient? Is it equitable? What does total surplus capture, and what does it miss?
+\soln
+\emph{Pareto efficient} means no change can make someone better off without hurting someone else. The Cournot outcome is \textbf{not} efficient: $p^c>MC$, so there are consumers willing to pay more than the cost of an extra unit who don't get it. Producing that unit and trading it at a price between WTP and MC would make both sides better off. The lost gains are the DWL. It is a NE because no single firm gains by expanding, but the firms' restraint hurts consumers. Like the Prisoner's Dilemma, NE need not be efficient. With asymmetric costs there is also productive inefficiency (high-cost firms producing).
+
+\emph{Equity} is fairness, and it has no single definition. Nothing in NE refers to it. Cournot shifts surplus from consumers to firms compared with competition, and whether that is ``fair'' needs a normative criterion: equal shares, a Rawlsian minimum, or something else.
+
+TS $=CS+PS$ measures total gains from trade, so it is the right yardstick for \emph{efficiency} (DWL $=TS^*-TS$). It counts a dollar the same no matter who receives it, so it says nothing about \emph{distribution}. It is a starting point, not the full evaluation.
+\end{examq}
+
+\begin{examq}{pure exchange vs.\ production}
+In a pure exchange market game, when is the outcome efficient, and what can prevent it? What new problems arise once firms produce the good?
+\soln
+In pure exchange, trade is voluntary, so a trade happens only if both sides gain ($WTP\ge p\ge WTS$). If there are no frictions, people keep trading until no mutually beneficial trade remains, so gains from trade are maximized. This does not need perfect competition. What gets in the way: \emph{transaction costs}, and \emph{information problems} such as crime, scams and fraud, which deter or destroy beneficial trades.
+
+With production there are two new questions: \emph{how much} each firm produces and \emph{which} firms produce. Firms with market power restrict output to raise price (underproduction, DWL), and when costs differ the wrong (high-cost) firms may produce. The course studies this with partial-equilibrium oligopoly models, Cournot being the main one.
+\end{examq}
 
 %=====================================================================
 \section{Answer templates for the guaranteed questions}
