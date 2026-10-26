@@ -15,3 +15,4 @@ totals = ["Population", "Violent crime total", "Murder and nonnegligent Manslaug
           "Robbery", "Aggravated assault", "Property crime total", "Burglary", "Larceny-theft",
           "Motor vehicle theft"] # population + the 9 crime totals, skip the rates
 us_data = full_data.groupby("Year")[totals].sum() # add up every state in each year, index is the year
+print(us_data.head())
