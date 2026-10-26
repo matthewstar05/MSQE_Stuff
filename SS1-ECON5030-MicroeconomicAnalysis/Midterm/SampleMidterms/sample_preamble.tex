@@ -1,0 +1,60 @@
+% Shared preamble for the ECON 5030 sample midterms.
+% Each wrapper file sets \soltrue (answer key) or \solfalse (exam) before \input-ing this.
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=1.15in,top=1.1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{cmap}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{comment}
+\usepackage{tikz}
+\usetikzlibrary{trees,patterns}
+
+\pagestyle{myheadings}
+\markright{}
+
+\setlist[description]{leftmargin=2.2em,labelindent=0pt,labelwidth=2em,itemsep=0.6em,font=\normalfont\bfseries}
+
+\ifsol
+  \newenvironment{solution}{\par\smallskip\noindent\textbf{Answer.} }{\par\medskip}
+\else
+  \excludecomment{solution}
+\fi
+
+\tikzset{dec/.style={circle,fill,inner sep=1.5pt}}
+
+% Two-stage game tree: #1,#2 = P1 actions; #3,#4 = P2 actions; #5-#8 = payoffs at
+% (#1,#3), (#1,#4), (#2,#3), (#2,#4).
+\newcommand{\gtree}[8]{%
+\begin{center}
+\begin{tikzpicture}[level distance=14mm, level 1/.style={sibling distance=52mm},
+  level 2/.style={sibling distance=26mm}, every node/.style={font=\small}]
+\node[dec,label=above:{P1}]{}
+  child{node[dec,label=left:{P2}]{}
+    child{node[below]{#5} edge from parent node[left]{$#3$}}
+    child{node[below]{#6} edge from parent node[right]{$#4$}}
+    edge from parent node[left]{$#1$}}
+  child{node[dec,label=right:{P2}]{}
+    child{node[below]{#7} edge from parent node[left]{$#3$}}
+    child{node[below]{#8} edge from parent node[right]{$#4$}}
+    edge from parent node[right]{$#2$}};
+\end{tikzpicture}
+\end{center}}
+
+% 2 x 4 normal-form matrix for a sequential 2x2 game. P2's strategy xy means
+% "play x after P1's first action, play y after P1's second action".
+% #1,#2 = P1 actions; #3-#6 = column labels; #7-#10 row 1 cells; #11-#14 row 2 cells.
+\newcommand{\seqmatrix}[9]{\def\smA{#1}\def\smB{#2}\def\smC{#3}\def\smD{#4}\def\smE{#5}\def\smF{#6}%
+  \def\smG{#7}\def\smH{#8}\def\smI{#9}\seqmatrixcont}
+\newcommand{\seqmatrixcont}[5]{%
+\begin{center}
+\begin{tabular}{c|cccc}
+ & $\smC$ & $\smD$ & $\smE$ & $\smF$\\ \hline
+$\smA$ & \smG & \smH & \smI & #1\\
+$\smB$ & #2 & #3 & #4 & #5
+\end{tabular}
+\end{center}}
+
+\newcommand{\bw}{\overline{\omega}}
