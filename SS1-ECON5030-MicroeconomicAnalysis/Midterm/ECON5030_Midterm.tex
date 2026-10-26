@@ -1,0 +1,136 @@
+% Transcription of the ECON 5030 midterm exam (photographed pages), typeset in the original's style.
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=1.2in,top=1.1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{enumitem}
+\usepackage{cmap}
+
+\pagestyle{myheadings}
+\markright{}
+
+\newcommand{\bw}{\overline{\omega}}
+
+\setlist[description]{leftmargin=2.2em,labelindent=0pt,labelwidth=2em,itemsep=0.6em,font=\normalfont\bfseries}
+
+\title{Midterm Exam}
+\author{Econ 511}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{myheadings}
+
+\section{Preferences}
+
+\noindent Consider an agent with preferences over $X=[0,1]\times[0,1]$ defined as follows: For all $x,x'\in X$,
+\begin{align*}
+x &\succ x' \text{ if } x_1 > x_1' \text{ and } x_1+x_2 > x_1'+x_2',\\
+x' &\succ x \text{ if } x_1 > x_1' \text{ and } x_1+x_2 > x_1'+x_2'\\
+x &\succ x' \text{if } x_1 = x_1' \text{ and } x_2 < x_2'
+\end{align*}
+
+\begin{description}
+\item[1.1] Write the definition of complete preferences clearly demonstrate that these preferences are (or are not) complete on $X$.
+\item[1.2] Write the definition of transitive preferences clearly demonstrate are (or are not) transitive on $X=\mathbb{R}^2$.
+\item[1.3] Does a utility function exist that represents these preferences on $X$. Explain.
+\end{description}
+
+\section{Game Theory}
+\subsection{Timing and Strategies}
+
+\noindent Take a simple two player game with each player having two actions. Player 1's set of actions is $\{a_1,b_1\}$. Player 2's set of actions is $\{c_2,d_2\}$. The players' payoffs over the four possible action combinations are as follows:
+\begin{align*}
+u_1(a_1,c_2) &= 45 & u_2(a_1,c_2) &= 50\\
+u_1(a_1,d_2) &= 20 & u_2(a_1,d_2) &= 45\\
+u_1(b_1,c_2) &= 50 & u_2(b_1,c_2) &= 15\\
+u_1(b_1,d_2) &= 25 & u_2(b_1,d_2) &= 25
+\end{align*}
+Suppose this is a sequential choice game in which player 1 goes first, then player 2 observes player 1's choice and makes her choice.
+
+\vspace{1.5em}
+\begin{description}
+\item[2.1] Write the Normal Form of the game.
+\item[2.2] Construct the Game matrix.
+\end{description}
+
+\newpage
+\begin{description}
+\item[2.3] Find the set of strategies the remain after iterated deletion of strictly dominated strategies.
+\item[2.4] Find the set of Nash Equilibrium.
+\item[2.5] Write the Game Tree and find the set of Subgame prefect equilibrium.
+\end{description}
+
+\subsection{Games with Different Preferences}
+
+\noindent There are two players and each player $i$ has two actions $\{R_i,Q_i\}$. The money each player $i$ receives for the different action pairs is (in a game with player $j$) is described in the matrix below (\emph{this is not the Game Matrix}):
+\[
+\begin{array}{ccc@{\qquad}c}
+ & & \multicolumn{2}{c}{P2}\\
+ & & R_2 & Q_2\\
+P1 & R_1 & \$9,\$9 & \$0,\$20\\
+ & Q_1 & \$20,\$0 & \$2,\$2
+\end{array}
+\]
+
+The game is sequential. Player 1 picks her action first and then player 2 observes the action of player 1 and player 2 picks his action. We will consider 3 cases of this game.
+
+\emph{Case 1}: Both players only care about their own money with more money being strictly better than less.
+
+\begin{description}
+\item[2.6] Create a normal form for this game. Write the game matrix and find the set of Nash Equilibrium. Draw the game tree and find the set of Subgame perfect equilibrium.
+\end{description}
+
+\emph{Case 2}: Both players care about each other in a particular way. Each player only cares about the sum of the two players' money and strictly prefers more total money to less.
+
+\begin{description}
+\item[2.7] Create a normal form for this game. Write the game matrix and find the set of Nash Equilibrium. Draw the game tree and find the set of Subgame perfect equilibrium.
+\end{description}
+
+\emph{Case 3}: There are 3 players: Player 1, Player 2a and Player 2b. Player 1 only cares about the sum of money of herself and Player 2b, with more money being strictly better. Player 2a only cares about her own money, with more money strictly better. Player 2b only cares about the sum of money of herself and Player 1, with more money being strictly better.
+
+In this case, Player 1 makes her decision without knowing for sure who she is playing. With probability $\mu\in(0,1)$ she will play against Player 2a and with probability $1-\mu$ she will play against Player 2b. The player not playing the game (2a or 2b) gets zero money no matter what happens.
+
+\newpage
+\begin{description}
+\item[2.8] You will need to be a little creative to analyze this game. Create a game tree for this game and use a form of backward induction as your solution concept. Explain clearly the difficulties you faced in finding a way to analyze the game.
+\end{description}
+
+\section{Conceptual Questions}
+
+\begin{description}
+\item[3.1] Explain clearly the idea of the Independence Axiom. Why is this the exact assumption needed for the an expected utility form representation of preferences over lotteries?
+\item[3.2] Define the Normal Form of a game. What are the two types of solution concepts we discussed in class for the Normal Form? Explain.
+\item[3.3] Lets suppose you wanted to apply game theory to better understand a military conflict (like the current conflict in the middle east). What are the difficulties for the application of game theoretic reasoning to understand such a scenario?
+\item[3.4] At this point in time, what is the most valuable new insight you learned from this course? (Anything reasonable gets you points. You can define ``valuable'' anyway you like)
+\end{description}
+
+\section{General Equilibrium Model of Exchange Economy}
+
+\noindent Consider two consumers with preferences on $X=\mathbb{R}^2_+$. The two consumers' preferences are represented by the utility functions:
+\begin{align*}
+u^1(x_1^1,x_2^1) &= \left(x_1^1\right)^{1/8}\left(x_2^1\right)^{7/8}\\
+u^2(x_1^2,x_2^2) &= \left(x_1^2\right)^{7/8}\left(x_2^2\right)^{1/8}
+\end{align*}
+Assume that prices are strictly positive $p=(p_1,p_2)\gg 0$. For now consider each consumer to have a wealth $w^i>0$.
+
+\begin{description}
+\item[4.1] Make a clear argument why we only need to consider the case that the budget constraint holds with equality (Walras' Law).
+\item[4.2] Write the Lagrangian for the two consumers' UMAX problems
+\item[4.3] Write the first order conditions (FOCs) and second order conditions (SOCs). Explain what the SOCs tell us about the solution to the problem.
+\item[4.4] Solve for the demand functions for both consumers.
+\end{description}
+
+\newpage
+Consider a market with these two consumer and two goods that is perfectly competitive. There is total endowment of each good in the economy is $\bw_1$ and $\bw_2$. Consumer 1's wealth is based on the the endowments $w^1=\lambda\bw_1+(1-\lambda)\bw_2$ and $w^2=(1-\lambda)\bw_1+\lambda\bw_2$, where the parameter $\lambda\in[0,1]$ and the total endowment of each good in the economy is $(\bw_1,\bw_2)$.
+
+\begin{description}
+\item[4.5] Write the Market Clearing Conditions (MCCs) and explain what they mean.
+\item[4.6] Explain why you must normalize a price to solve for the prices using the MCCs.
+\item[4.7] Solve the MMCs for the vector $p^*$.
+\item[4.8] Explain exactly how the prices change as the parameter $\lambda$ changes.
+\item[4.9] Explain exactly how the prices change as $(\bw_1,\bw_2)$. Give an intuition for this result.
+\end{description}
+
+\end{document}
