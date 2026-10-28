@@ -1,0 +1,26 @@
+\input{proposal_style}
+\begin{document}
+\header{Proposal 1: Large Language Models and Labor Market Signals}
+
+\section{Article, authors, journal}
+\textbf{``Labor Market Signals: The Role of Large Language Models.''} Kian Abbas Nejad, Giuseppe Musillo, Till Wicker, and Niccol\`o Zaccaria. \emph{Journal of Labor Economics} (published online October 2026). DOI: \url{https://doi.org/10.1086/744669}.
+
+\section{Replication package}
+Harvard Dataverse (JOLE): \url{https://doi.org/10.7910/DVN/LPIREO}. I downloaded the package (\nolinkurl{ChatGPT_ReplicationPackage.zip}, 2.8 MB) and confirmed that it contains the final analysis data (\nolinkurl{Data/Experiment_1/2_Final/FinalData_forAnalysis.dta} and the Experiment 2 \texttt{.dta} files), the cleaning code, and the analysis code that writes every regression table. The only data withheld (for IRB/GDPR reasons) are the raw cover-letter texts and browser histories; their numerical evaluations are included, so none of the tables below depend on them.
+
+\section{Programming language}
+\textbf{Stata.} All regression tables come from \nolinkurl{Code/2_Analysis/1_Main_Analysis_code.do} and \nolinkurl{2_App_Analysis_code.do}, run through \texttt{0MasterFile.do} (uses \texttt{reghdfe}, \texttt{estout}, \texttt{iebaltab}). The structural model is in MATLAB, and a few text-analysis figures use Python. My replication will be done entirely in R (e.g.\ \texttt{haven}, \texttt{fixest}, \texttt{modelsummary}).
+
+\section{Research question}
+The authors are trying to understand the effect of \textbf{job applicants' access to a large language model (ChatGPT)} on \textbf{the quality of their cover letters and how recruiters evaluate them}, and therefore on whether a cover letter still works as a signal of applicant quality once writing becomes nearly free.
+
+\section{Why this paper}
+Generative AI is a general-purpose technology whose marginal cost per use (per token) has collapsed, and economists are only starting to measure what that does to markets. This paper is a clean randomized experiment on one of the first markets LLMs disrupt: written job applications. If anyone can produce a polished cover letter for a fraction of a cent of compute, the letter stops separating strong from weak applicants. That is a textbook signaling problem (Spence), and the paper shows it happening in real data. It matters for hiring efficiency, for how firms will screen applicants (increasingly with their own AI agents), and for whether AI narrows or widens gaps between workers. I am interested in the economics of the LLM market, including pricing, usage intensity and competition, and this paper links usage directly to outcomes: the package even records how many ChatGPT prompts each treated applicant used, which I can relate to cover-letter quality as an extension. Because treatment is randomized, the OLS estimates have a clear causal interpretation, which makes this an ideal paper for applying the regression tools from class.
+
+\section{Summary statistics to replicate}
+\textbf{Online Appendix Table A1, ``Balance Table: Demographics'' (all columns)}: means of applicant characteristics (Dutch, GPA, English, MSc, age, economics/business degree, Tilburg University, female) for the control and ChatGPT-treatment groups, with the test of differences. This describes the sample and checks that randomization worked.
+
+\section{Main OLS result to replicate}
+\textbf{Table 1, ``Effect of ChatGPT on Cover Letter,'' columns (1)--(6).} These are OLS regressions of standardized recruiter scores (overall cover-letter score in column 1, then layout, introduction, experience, motivation and closing) on the ChatGPT treatment dummy, controlling for CV score, GPA, MSc status, age and gender, with recruiter$\times$firm and school fixed effects and standard errors clustered by applicant. The headline estimate (column 1) is a $0.222$ standard-deviation increase in the overall cover-letter score (SE $0.117$, $N=274$). This directly answers the research question in (4). Columns (7)--(8) are ordered logit/logit models, so I will focus on columns (1)--(6).
+
+\end{document}

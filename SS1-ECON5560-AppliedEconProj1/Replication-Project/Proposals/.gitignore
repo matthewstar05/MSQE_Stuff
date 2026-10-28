@@ -1,0 +1,6 @@
+# Draft replication proposals: kept local except Proposal 1 (the chosen one) and its shared preamble.
+*
+!.gitignore
+!proposal_style.tex
+!Proposal1_LLM_Labor_Market_Signals.tex
+!Proposal1_LLM_Labor_Market_Signals.pdf

@@ -1,0 +1,25 @@
+% Shared layout for the replication proposals (\input by each Proposal*.tex).
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{cmap}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\pagestyle{plain}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+\titleformat{\section}{\large\bfseries}{(\thesection)}{0.6em}{}
+\titlespacing*{\section}{0pt}{1em}{0.3em}
+\setlist[itemize]{itemsep=0.15em,topsep=0.2em}
+
+% \header{paper short title}
+\newcommand{\header}[1]{%
+  \begin{center}
+  {\Large Replication Project Part 1: Proposal}\\[0.3em]
+  {\large #1}\\[0.3em]
+  ECON 5560 \quad$\cdot$\quad Name: \rule{5cm}{0.4pt} \quad$\cdot$\quad Due 10/28
+  \end{center}\vspace{-0.5em}}
