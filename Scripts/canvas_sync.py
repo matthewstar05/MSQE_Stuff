@@ -35,14 +35,13 @@ COURSE_MAP = {
 # Browser Communication (Arc AppleScript)
 # ----------------------------------------------------------------------
 
-def ensure_canvas_tab_selected():
-    """Finds and selects the Canvas tab in Arc so background Chromium processes stay responsive."""
+def find_canvas_tab():
+    """Checks if an authenticated Canvas tab is open in Arc without focusing or selecting it."""
     applescript = '''
     tell application "Arc"
         repeat with w in windows
             repeat with t in tabs of w
                 if (URL of t) starts with "https://canvas.calpoly.edu" then
-                    tell t to select
                     return URL of t
                 end if
             end repeat
@@ -54,18 +53,17 @@ def ensure_canvas_tab_selected():
     return p.stdout.strip()
 
 def arc_eval(js_code):
-    """Executes JavaScript inside the active Canvas tab in Arc."""
+    """Executes JavaScript inside the Canvas tab in Arc completely in the background without focusing or selecting."""
     applescript = f'''
     tell application "Arc"
         repeat with w in windows
             repeat with t in tabs of w
                 if (URL of t) starts with "https://canvas.calpoly.edu" then
-                    tell t
-                        return execute javascript "{js_code}"
-                    end tell
+                    return (execute t javascript "{js_code}")
                 end if
             end repeat
         end repeat
+        return "NOT_FOUND"
     end tell
     '''
     p = subprocess.run(['osascript'], input=applescript, capture_output=True, text=True)
@@ -85,59 +83,36 @@ def canvas_api_get(endpoint):
     raw = arc_eval(escaped_js)
     try:
         parsed_str = json.loads(raw)
-        return json.loads(parsed_str)
+        if isinstance(parsed_str, str):
+            parsed_str = json.loads(parsed_str)
+        return parsed_str
     except Exception:
         return None
 
 def download_file_to(url, dest_path):
-    """Downloads a file via fetch() in the browser tab and saves it locally."""
+    """Downloads a file in a single synchronous background call without polling or tab selection."""
     print(f"  Downloading: {os.path.basename(dest_path)}...")
     dl_js = f"""(() => {{
-        window._dl_status = 'DOWNLOADING';
-        window._dl_b64 = '';
-        fetch('{url}')
-            .then(r => {{
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return r.blob();
-            }})
-            .then(blob => {{
-                const reader = new FileReader();
-                reader.onloadend = () => {{
-                    window._dl_b64 = reader.result.split(',')[1];
-                    window._dl_status = 'DONE';
-                }};
-                reader.readAsDataURL(blob);
-            }})
-            .catch(err => {{
-                window._dl_status = 'ERROR: ' + err;
-            }});
-        return 'STARTED';
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '{url}', false);
+        xhr.overrideMimeType('text/plain; charset=x-user-defined');
+        xhr.send(null);
+        if (xhr.status !== 200) return 'ERROR:' + xhr.status;
+        const bin = xhr.responseText;
+        let binary = '';
+        for (let i = 0; i < bin.length; i++) {{
+            binary += String.fromCharCode(bin.charCodeAt(i) & 0xff);
+        }}
+        return btoa(binary);
     }})()"""
     escaped_dl_js = dl_js.replace('\\', '\\\\').replace('"', '\\"').replace('\n', ' ')
-    arc_eval(escaped_dl_js)
+    raw = arc_eval(escaped_dl_js)
+    if raw.startswith('"') and raw.endswith('"'):
+        raw = raw[1:-1]
+    if raw.startswith('ERROR:') or raw == 'NOT_FOUND':
+        raise RuntimeError(f"Download failed for {url}: {raw}")
 
-    for _ in range(180):
-        time.sleep(0.4)
-        st = arc_eval("window._dl_status")
-        if st == '"DONE"':
-            break
-        elif "ERROR" in st:
-            raise RuntimeError(f"Download failed: {st}")
-    else:
-        raise TimeoutError(f"Download timed out for {url}")
-
-    total_len = int(json.loads(arc_eval("window._dl_b64.length")))
-    chunk_size = 500000
-    b64_chunks = []
-    offset = 0
-    while offset < total_len:
-        slice_js = f"window._dl_b64.slice({offset}, {offset + chunk_size})"
-        raw_chunk = arc_eval(slice_js)
-        b64_chunks.append(json.loads(raw_chunk))
-        offset += chunk_size
-
-    full_b64 = "".join(b64_chunks)
-    data = base64.b64decode(full_b64)
+    data = base64.b64decode(raw)
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, "wb") as f:
         f.write(data)
@@ -247,8 +222,8 @@ def run_sync(dry_run=False, push=False):
     print("MSQE Canvas Routine: Starting course differential sync")
     print("=" * 60)
 
-    # 1. Verify Canvas tab in Arc
-    tab_status = ensure_canvas_tab_selected()
+    # 1. Verify Canvas tab in Arc (completely in background, never select/focus)
+    tab_status = find_canvas_tab()
     if "NOT_FOUND" in tab_status:
         print("[ERROR] Canvas tab is not currently open or logged in within Arc.")
         print("Please ensure https://canvas.calpoly.edu is loaded in an Arc tab.")
