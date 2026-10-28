@@ -1,0 +1,70 @@
+% Transcription of the scanned handout "Replication Project Part 1 Proposal, Due 1028.pdf", typeset in the original's style.
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=1in,top=0.8in,bottom=0.8in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{cmap}
+\usepackage{enumitem}
+\usepackage{titlesec}
+
+\pagestyle{plain}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\titleformat*{\section}{\Large\bfseries}
+\titlespacing*{\section}{0pt}{0.9em}{0.3em}
+\setlist[enumerate]{label=(\arabic*),leftmargin=2.4em,itemsep=0.2em,topsep=0.2em}
+\newcommand{\blank}{\rule[-0.2ex]{2.5em}{0.4pt}}
+
+\title{Replication Project Part 1: Proposal, Due 10/28}
+\date{}
+\author{}
+
+\begin{document}
+\vspace*{-4em}
+{\let\newpage\relax\maketitle}
+\vspace*{-3em}
+
+This is the first part of the replication project for ECON 5021. At the end of the semester, you will give a 5-minute presentation of your project and field 3 minutes of questions from me and your classmates.
+
+For the replication project, you need to identify an economics paper whose results can be replicated. You will need to download the data and work through the analysis presented in the paper.
+
+You should focus on papers that use \textbf{ordinary least squares} so that you can demonstrate your understanding of how to apply the tools we have covered in this class.
+
+\section*{Where to Find Papers That Can Be Replicated}
+
+It is now standard practice for economics journals to require authors to make replication packages publicly available, including the data and code needed to reproduce their published results. You should focus on papers that provide a replication package, including the data, rather than trying to recreate the data from the original sources.
+
+There are two main places to look for papers with publicly available replication packages:
+\begin{enumerate}
+\item Most economics journals require authors to submit replication packages, which you can find directly on the journal's website.
+\item One particularly good source is openICPSR, which hosts replication packages from multiple journals. Look for projects with titles beginning with ``Replication Code for:''.
+\end{enumerate}
+
+\section*{What Defines a Suitable Paper to Replicate?}
+
+Here is what you should look for:
+\begin{enumerate}
+\item An economics topic that interests you and that you can convincingly argue is important to study.
+\item The paper must be \emph{published} in an \emph{economics journal}.
+\item At least part of the paper's main results must be estimated using ordinary least squares. These are the results you will focus on in your replication and presentation, even if the authors eventually go on to use more sophisticated methods.
+\item Check that the data are publicly available. Sometimes the data have restricted access, making it impossible to obtain them immediately for replication.
+\item It is up to you whether you want to pursue papers that require significant data cleaning or merging multiple datasets to build the estimation sample. I am fine with you relying on AI tools to help understand how to use the provided code to construct the estimation sample. Furthermore, you do not need to replicate the paper's results exactly, so there may be some shortcuts in building the data that get you very close to the authors' analysis.
+\item Because your replication will be in R, the original replication package \emph{must not} use R (this is not a copy-and-paste exercise). Look for papers with replication code written in Stata or another programming language.
+\item You cannot choose a paper that has already been selected by another student.
+\end{enumerate}
+
+\newpage
+\section*{What to Include in Your Proposal}
+
+You will submit your proposal on Canvas. Your proposal must include the following:
+\begin{enumerate}
+\item The title of the journal article, the authors, and the journal in which it was published.
+\item Provide a link to the replication package and confirm that you can download the data and code needed to replicate the results.
+\item Identify the programming language used in the original replication package (e.g., Stata, Python, MATLAB). Recall that your replication must be completed in R.
+\item State the main research question the authors are trying to answer. For example, the authors are trying to understand the effect of \blank{} on \blank.
+\item Justify why you chose this paper, including why it interests you and how it addresses an important issue. If you provide a weak justification or choose a paper already selected by another student, I will ask you to submit a new proposal.
+\item Identify a set of summary statistics presented in the paper that you intend to replicate, including the table and column numbers.
+\item Identify a main result from an OLS regression that you intend to replicate, including the table and column numbers. This regression should address the research question you identified in (4).
+\end{enumerate}
+
+\end{document}
