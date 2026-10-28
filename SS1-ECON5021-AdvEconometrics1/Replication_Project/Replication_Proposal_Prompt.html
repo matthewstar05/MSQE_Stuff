@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECON 5021: Replication Proposal Instructions & Prompt</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #24292e;
+      background-color: #fafbfc;
+      margin: 0;
+      padding: 2rem 1rem;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 2.5rem 3rem;
+      border: 1px solid #e1e4e8;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    h1 {
+      font-size: 1.85rem;
+      border-bottom: 2px solid #eaecef;
+      padding-bottom: 0.5rem;
+      margin-top: 0;
+      color: #154734;
+    }
+    h2, h3, h4 {
+      color: #24292e;
+      margin-top: 1.5rem;
+    }
+    .meta-box {
+      background: #f6f8fa;
+      border-left: 4px solid #154734;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+    .meta-box ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+    code {
+      background-color: rgba(27,31,35,0.05);
+      border-radius: 3px;
+      font-size: 85%;
+      padding: 0.2em 0.4em;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+    pre {
+      background-color: #f6f8fa;
+      border-radius: 6px;
+      font-size: 85%;
+      line-height: 1.45;
+      overflow: auto;
+      padding: 16px;
+    }
+    pre code {
+      background-color: transparent;
+      padding: 0;
+    }
+    blockquote {
+      border-left: 0.25em solid #dfe2e5;
+      color: #6a737d;
+      padding: 0 1em;
+      margin: 1em 0;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1rem 0;
+    }
+    table th, table td {
+      border: 1px solid #dfe2e5;
+      padding: 6px 13px;
+    }
+    table tr:nth-child(2n) {
+      background-color: #f6f8fa;
+    }
+    a {
+      color: #0366d6;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ECON 5021: Replication Proposal Instructions & Prompt</h1>
+    <div class="meta-box"><ul><li><strong>Course:</strong> ECON 5021: Advanced Econometrics I</li><li><strong>Assignment:</strong> Replication Proposal</li><li><strong>Last Updated:</strong> 2026-10-28T15:50:25Z</li></ul></div>
+    <div class="content">
+      <p>This is the first part of the replication project for ECON 5021. At the end of the semester, you will give a 5-minute presentation of your project and field 3 minutes of questions from me and your classmates.</p>
+<p>For the replication project, you need to identify an economics paper whose results can be replicated. You will need to download the data and work through the analysis presented in the paper.</p>
+<p>You should focus on papers that use <strong>ordinary least squares</strong> so that you can demonstrate your understanding of how to apply the tools we have covered in this class.</p>
+<div id="where-to-find-papers-that-can-be-replicated" class="section level1">
+<h1>Where to Find Papers That Can Be Replicated</h1>
+<p>It is now standard practice for economics journals to require authors to make replication packages publicly available, including the data and code needed to reproduce their published results. You should focus on papers that provide a replication package, including the data, rather than trying to recreate the data from the original sources.</p>
+<p>There are two main places to look for papers with publicly available replication packages:</p>
+<ol style="list-style-type: decimal;">
+<li>
+<p>Most economics journals require authors to submit replication packages, which you can find directly on the journal’s website.</p>
+</li>
+<li>
+<p>One particularly good source is <a href="https://www.openicpsr.org/openicpsr/">openICPSR</a>, which hosts replication packages from multiple journals. Look for projects with titles beginning with “Replication Code for:”.</p>
+</li>
+</ol>
+</div>
+<div id="what-defines-a-suitable-paper-to-replicate" class="section level1">
+<h1>What Defines a Suitable Paper to Replicate?</h1>
+<p>Here is what you should look for:</p>
+<ol style="list-style-type: decimal;">
+<li>
+<p>An economics topic that interests you and that you can convincingly argue is important to study.</p>
+</li>
+<li>
+<p>The paper must be <em>published</em> in an <em>economics journal</em>.</p>
+</li>
+<li>
+<p>At least part of the paper’s main results must be estimated using ordinary least squares. These are the results you will focus on in your replication and presentation, even if the authors eventually go on to use more sophisticated methods.</p>
+</li>
+<li>
+<p>Check that the data are publicly available. Sometimes the data have restricted access, making it impossible to obtain them immediately for replication.</p>
+</li>
+<li>
+<p>It is up to you whether you want to pursue papers that require significant data cleaning or merging multiple datasets to build the estimation sample. I am fine with you relying on AI tools to help understand how to use the provided code to construct the estimation sample. Furthermore, you do not need to replicate the paper’s results exactly, so there may be some shortcuts in building the data that get you very close to the authors’ analysis.</p>
+</li>
+<li>
+<p>Because your replication will be in R, the original replication package <em>must not</em> use R (this is not a copy-and-paste exercise). Look for papers with replication code written in Stata or another programming language.</p>
+</li>
+<li>
+<p>You cannot choose a paper that has already been selected by another student.</p>
+</li>
+</ol>
+</div>
+<div id="what-to-include-in-your-proposal" class="section level1">
+<h1>What to Include in Your Proposal</h1>
+<p>You will submit your proposal on Canvas. Your proposal must include the following:</p>
+<ol style="list-style-type: decimal;">
+<li>
+<p>The title of the journal article, the authors, and the journal in which it was published.</p>
+</li>
+<li>
+<p>Provide a link to the replication package and confirm that you can download the data and code needed to replicate the results.</p>
+</li>
+<li>
+<p>Identify the programming language used in the original replication package (e.g., Stata, Python, MATLAB). Recall that your replication must be completed in R.</p>
+</li>
+<li>
+<p>State the main research question the authors are trying to answer. For example, the authors are trying to understand the effect of ___ on ___.</p>
+</li>
+<li>
+<p>Justify why you chose this paper, including why it interests you and how it addresses an important issue. If you provide a weak justification or choose a paper already selected by another student, I will ask you to submit a new proposal.</p>
+</li>
+<li>
+<p>Identify a set of summary statistics presented in the paper that you intend to replicate, including the table and column numbers.</p>
+</li>
+<li>
+<p>Identify a main result from an OLS regression that you intend to replicate, including the table and column numbers. This regression should address the research question you identified in (4).</p>
+</li>
+</ol>
+</div>
+    </div>
+  </div>
+</body>
+</html>

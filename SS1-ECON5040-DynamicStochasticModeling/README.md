@@ -8,7 +8,7 @@
 | [Lecture_Notes/](Lecture_Notes/) | Lectures grouped by instructional week and topic. |
 | [In_Class_Notebooks/](In_Class_Notebooks/) | Class examples, notebook experiments, and related scripts grouped by week. |
 | [ProblemSets/](ProblemSets/) | Assignment prompts, starter notebooks, answer keys, and student submissions grouped by problem-set number. |
-| [Exams/Midterm/](Exams/Midterm/) | Midterm study guide. |
+| [Exams/Midterm/](Exams/Midterm/) | Midterm study guide and official exam answer key. |
 | [Final_Project/](Final_Project/) | Project instructions, starter notebook, and SIR model example. |
 | [Readings/](Readings/) | McCall (1970) and COVID lockdown readings. |
 | [Resources/](Resources/) | [Python reference notebooks](Resources/Python/), [command-line and Python/R tutorials](Resources/Tutorials/), and the grading prompt; see the [resource index](Resources/README.md). |
@@ -26,6 +26,8 @@
 | [ProblemSet7/](ProblemSets/ProblemSet7/) | Optimal savings. |
 | [ProblemSet8/](ProblemSets/ProblemSet8/) | Income fluctuations. |
 | [ProblemSet9/](ProblemSets/ProblemSet9/) | Asset pricing in a Markov economy. |
+| [ProblemSet10/](ProblemSets/ProblemSet10/) | Lucas Tree and risk-free rates. |
+| [ProblemSet11/](ProblemSets/ProblemSet11/) | Complete markets and risk sharing. |
 
 Existing `Submission/` folders moved with their corresponding problem sets. `PS1_Starter_Working.ipynb` retains the earlier working version alongside the instructor starter. `pwt110.xlsx` stays beside the Problem Set 6 notebook that reads it.
 

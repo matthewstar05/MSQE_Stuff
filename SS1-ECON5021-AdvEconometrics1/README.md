@@ -10,5 +10,6 @@
 | [Exercises/Short_Answers/](Exercises/Short_Answers/) | Lecture 2-4 and 8-10 short-answer question sets and paired solutions; see the [exercise index](Exercises/Short_Answers/README.md). |
 | [Scripts/](Scripts/) | R class work, simulations, exam scratch work, and FRED examples. |
 | [Exam1/](Exam1/) | Exam 1 preparation, practice exams, and solution scripts. |
+| [Replication_Project/](Replication_Project/) | Replication project instructions, proposal guidelines, and assignment prompt. |
 
 The course RStudio project remains at `SS1-ECON5021-AdvEconometrics1.Rproj`. The separate Exam 1 RStudio project remains inside `Exam1/`.

@@ -187,11 +187,13 @@ def target_dest_for_file(course_folder, filename, source):
     src_lower = source.lower()
 
     if course_folder == "SS1-ECON5015-ComputingMLEcon":
+        if "chinook" in fn_lower or "sql" in fn_lower or "db_2025" in fn_lower:
+            return os.path.join(REPO_ROOT, course_folder, "Homeworks", "Homework10_DatabasesSQL", filename)
         if fn_lower.endswith('.ipynb') or fn_lower.endswith('.html'):
             return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", filename)
         if "world bank" in fn_lower or "api" in fn_lower:
             return os.path.join(REPO_ROOT, course_folder, "Homeworks", "Homework9_WorldBankAPI", filename)
-        if fn_lower.endswith('.pptx'):
+        if fn_lower.endswith('.pptx') or "database" in fn_lower:
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", filename)
         if "hw" in fn_lower or "assignment" in fn_lower:
             return os.path.join(REPO_ROOT, course_folder, "Homeworks", filename)
@@ -219,6 +221,14 @@ def target_dest_for_file(course_folder, filename, source):
     elif course_folder == "SS1-ECON5040-DynamicStochasticModeling":
         if "final" in src_lower or "final" in fn_lower:
             return os.path.join(REPO_ROOT, course_folder, "Exams", "Final", filename)
+        if "midterm" in fn_lower and "key" in fn_lower:
+            return os.path.join(REPO_ROOT, course_folder, "Exams", "Midterm", filename)
+        if "week12_problem_set" in fn_lower or "ps11" in fn_lower:
+            return os.path.join(REPO_ROOT, course_folder, "ProblemSets", "ProblemSet11", filename)
+        if "complete_markets" in fn_lower or "arrow_securities" in fn_lower or "week12" in fn_lower:
+            return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", "Week12_Complete_Markets", filename)
+        if "income_substitution" in fn_lower:
+            return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", "Week1_Intertemporal_Choice", filename)
         if fn_lower.endswith('.ipynb'):
             return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", filename)
         return os.path.join(REPO_ROOT, course_folder, "Readings", filename)
@@ -351,7 +361,8 @@ def run_sync(dry_run=False, push=False):
 
             if matched_local:
                 # If notebook or code was executed locally, size differences are normal — skip overwriting
-                continue
+                if filename.lower().endswith(('.ipynb', '.py')) or matched_local["size"] == canvas_size:
+                    continue
 
             # Skip small non-document announcement icons
             if filename.lower() in ['image.png', 'images.jpeg'] and canvas_size < 500000 and "announcement" in finfo["source"].lower():
