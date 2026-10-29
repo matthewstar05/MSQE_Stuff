@@ -194,6 +194,8 @@ def target_dest_for_file(course_folder, filename, source):
         return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", filename)
 
     elif course_folder == "SS1-ECON5040-DynamicStochasticModeling":
+        if "prelim" in fn_lower:
+            return os.path.join(REPO_ROOT, course_folder, "Exams", "Prelim", filename)
         if "final" in src_lower or "final" in fn_lower:
             return os.path.join(REPO_ROOT, course_folder, "Exams", "Final", filename)
         if "midterm" in fn_lower and "key" in fn_lower:
@@ -242,12 +244,17 @@ def run_sync(dry_run=False, push=False):
 
     local_by_folder = {}
     for rel_path, finfo in local_inv.items():
-        parts = rel_path.split(os.sep)
-        folder = parts[0]
-        local_by_folder.setdefault(folder, []).append(finfo)
+        matched_fld = None
+        for fld in COURSE_MAP.values():
+            if rel_path.startswith(fld + os.sep) or rel_path == fld:
+                matched_fld = fld
+                break
+        if not matched_fld:
+            matched_fld = rel_path.split(os.sep)[0]
+        local_by_folder.setdefault(matched_fld, []).append(finfo)
 
     # 3. Scan each course
-    differentials = [] # list of (url, dest_path, file_meta)
+    differentials = [] # list of (url, dest_path, file_meta, folder)
     
     for cid, folder in COURSE_MAP.items():
         print(f"\nScanning {folder} (ID: {cid})...")
@@ -271,13 +278,13 @@ def run_sync(dry_run=False, push=False):
                     fid = item.get('content_id')
                     title = item.get('title')
                     if itype == 'File' and fid and str(fid) not in course_files:
-                        course_files[str(fid)] = {"source": f"module:{m_name}", "title": title}
+                        course_files[str(fid)] = {"source": f"module:{m_name}", "title": title, "meta": None}
                     elif itype == 'Page' and item.get('page_url'):
                         p = canvas_api_get(f'/api/v1/courses/{cid}/pages/{item.get("page_url")}')
                         if isinstance(p, dict):
                             for pfid in extract_file_ids_from_html(p.get('body', '')):
                                 if str(pfid) not in course_files:
-                                    course_files[str(pfid)] = {"source": f"page:{m_name}/{title}", "title": None}
+                                    course_files[str(pfid)] = {"source": f"page:{m_name}/{title}", "title": None, "meta": None}
 
         # Assignments
         assignments = canvas_api_get(f'/api/v1/courses/{cid}/assignments?per_page=100')
@@ -285,7 +292,7 @@ def run_sync(dry_run=False, push=False):
             for a in assignments:
                 for fid in extract_file_ids_from_html(a.get('description', '')):
                     if str(fid) not in course_files:
-                        course_files[str(fid)] = {"source": f"assignment:{a.get('name')}", "title": None}
+                        course_files[str(fid)] = {"source": f"assignment:{a.get('name')}", "title": None, "meta": None}
 
         # Announcements
         announcements = canvas_api_get(f'/api/v1/courses/{cid}/discussion_topics?only_announcements=true&per_page=50')
@@ -293,7 +300,7 @@ def run_sync(dry_run=False, push=False):
             for ann in announcements:
                 for fid in extract_file_ids_from_html(ann.get('message', '')):
                     if str(fid) not in course_files:
-                        course_files[str(fid)] = {"source": f"announcement:{ann.get('title')}", "title": None}
+                        course_files[str(fid)] = {"source": f"announcement:{ann.get('title')}", "title": None, "meta": None}
                 for att in ann.get('attachments', []):
                     fid = att.get('id')
                     if fid and str(fid) not in course_files:
@@ -304,43 +311,84 @@ def run_sync(dry_run=False, push=False):
         if isinstance(c_info, dict) and c_info.get('syllabus_body'):
             for fid in extract_file_ids_from_html(c_info.get('syllabus_body')):
                 if str(fid) not in course_files:
-                    course_files[str(fid)] = {"source": "syllabus", "title": None}
+                    course_files[str(fid)] = {"source": "syllabus", "title": None, "meta": None}
 
-        # Resolve metadata
+        # Resolve metadata efficiently
         local_files = local_by_folder.get(folder, [])
         local_filenames_lower = {item["filename"].lower(): item for item in local_files}
+        local_sizes = {item["size"]: item for item in local_files}
+
+        # Fast-path: only resolve files that do not directly match an existing local filename
+        unresolved_fids = []
+        for fid, finfo in course_files.items():
+            if finfo.get("meta"):
+                continue
+            title = finfo.get("title")
+            if title and title.lower() in local_filenames_lower:
+                continue
+            unresolved_fids.append(fid)
+
+        # Batch resolve metadata in browser context (chunks of 25)
+        if unresolved_fids:
+            chunk_size = 25
+            for i in range(0, len(unresolved_fids), chunk_size):
+                chunk = unresolved_fids[i:i+chunk_size]
+                batch_js = f"""(() => {{
+                    const fids = {json.dumps(chunk)};
+                    const out = {{}};
+                    for (const id of fids) {{
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('GET', '/api/v1/files/' + id, false);
+                        xhr.send(null);
+                        if (xhr.status === 200) {{
+                            try {{ out[id] = JSON.parse(xhr.responseText); }} catch(e) {{}}
+                        }}
+                    }}
+                    return JSON.stringify(out);
+                }})()"""
+                escaped_batch_js = batch_js.replace('\\', '\\\\').replace('"', '\\"').replace('\n', ' ')
+                raw_res = arc_eval(escaped_batch_js)
+                try:
+                    batch_data = json.loads(raw_res)
+                    if isinstance(batch_data, str):
+                        batch_data = json.loads(batch_data)
+                    for id_str, m in batch_data.items():
+                        if id_str in course_files:
+                            course_files[id_str]["meta"] = m
+                except Exception:
+                    pass
 
         for fid, finfo in course_files.items():
             meta = finfo.get("meta")
-            if not meta or not meta.get("url"):
-                meta = canvas_api_get(f'/api/v1/courses/{cid}/files/{fid}')
-                if not isinstance(meta, dict) or not meta.get("url"):
-                    meta = canvas_api_get(f'/api/v1/files/{fid}')
-                finfo["meta"] = meta if isinstance(meta, dict) and meta.get("url") else None
-
-            meta = finfo.get("meta")
-            if not meta or not meta.get("url"):
+            title = finfo.get("title")
+            filename = (meta.get("display_name") or meta.get("filename")) if meta else title
+            if not filename:
                 continue
-
-            filename = meta.get("display_name") or meta.get("filename")
-            canvas_size = meta.get("size")
-            canvas_url = meta.get("url")
+            canvas_size = meta.get("size") if meta else None
+            canvas_url = meta.get("url") if meta else None
 
             # Check if file exists locally by filename or exact byte size
             matched_local = local_filenames_lower.get(filename.lower())
             if not matched_local and canvas_size and canvas_size > 5000:
                 # Avoid re-downloading files that were simply renamed locally
-                local_sizes = {item["size"]: item for item in local_files}
                 if canvas_size in local_sizes:
                     matched_local = local_sizes[canvas_size]
 
             if matched_local:
                 # If notebook or code was executed locally, size differences are normal — skip overwriting
-                if filename.lower().endswith(('.ipynb', '.py')) or matched_local["size"] == canvas_size:
+                if filename.lower().endswith(('.ipynb', '.py')) or (canvas_size and matched_local["size"] == canvas_size) or canvas_size is None:
+                    continue
+                # If size differs on a non-code file (e.g. updated prelim/syllabus), update it!
+                if canvas_size and matched_local["size"] != canvas_size:
+                    if canvas_url:
+                        differentials.append((canvas_url, matched_local["full_path"], meta, folder))
                     continue
 
             # Skip small non-document announcement icons
-            if filename.lower() in ['image.png', 'images.jpeg'] and canvas_size < 500000 and "announcement" in finfo["source"].lower():
+            if filename.lower() in ['image.png', 'images.jpeg'] and canvas_size and canvas_size < 500000 and "announcement" in finfo["source"].lower():
+                continue
+
+            if not canvas_url:
                 continue
 
             dest_path = target_dest_for_file(folder, filename, finfo["source"])
