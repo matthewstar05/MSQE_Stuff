@@ -5,7 +5,7 @@ Matthew Suban
 """
 import sqlite3
 from pathlib import Path
-
+from numpy import true_divide
 import pandas as pd
 
 db_path = Path(__file__).resolve().parent / "chinook.db"
@@ -21,8 +21,11 @@ d3 = pd.read_sql_query("select AlbumId, sum(Milliseconds)/60000.0 as Minutes fro
 # 4. same as 3 but only albums 60 minutes or longer, longest first
 d4 = pd.read_sql_query("select AlbumId, sum(Milliseconds)/60000.0 as Minutes from Track group by AlbumId having Minutes >= 60 order by Minutes desc;", con)
 
-print(d1)
-print(d2)
-print(d3)
-print(d4)
+output = True
+if output:
+    print(d1)
+    print(d2)
+    print(d3)
+    print(d4)
+    
 con.close()

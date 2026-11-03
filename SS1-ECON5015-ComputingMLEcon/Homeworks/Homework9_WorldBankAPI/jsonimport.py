@@ -6,12 +6,11 @@ Matthew Suban
 import requests
 import pandas as pd
 
-# imports the world bank data for one indicator code and year (all countries)
-# and returns it as a data frame, one row per country in the same order as the json
+# imports the world bank data for
 def jsonimport(code, year):
     url = "https://api.worldbank.org/v2/country/all/indicator/" + code + "?format=json&date=" + str(year)
     output = requests.get(url).json()
-    pages = output[0]["pages"] # first dictionary says how many pages there are
+    pages = output[0]["pages"] # check first dict for page count
 
     df = pd.DataFrame()
     for p in range(1, pages + 1):
