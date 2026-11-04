@@ -36,40 +36,77 @@ COURSE_MAP = {
 # ----------------------------------------------------------------------
 
 def find_canvas_tab():
-    """Checks if an authenticated Canvas tab is open in Arc without focusing or selecting it."""
+    """Checks if an authenticated Canvas tab is open in Arc without focusing or selecting if already active."""
     applescript = '''
     tell application "Arc"
+        try
+            if (URL of active tab of front window) starts with "https://canvas.calpoly.edu" then
+                return (URL of active tab of front window)
+            end if
+        end try
+        repeat with w in windows
+            try
+                if (URL of active tab of w) starts with "https://canvas.calpoly.edu" then
+                    return (URL of active tab of w)
+                end if
+            end try
+        end repeat
         repeat with w in windows
             repeat with t in tabs of w
-                if (URL of t) starts with "https://canvas.calpoly.edu" then
-                    return URL of t
-                end if
+                try
+                    if (URL of t) starts with "https://canvas.calpoly.edu" then
+                        return (URL of t)
+                    end if
+                end try
             end repeat
         end repeat
         return "NOT_FOUND"
     end tell
     '''
-    p = subprocess.run(['osascript'], input=applescript, capture_output=True, text=True)
+    p = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True)
     return p.stdout.strip()
 
 def arc_eval(js_code):
-    """Executes JavaScript inside the Canvas tab in Arc completely in the background without focusing or selecting."""
+    """Executes JavaScript inside an authenticated Canvas tab in Arc."""
+    escaped_js = js_code.replace('\\', '\\\\').replace('"', '\\"').replace('\n', ' ')
     applescript = f'''
     tell application "Arc"
+        try
+            if (URL of active tab of front window) starts with "https://canvas.calpoly.edu" then
+                return (execute active tab of front window javascript "{escaped_js}")
+            end if
+        end try
+        repeat with w in windows
+            try
+                if (URL of active tab of w) starts with "https://canvas.calpoly.edu" then
+                    return (execute active tab of w javascript "{escaped_js}")
+                end if
+            end try
+        end repeat
         repeat with w in windows
             repeat with t in tabs of w
-                if (URL of t) starts with "https://canvas.calpoly.edu" then
-                    return (execute t javascript "{js_code}")
-                end if
+                try
+                    if (URL of t) starts with "https://canvas.calpoly.edu" then
+                        select t
+                        delay 0.2
+                        return (execute t javascript "{escaped_js}")
+                    end if
+                end try
             end repeat
         end repeat
         return "NOT_FOUND"
     end tell
     '''
-    p = subprocess.run(['osascript'], input=applescript, capture_output=True, text=True)
+    p = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True)
     if p.returncode != 0:
         raise RuntimeError(f"AppleScript error: {p.stderr.strip()}")
-    return p.stdout.strip()
+    res = p.stdout.strip()
+    if res.startswith('"') and res.endswith('"'):
+        try:
+            res = json.loads(res)
+        except Exception:
+            pass
+    return res
 
 def canvas_api_get(endpoint):
     """Calls Canvas API synchronously using XMLHttpRequest within the browser context."""
@@ -79,18 +116,19 @@ def canvas_api_get(endpoint):
         xhr.send(null);
         return xhr.responseText;
     }})()"""
-    escaped_js = js.replace('\\', '\\\\').replace('"', '\\"').replace('\n', ' ')
-    raw = arc_eval(escaped_js)
+    raw = arc_eval(js)
+    if not raw or raw == 'NOT_FOUND':
+        return None
     try:
-        parsed_str = json.loads(raw)
-        if isinstance(parsed_str, str):
-            parsed_str = json.loads(parsed_str)
-        return parsed_str
+        parsed = json.loads(raw)
+        if isinstance(parsed, str):
+            parsed = json.loads(parsed)
+        return parsed
     except Exception:
         return None
 
 def download_file_to(url, dest_path):
-    """Downloads a file in a single synchronous background call without polling or tab selection."""
+    """Downloads a file in a single synchronous background call using fast base64 encoding."""
     print(f"  Downloading: {os.path.basename(dest_path)}...")
     dl_js = f"""(() => {{
         const xhr = new XMLHttpRequest();
@@ -99,17 +137,31 @@ def download_file_to(url, dest_path):
         xhr.send(null);
         if (xhr.status !== 200) return 'ERROR:' + xhr.status;
         const bin = xhr.responseText;
-        let binary = '';
-        for (let i = 0; i < bin.length; i++) {{
-            binary += String.fromCharCode(bin.charCodeAt(i) & 0xff);
+        const len = bin.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) bytes[i] = bin.charCodeAt(i) & 0xff;
+        
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+        let out = '';
+        const extra = len % 3;
+        const main = len - extra;
+        for (let i = 0; i < main; i += 3) {{
+            const b0 = bytes[i], b1 = bytes[i+1], b2 = bytes[i+2];
+            out += chars[b0 >> 2] + chars[((b0 & 3) << 4) | (b1 >> 4)] + chars[((b1 & 15) << 2) | (b2 >> 6)] + chars[b2 & 63];
         }}
-        return btoa(binary);
+        if (extra === 1) {{
+            const b0 = bytes[main];
+            out += chars[b0 >> 2] + chars[(b0 & 3) << 4] + '==';
+        }} else if (extra === 2) {{
+            const b0 = bytes[main], b1 = bytes[main+1];
+            out += chars[b0 >> 2] + chars[((b0 & 3) << 4) | (b1 >> 4)] + chars[(b1 & 15) << 2] + '=';
+        }}
+        return out;
     }})()"""
-    escaped_dl_js = dl_js.replace('\\', '\\\\').replace('"', '\\"').replace('\n', ' ')
-    raw = arc_eval(escaped_dl_js)
-    if raw.startswith('"') and raw.endswith('"'):
+    raw = arc_eval(dl_js)
+    if isinstance(raw, str) and raw.startswith('"') and raw.endswith('"'):
         raw = raw[1:-1]
-    if raw.startswith('ERROR:') or raw == 'NOT_FOUND':
+    if not isinstance(raw, str) or raw.startswith('ERROR:') or raw == 'NOT_FOUND':
         raise RuntimeError(f"Download failed for {url}: {raw}")
 
     data = base64.b64decode(raw)
@@ -162,14 +214,18 @@ def target_dest_for_file(course_folder, filename, source):
     src_lower = source.lower()
 
     if course_folder == "SS1-ECON5015-ComputingMLEcon":
-        if "chinook" in fn_lower or "sql" in fn_lower or "db_2025" in fn_lower:
+        if "chinook" in fn_lower or "sql" in fn_lower or "db_2025" in fn_lower or "northwind" in fn_lower:
             return os.path.join(REPO_ROOT, course_folder, "Homeworks", "Homework10_DatabasesSQL", filename)
-        if fn_lower.endswith('.ipynb') or fn_lower.endswith('.html'):
+        if fn_lower.endswith(('.ipynb', '.html')):
             return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", filename)
+        if fn_lower.endswith('.py'):
+            return os.path.join(REPO_ROOT, course_folder, "Scripts", filename)
         if "world bank" in fn_lower or "api" in fn_lower:
             return os.path.join(REPO_ROOT, course_folder, "Homeworks", "Homework9_WorldBankAPI", filename)
-        if fn_lower.endswith('.pptx') or "database" in fn_lower:
+        if fn_lower.endswith(('.pptx', '.pdf')) or "statistical learning" in fn_lower or "model_selection" in fn_lower or "database" in fn_lower:
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", filename)
+        if fn_lower.endswith('.csv'):
+            return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", filename)
         if "hw" in fn_lower or "assignment" in fn_lower:
             return os.path.join(REPO_ROOT, course_folder, "Homeworks", filename)
         return os.path.join(REPO_ROOT, course_folder, "Resources", filename)
@@ -182,8 +238,10 @@ def target_dest_for_file(course_folder, filename, source):
     elif course_folder == "SS1-ECON5021-AdvEconometrics1":
         if "proposal" in fn_lower or "replication" in fn_lower or "replication" in src_lower:
             return os.path.join(REPO_ROOT, course_folder, "Replication_Project", filename)
-        if fn_lower.endswith('.pdf') and "lecture" in fn_lower:
+        if fn_lower.endswith('.pdf') and ("lecture" in fn_lower or "note" in fn_lower):
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", filename)
+        if "syllabus" in fn_lower:
+            return os.path.join(REPO_ROOT, course_folder, "Course_Info", filename)
         return os.path.join(REPO_ROOT, course_folder, "Exercises", filename)
 
     elif course_folder == "SS1-ECON5030-MicroeconomicAnalysis":
@@ -198,14 +256,15 @@ def target_dest_for_file(course_folder, filename, source):
             return os.path.join(REPO_ROOT, course_folder, "Exams", "Prelim", filename)
         if "final" in src_lower or "final" in fn_lower:
             return os.path.join(REPO_ROOT, course_folder, "Exams", "Final", filename)
-        if "midterm" in fn_lower and "key" in fn_lower:
-            return os.path.join(REPO_ROOT, course_folder, "Exams", "Midterm", filename)
-        if "week12_problem_set" in fn_lower or "ps11" in fn_lower:
-            return os.path.join(REPO_ROOT, course_folder, "ProblemSets", "ProblemSet11", filename)
-        if "complete_markets" in fn_lower or "arrow_securities" in fn_lower or "week12" in fn_lower:
+        if "midterm" in fn_lower:
+            return os.path.join(REPO_ROOT, course_folder, "Course_Info", "Exams", "Midterm", filename)
+        if "week12" in fn_lower or "complete_markets" in fn_lower or "arrow_securities" in fn_lower:
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", "Week12_Complete_Markets", filename)
-        if "income_substitution" in fn_lower:
+        if "week1" in fn_lower or "intertemporal" in fn_lower or "slutsky" in fn_lower:
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", "Week1_Intertemporal_Choice", filename)
+        m_ps = re.search(r'(?:problem_set_|ps)(\d+)', fn_lower)
+        if m_ps:
+            return os.path.join(REPO_ROOT, course_folder, "ProblemSets", f"ProblemSet{m_ps.group(1)}", filename)
         if fn_lower.endswith('.ipynb'):
             return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", filename)
         return os.path.join(REPO_ROOT, course_folder, "Readings", filename)
@@ -224,7 +283,7 @@ def run_sync(dry_run=False, push=False):
     print("MSQE Canvas Routine: Starting course differential sync")
     print("=" * 60)
 
-    # 1. Verify Canvas tab in Arc (completely in background, never select/focus)
+    # 1. Verify Canvas tab in Arc
     tab_status = find_canvas_tab()
     if "NOT_FOUND" in tab_status:
         print("[ERROR] Canvas tab is not currently open or logged in within Arc.")
@@ -253,22 +312,29 @@ def run_sync(dry_run=False, push=False):
             matched_fld = rel_path.split(os.sep)[0]
         local_by_folder.setdefault(matched_fld, []).append(finfo)
 
-    # 3. Scan each course
-    differentials = [] # list of (url, dest_path, file_meta, folder)
+    # 3. Scan each course comprehensively
+    differentials = [] # list of (url, dest_path, file_meta, folder, is_update)
     
     for cid, folder in COURSE_MAP.items():
         print(f"\nScanning {folder} (ID: {cid})...")
         course_files = {}
 
-        # Direct files check
-        files_list = canvas_api_get(f'/api/v1/courses/{cid}/files?per_page=100')
-        if isinstance(files_list, list):
-            for f in files_list:
-                fid = f.get('id')
-                if fid:
-                    course_files[str(fid)] = {"source": "files_api", "title": f.get('display_name'), "meta": f}
+        # 3a. Direct files endpoint (handles pagination)
+        page = 1
+        while page <= 5:
+            files_list = canvas_api_get(f'/api/v1/courses/{cid}/files?per_page=100&page={page}')
+            if isinstance(files_list, list) and files_list:
+                for f in files_list:
+                    fid = str(f.get('id'))
+                    if fid:
+                        course_files[fid] = {"source": "files_api", "title": f.get('display_name'), "meta": f}
+                if len(files_list) < 100:
+                    break
+                page += 1
+            else:
+                break
 
-        # Modules
+        # 3b. Modules and module items
         modules = canvas_api_get(f'/api/v1/courses/{cid}/modules?include[]=items&per_page=100')
         if isinstance(modules, list):
             for m in modules:
@@ -284,53 +350,71 @@ def run_sync(dry_run=False, push=False):
                         if isinstance(p, dict):
                             for pfid in extract_file_ids_from_html(p.get('body', '')):
                                 if str(pfid) not in course_files:
-                                    course_files[str(pfid)] = {"source": f"page:{m_name}/{title}", "title": None, "meta": None}
+                                    course_files[str(pfid)] = {"source": f"module_page:{m_name}/{title}", "title": None, "meta": None}
 
-        # Assignments
+        # 3c. All published Course Pages (including those not placed in modules)
+        all_pages = canvas_api_get(f'/api/v1/courses/{cid}/pages?per_page=100')
+        if isinstance(all_pages, list):
+            for p_meta in all_pages:
+                p_url = p_meta.get('url')
+                p_title = p_meta.get('title')
+                if p_url:
+                    p = canvas_api_get(f'/api/v1/courses/{cid}/pages/{p_url}')
+                    if isinstance(p, dict):
+                        for pfid in extract_file_ids_from_html(p.get('body', '')):
+                            if str(pfid) not in course_files:
+                                course_files[str(pfid)] = {"source": f"page:{p_title}", "title": None, "meta": None}
+
+        # 3d. Assignments (description & attachments)
         assignments = canvas_api_get(f'/api/v1/courses/{cid}/assignments?per_page=100')
         if isinstance(assignments, list):
             for a in assignments:
+                a_name = a.get('name', '')
                 for fid in extract_file_ids_from_html(a.get('description', '')):
                     if str(fid) not in course_files:
-                        course_files[str(fid)] = {"source": f"assignment:{a.get('name')}", "title": None, "meta": None}
+                        course_files[str(fid)] = {"source": f"assignment:{a_name}", "title": None, "meta": None}
+                for att in a.get('attachments', []):
+                    fid = str(att.get('id'))
+                    if fid and fid not in course_files:
+                        course_files[fid] = {"source": f"assignment_att:{a_name}", "title": att.get('display_name'), "meta": att}
 
-        # Announcements
+        # 3e. Announcements
         announcements = canvas_api_get(f'/api/v1/courses/{cid}/discussion_topics?only_announcements=true&per_page=50')
         if isinstance(announcements, list):
             for ann in announcements:
+                ann_title = ann.get('title', '')
                 for fid in extract_file_ids_from_html(ann.get('message', '')):
                     if str(fid) not in course_files:
-                        course_files[str(fid)] = {"source": f"announcement:{ann.get('title')}", "title": None, "meta": None}
+                        course_files[str(fid)] = {"source": f"announcement:{ann_title}", "title": None, "meta": None}
                 for att in ann.get('attachments', []):
-                    fid = att.get('id')
-                    if fid and str(fid) not in course_files:
-                        course_files[str(fid)] = {"source": f"announcement:{ann.get('title')}", "title": att.get('display_name'), "meta": att}
+                    fid = str(att.get('id'))
+                    if fid and fid not in course_files:
+                        course_files[fid] = {"source": f"announcement_att:{ann_title}", "title": att.get('display_name'), "meta": att}
 
-        # Syllabus
+        # 3f. Discussions (non-announcements)
+        discussions = canvas_api_get(f'/api/v1/courses/{cid}/discussion_topics?per_page=50')
+        if isinstance(discussions, list):
+            for disc in discussions:
+                disc_title = disc.get('title', '')
+                for fid in extract_file_ids_from_html(disc.get('message', '')):
+                    if str(fid) not in course_files:
+                        course_files[str(fid)] = {"source": f"discussion:{disc_title}", "title": None, "meta": None}
+                for att in disc.get('attachments', []):
+                    fid = str(att.get('id'))
+                    if fid and fid not in course_files:
+                        course_files[fid] = {"source": f"discussion_att:{disc_title}", "title": att.get('display_name'), "meta": att}
+
+        # 3g. Syllabus
         c_info = canvas_api_get(f'/api/v1/courses/{cid}?include[]=syllabus_body')
         if isinstance(c_info, dict) and c_info.get('syllabus_body'):
             for fid in extract_file_ids_from_html(c_info.get('syllabus_body')):
                 if str(fid) not in course_files:
                     course_files[str(fid)] = {"source": "syllabus", "title": None, "meta": None}
 
-        # Resolve metadata efficiently
-        local_files = local_by_folder.get(folder, [])
-        local_filenames_lower = {item["filename"].lower(): item for item in local_files}
-        local_sizes = {item["size"]: item for item in local_files}
-
-        # Fast-path: only resolve files that do not directly match an existing local filename
-        unresolved_fids = []
-        for fid, finfo in course_files.items():
-            if finfo.get("meta"):
-                continue
-            title = finfo.get("title")
-            if title and title.lower() in local_filenames_lower:
-                continue
-            unresolved_fids.append(fid)
-
-        # Batch resolve metadata in browser context (chunks of 25)
+        # 3h. Batch resolve ALL unresolved metadata in browser context
+        unresolved_fids = [fid for fid, finfo in course_files.items() if not finfo.get("meta")]
         if unresolved_fids:
-            chunk_size = 25
+            chunk_size = 30
             for i in range(0, len(unresolved_fids), chunk_size):
                 chunk = unresolved_fids[i:i+chunk_size]
                 batch_js = f"""(() => {{
@@ -346,17 +430,25 @@ def run_sync(dry_run=False, push=False):
                     }}
                     return JSON.stringify(out);
                 }})()"""
-                escaped_batch_js = batch_js.replace('\\', '\\\\').replace('"', '\\"').replace('\n', ' ')
-                raw_res = arc_eval(escaped_batch_js)
+                raw_res = arc_eval(batch_js)
                 try:
-                    batch_data = json.loads(raw_res)
-                    if isinstance(batch_data, str):
-                        batch_data = json.loads(batch_data)
-                    for id_str, m in batch_data.items():
-                        if id_str in course_files:
-                            course_files[id_str]["meta"] = m
+                    if isinstance(raw_res, str):
+                        batch_data = json.loads(raw_res)
+                        if isinstance(batch_data, str):
+                            batch_data = json.loads(batch_data)
+                    else:
+                        batch_data = raw_res
+                    if isinstance(batch_data, dict):
+                        for id_str, m in batch_data.items():
+                            if id_str in course_files:
+                                course_files[id_str]["meta"] = m
                 except Exception:
                     pass
+
+        # 3i. Differentiate against local files
+        local_files = local_by_folder.get(folder, [])
+        local_filenames_lower = {item["filename"].lower(): item for item in local_files}
+        local_sizes = {item["size"]: item for item in local_files}
 
         for fid, finfo in course_files.items():
             meta = finfo.get("meta")
@@ -367,10 +459,13 @@ def run_sync(dry_run=False, push=False):
             canvas_size = meta.get("size") if meta else None
             canvas_url = meta.get("url") if meta else None
 
+            # Skip small non-document announcement icons
+            if filename.lower() in ['image.png', 'images.jpeg'] and canvas_size and canvas_size < 500000 and "announcement" in finfo["source"].lower():
+                continue
+
             # Check if file exists locally by filename or exact byte size
             matched_local = local_filenames_lower.get(filename.lower())
             if not matched_local and canvas_size and canvas_size > 5000:
-                # Avoid re-downloading files that were simply renamed locally
                 if canvas_size in local_sizes:
                     matched_local = local_sizes[canvas_size]
 
@@ -378,33 +473,32 @@ def run_sync(dry_run=False, push=False):
                 # If notebook or code was executed locally, size differences are normal — skip overwriting
                 if filename.lower().endswith(('.ipynb', '.py')) or (canvas_size and matched_local["size"] == canvas_size) or canvas_size is None:
                     continue
-                # If size differs on a non-code file (e.g. updated prelim/syllabus), update it!
+                # If size differs on a document file (e.g. updated lecture slides, study guide, syllabus), update it in place!
                 if canvas_size and matched_local["size"] != canvas_size:
                     if canvas_url:
-                        differentials.append((canvas_url, matched_local["full_path"], meta, folder))
+                        differentials.append((canvas_url, matched_local["full_path"], meta, folder, True))
                     continue
-
-            # Skip small non-document announcement icons
-            if filename.lower() in ['image.png', 'images.jpeg'] and canvas_size and canvas_size < 500000 and "announcement" in finfo["source"].lower():
-                continue
 
             if not canvas_url:
                 continue
 
             dest_path = target_dest_for_file(folder, filename, finfo["source"])
-            differentials.append((canvas_url, dest_path, meta, folder))
+            differentials.append((canvas_url, dest_path, meta, folder, False))
 
     # 4. Check Downloads folder for recent course materials
     downloads_proposal = os.path.join(DOWNLOADS_DIR, "Replication Project Part 1 Proposal, Due 1028.pdf")
     dest_proposal = os.path.join(REPO_ROOT, "SS1-ECON5021-AdvEconometrics1/Replication_Project/Replication Project Part 1 Proposal, Due 1028.pdf")
     if os.path.exists(downloads_proposal) and not os.path.exists(dest_proposal):
-        differentials.append(("file://" + downloads_proposal, dest_proposal, {"display_name": os.path.basename(downloads_proposal)}, "SS1-ECON5021-AdvEconometrics1"))
+        differentials.append(("file://" + downloads_proposal, dest_proposal, {"display_name": os.path.basename(downloads_proposal)}, "SS1-ECON5021-AdvEconometrics1", False))
 
     print("\n" + "=" * 60)
-    print(f"DIFFERENTIALS FOUND: {len(differentials)} new course files")
+    print(f"DIFFERENTIALS FOUND: {len(differentials)} course file(s)")
     print("=" * 60)
-    for url, dest, meta, fld in differentials:
-        print(f"  + [{fld}] {os.path.basename(dest)} -> {os.path.relpath(dest, REPO_ROOT)}")
+    for url, dest, meta, fld, is_update in differentials:
+        tag = "[UPDATE]" if is_update else "[NEW]"
+        csize = meta.get("size") if meta else 0
+        size_str = f" ({csize:,} bytes)" if csize else ""
+        print(f"  {tag} [{fld}] {os.path.basename(dest)}{size_str} -> {os.path.relpath(dest, REPO_ROOT)}")
 
     if dry_run or not differentials:
         if dry_run:
@@ -415,8 +509,8 @@ def run_sync(dry_run=False, push=False):
 
     # 5. Download differentials
     created_paths = []
-    print("\nDownloading new course materials...")
-    for url, dest, meta, fld in differentials:
+    print("\nDownloading course materials...")
+    for url, dest, meta, fld, is_update in differentials:
         try:
             if url.startswith("file://"):
                 src_path = url[7:]
@@ -434,10 +528,15 @@ def run_sync(dry_run=False, push=False):
         print("\n" + "=" * 60)
         print("Committing and pushing following AGENTS.md rules...")
         print("=" * 60)
-        # Stage only created paths
-        subprocess.run(["git", "add", "--"] + created_paths, cwd=REPO_ROOT, check=True)
+        # Stage only created/updated paths plus script if modified
+        paths_to_stage = list(created_paths)
+        script_rel = "Scripts/canvas_sync.py"
+        diff_check = subprocess.run(["git", "diff", "--name-only", script_rel], cwd=REPO_ROOT, capture_output=True, text=True)
+        if diff_check.stdout.strip():
+            paths_to_stage.append(script_rel)
+        subprocess.run(["git", "add", "--"] + paths_to_stage, cwd=REPO_ROOT, check=True)
         # Commit once per prompt
-        msg = "Canvas sync: update course materials from Canvas"
+        msg = "Canvas sync: update course materials and improve sync routine"
         subprocess.run(["git", "commit", "-m", msg], cwd=REPO_ROOT, check=True)
         # Rebase sync
         subprocess.run(["git", "pull", "--rebase", "--autostash", "origin", "main"], cwd=REPO_ROOT, check=True)
