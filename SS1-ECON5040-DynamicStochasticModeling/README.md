@@ -6,11 +6,12 @@
 | --- | --- |
 | [Course_Info/](Course_Info/) | Course syllabus. |
 | [Lecture_Notes/](Lecture_Notes/) | Lectures grouped by instructional week and topic. |
+| [Week 11: Lucas Tree and risk-free rates](Lecture_Notes/Week11_Lucas_Tree/) | [Both lecture notebooks, the Lucas reading, and the problem-set files](Lecture_Notes/Week11_Lucas_Tree/README.md). |
 | [In_Class_Notebooks/](In_Class_Notebooks/) | Class examples, notebook experiments, and related scripts grouped by week. |
 | [ProblemSets/](ProblemSets/) | Assignment prompts, starter notebooks, answer keys, and student submissions grouped by problem-set number. |
 | [Exams/Midterm/](Exams/Midterm/) | Midterm study guide and official exam answer key. |
 | [Final_Project/](Final_Project/) | Project instructions, starter notebook, and SIR model example. |
-| [Readings/](Readings/) | McCall (1970) and COVID lockdown readings. |
+| [Readings/](Readings/) | Lucas (1978), McCall (1970), and COVID lockdown readings. |
 | [Resources/](Resources/) | [Python reference notebooks](Resources/Python/), [command-line and Python/R tutorials](Resources/Tutorials/), and the grading prompt; see the [resource index](Resources/README.md). |
 
 ## Problem-set guide
