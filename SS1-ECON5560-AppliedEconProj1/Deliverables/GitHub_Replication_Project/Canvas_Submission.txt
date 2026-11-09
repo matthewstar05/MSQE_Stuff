@@ -1,0 +1,24 @@
+GitHub username: matthew-suban-slo
+Repository URL: https://github.com/matthew-suban-slo/econ5560-replication-suban
+
+Last 20 lines of logs/run_log.txt:
+=== FINAL RUN AND ENVIRONMENT SUMMARY ===
+Pipeline status: PASS (all eight stages completed)
+Output validation: PASS (samples, choices, numeric tables, exhibits, dashboard)
+GitHub username: matthew-suban-slo
+Repository: https://github.com/matthew-suban-slo/econ5560-replication-suban
+Source commit: 29a17829b4ada0b02c78c4d86b170207b983e837
+Completed UTC: 2026-11-09T03:52:46.761615+00:00
+Full pipeline elapsed: 532.00 seconds
+Python: 3.12.12 (CPython)
+Operating system: macOS-27.0.1-arm64-arm-64bit
+numpy: 1.26.4
+pandas: 2.3.3
+scipy: 1.13.1
+statsmodels: 0.14.6
+matplotlib: 3.9.4
+Raw data SHA-256: ea292824db6b36ef18961aa954f0cb7964af5a7285d7e479840cf7aef19f3df2
+Regenerated output files: 39
+Mixed logit primary convergence: m3=True, m4=True
+Limitations: published cells differ; mixed-logit results depend on simulation draws.
+=== END ENVIRONMENT SUMMARY ===
