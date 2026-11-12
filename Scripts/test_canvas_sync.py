@@ -30,25 +30,25 @@ class CanvasSyncTests(unittest.TestCase):
 
     def test_pagination_follows_opaque_next_even_on_a_short_page(self):
         next_url = sync.CANVAS_ORIGIN + "/api/v1/courses/1/files?cursor=opaque"
-        with patch.object(sync, "arc_eval", side_effect=[
+        with patch.object(sync, "browser_run", side_effect=[
                 self.response([{"id": 1}], link=f'<{next_url}>; rel="next"'),
                 self.response([{"id": 2}])]) as browser:
             self.assertEqual(sync.canvas_api_list("/api/v1/courses/1/files?per_page=100"), [{"id": 1}, {"id": 2}])
         self.assertIn(next_url, browser.call_args_list[1].args[0])
 
     def test_pagination_does_not_follow_an_external_origin(self):
-        with patch.object(sync, "arc_eval", return_value=self.response([], link='<https://example.org/api/v1/files>; rel="next"')):
+        with patch.object(sync, "browser_run", return_value=self.response([], link='<https://example.org/api/v1/files>; rel="next"')):
             with self.assertRaisesRegex(RuntimeError, "outside"):
                 sync.canvas_api_list("/api/v1/courses/1/files")
 
     def test_login_html_is_an_error_rather_than_an_empty_course(self):
         response = json.dumps({"status": 200, "body": "<html>Login</html>", "link": ""})
-        with patch.object(sync, "arc_eval", return_value=response):
+        with patch.object(sync, "browser_run", return_value=response):
             with self.assertRaisesRegex(RuntimeError, "login page"):
                 sync.canvas_api_get("/api/v1/users/self")
 
     def test_transient_read_error_recovers_and_is_cached(self):
-        with patch.object(sync, "arc_eval", side_effect=[self.response({}, 503), self.response({"id": 1})]) as browser, \
+        with patch.object(sync, "browser_run", side_effect=[self.response({}, 503), self.response({"id": 1})]) as browser, \
                 patch.object(sync.time, "sleep") as wait:
             self.assertEqual(sync.canvas_api_get("/api/v1/users/self"), {"id": 1})
             self.assertEqual(sync.canvas_api_get("/api/v1/users/self"), {"id": 1})
@@ -58,7 +58,7 @@ class CanvasSyncTests(unittest.TestCase):
     def test_incomplete_download_does_not_replace_an_existing_document(self):
         dest = self.root / "notes.pdf"
         dest.write_bytes(b"Existing notes")
-        with patch.object(sync, "arc_eval", return_value=base64.b64encode(b"partial").decode()):
+        with patch.object(sync, "browser_run", return_value=base64.b64encode(b"partial").decode()):
             with self.assertRaisesRegex(RuntimeError, "Incomplete download"):
                 sync.download_file_to("https://canvas.calpoly.edu/files/1/download", str(dest), expected_size=100)
         self.assertEqual(dest.read_bytes(), b"Existing notes")
@@ -67,7 +67,7 @@ class CanvasSyncTests(unittest.TestCase):
     def test_content_hash_confirms_a_renamed_duplicate(self):
         data = b"Same file under another name"
         dest = self.root / "new-name.pdf"
-        with patch.object(sync, "arc_eval", return_value=base64.b64encode(data).decode()):
+        with patch.object(sync, "browser_run", return_value=base64.b64encode(data).decode()):
             result = sync.download_file_to("https://canvas.calpoly.edu/files/1/download", str(dest), len(data),
                                            {hashlib.sha256(data).hexdigest(): "existing.pdf"})
         self.assertIsNone(result)
@@ -77,10 +77,39 @@ class CanvasSyncTests(unittest.TestCase):
         data = b"New lecture notes"
         dest = self.root / "notes.pdf"
         dest.write_bytes(b"Old notes")
-        with patch.object(sync, "arc_eval", return_value=base64.b64encode(data).decode()):
+        with patch.object(sync, "browser_run", return_value=base64.b64encode(data).decode()):
             self.assertEqual(sync.download_file_to("https://canvas.calpoly.edu/files/1/download", str(dest), len(data)), len(data))
         self.assertEqual(dest.read_bytes(), data)
         self.assertEqual(list(self.root.glob(".canvas-*")), [])
+
+    def test_browser_requests_poll_briefly_and_read_in_chunks(self):
+        calls = []
+
+        def page(js):
+            calls.append(js)
+            if "return 'started'" in js:
+                return "started"
+            if "PENDING" in js:
+                return "PENDING" if len(calls) < 4 else "LEN:5"
+            if ".slice(0, 3)" in js:
+                return "abc"
+            if ".slice(3, 6)" in js:
+                return "de"
+            return "ok"
+
+        with patch.object(sync, "arc_eval", side_effect=page), patch.object(sync, "CHUNK_CHARS", 3), \
+                patch.object(sync.time, "sleep"):
+            self.assertEqual(sync.browser_run("return 'abcde';"), "abcde")
+        self.assertNotIn("XMLHttpRequest", "".join(calls))
+        self.assertIn("delete window.__canvasSync", calls[-1])
+
+    def test_browser_request_error_is_reported(self):
+        def page(js):
+            return "started" if "return 'started'" in js else ("ERROR:TypeError" if "PENDING" in js else "ok")
+
+        with patch.object(sync, "arc_eval", side_effect=page):
+            with self.assertRaisesRegex(RuntimeError, "TypeError"):
+                sync.browser_run("throw new TypeError();")
 
     def test_model_selection_assignment_goes_into_homeworks(self):
         path = sync.target_dest_for_file("SS1-ECON5015-ComputingMLEcon", "model_selection_assignment_2026.docx", "files_api")
@@ -158,12 +187,73 @@ class CanvasSyncTests(unittest.TestCase):
                 patch.object(sync, "find_canvas_tab", return_value=sync.CANVAS_ORIGIN), \
                 patch.object(sync, "canvas_api_get", return_value={"id": 1}), \
                 patch.object(sync, "canvas_api_list", side_effect=listing), \
-                patch.object(sync, "arc_eval", return_value=json.dumps(metadata)), \
+                patch.object(sync, "browser_run", return_value=json.dumps(metadata)), \
                 patch.object(sync.subprocess, "run", return_value=subprocess.CompletedProcess([], 0, stdout=b"")), \
                 contextlib.redirect_stdout(io.StringIO()) as output:
             sync.run_sync(dry_run=True)
         self.assertIn("/api/v1/courses/1/modules/2/items?per_page=100", endpoints)
         self.assertIn("Week11_Lucas_Tree/Week11_notes.pdf", output.getvalue())
+
+    def test_matching_by_module_item_title_with_extension(self):
+        folder = "SS1-ECON5015-ComputingMLEcon"
+        existing = self.root / folder / "Lecture_Notes" / "Introduction to Python.pptx"
+        existing.parent.mkdir(parents=True)
+        existing.write_bytes(b"ppt content" * 100)
+        file_size = len(existing.read_bytes())
+
+        # Module item has title 'Introduction to Python', but file metadata has display_name 'lecture1 2024.pptx'
+        module_item = {"type": "File", "content_id": 99, "title": "Introduction to Python"}
+        metadata = {"99": {"id": 99, "display_name": "lecture1 2024.pptx", "size": file_size,
+                           "url": "https://canvas.calpoly.edu/files/99/download"}}
+
+        def listing(path):
+            if "/modules?" in path:
+                return [{"id": 1, "name": "Module 1", "items_count": 1, "items": [module_item]}]
+            return []
+
+        with patch.object(sync, "COURSE_MAP", {1: folder}), \
+                patch.object(sync, "find_canvas_tab", return_value=sync.CANVAS_ORIGIN), \
+                patch.object(sync, "canvas_api_get", return_value={"id": 1}), \
+                patch.object(sync, "canvas_api_list", side_effect=listing), \
+                patch.object(sync, "browser_run", return_value=json.dumps(metadata)), \
+                patch.object(sync.subprocess, "run", return_value=subprocess.CompletedProcess([], 0, stdout=b"")), \
+                contextlib.redirect_stdout(io.StringIO()) as output:
+            sync.run_sync(dry_run=True)
+        # Should recognize the file as already present and not report a differential
+        self.assertIn("DIFFERENTIALS FOUND: 0", output.getvalue())
+
+    def test_matching_by_normalized_filename_with_punctuation(self):
+        folder = "SS1-ECON5040-DynamicStochasticModeling"
+        existing = self.root / folder / "Readings" / "WSJ - Printing Covid Lessons Learned Four Years Later.pdf"
+        existing.parent.mkdir(parents=True)
+        existing.write_bytes(b"pdf content" * 50)
+        file_size = len(existing.read_bytes())
+
+        # Canvas file has comma in name: 'WSJ - Printing Covid Lessons Learned, Four Years Later.pdf'
+        metadata = {"id": 88, "display_name": "WSJ - Printing Covid Lessons Learned, Four Years Later.pdf",
+                    "size": file_size, "url": "https://canvas.calpoly.edu/files/88/download"}
+
+        with patch.object(sync, "COURSE_MAP", {1: folder}), \
+                patch.object(sync, "find_canvas_tab", return_value=sync.CANVAS_ORIGIN), \
+                patch.object(sync, "canvas_api_get", return_value={"id": 1}), \
+                patch.object(sync, "canvas_api_list", side_effect=lambda p: [metadata] if "/files?" in p else []), \
+                patch.object(sync.subprocess, "run", return_value=subprocess.CompletedProcess([], 0, stdout=b"")), \
+                contextlib.redirect_stdout(io.StringIO()) as output:
+            sync.run_sync(dry_run=True)
+        self.assertIn("DIFFERENTIALS FOUND: 0", output.getvalue())
+
+    def test_econ5015_quiz_and_exam_routing(self):
+        course = "SS1-ECON5015-ComputingMLEcon"
+        self.assertIn("/Quizzes/Practice/", sync.target_dest_for_file(course, "quiz_practice_2026.docx", "module"))
+        self.assertIn("/Quizzes/", sync.target_dest_for_file(course, "quiz_1.docx", "module"))
+        self.assertIn("/Homeworks/Exams/Midterm/Practice/", sync.target_dest_for_file(course, "midterm_additional_practice.docx", "module"))
+        self.assertIn("/Homeworks/Homework5/Algorithmic_Efficiency/", sync.target_dest_for_file(course, "hw_algorithmic_efficiency.docx", "module"))
+
+    def test_econ5040_prelim_and_final_project_routing(self):
+        course = "SS1-ECON5040-DynamicStochasticModeling"
+        self.assertIn("/Course_Info/Exams/Prelim/", sync.target_dest_for_file(course, "prelim2026.pdf", "module"))
+        self.assertIn("/Final_Project/", sync.target_dest_for_file(course, "final_project.pdf", "module:Final Project"))
+        self.assertIn("/Readings/", sync.target_dest_for_file(course, "covid_lessons.pdf", "module:Finals week"))
 
 
 if __name__ == "__main__":

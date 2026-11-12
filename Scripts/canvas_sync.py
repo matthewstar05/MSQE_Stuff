@@ -41,19 +41,24 @@ COURSE_MAP = {
 # Browser Communication (Arc AppleScript)
 # ----------------------------------------------------------------------
 
+# Arc runs each AppleScript `execute` on its main thread and waits for the page's
+# answer, so every call must return at once: requests run as async fetches in the
+# page and are polled with tiny evals. A synchronous XHR here freezes all of Arc.
+# The tab is addressed by id and never selected, so it can stay in the background.
+CANVAS_TAB = {}
+POLL_SECONDS = 0.25
+CHUNK_CHARS = 512 * 1024
+JOB_TIMEOUT = 300
+
+
 def find_canvas_tab():
-    """Checks if an authenticated Canvas tab is open in Arc without focusing or selecting if already active."""
+    """Find a signed-in Canvas tab in Arc and remember it, without selecting it."""
     applescript = '''
     tell application "Arc"
-        try
-            if (URL of active tab of front window) starts with "https://canvas.calpoly.edu" then
-                return (URL of active tab of front window)
-            end if
-        end try
         repeat with w in windows
             try
                 if (URL of active tab of w) starts with "https://canvas.calpoly.edu" then
-                    return (URL of active tab of w)
+                    return (id of w) & " " & (id of active tab of w) & " " & (URL of active tab of w)
                 end if
             end try
         end repeat
@@ -61,7 +66,7 @@ def find_canvas_tab():
             repeat with t in tabs of w
                 try
                     if (URL of t) starts with "https://canvas.calpoly.edu" then
-                        return (URL of t)
+                        return (id of w) & " " & (id of t) & " " & (URL of t)
                     end if
                 end try
             end repeat
@@ -72,42 +77,28 @@ def find_canvas_tab():
     p = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True, timeout=20)
     if p.returncode:
         raise RuntimeError("Could not inspect Arc's Canvas tab: " + p.stderr.strip())
-    return p.stdout.strip()
+    parts = p.stdout.strip().split(" ", 2)
+    if len(parts) != 3:
+        CANVAS_TAB.clear()
+        return "NOT_FOUND"
+    CANVAS_TAB.update(window=parts[0], tab=parts[1])
+    return parts[2]
+
 
 def arc_eval(js_code):
-    """Executes JavaScript inside an authenticated Canvas tab in Arc."""
+    """Run a short JavaScript expression in the remembered Canvas tab."""
+    if not CANVAS_TAB and "NOT_FOUND" in find_canvas_tab():
+        raise RuntimeError("The Canvas tab in Arc was closed; scan is incomplete.")
     escaped_js = js_code.replace('\\', '\\\\').replace('"', '\\"').replace('\n', ' ')
-    applescript = f'''
-    tell application "Arc"
-        try
-            if (URL of active tab of front window) starts with "https://canvas.calpoly.edu" then
-                return (execute active tab of front window javascript "{escaped_js}")
-            end if
-        end try
-        repeat with w in windows
-            try
-                if (URL of active tab of w) starts with "https://canvas.calpoly.edu" then
-                    return (execute active tab of w javascript "{escaped_js}")
-                end if
-            end try
-        end repeat
-        repeat with w in windows
-            repeat with t in tabs of w
-                try
-                    if (URL of t) starts with "https://canvas.calpoly.edu" then
-                        select t
-                        delay 0.2
-                        return (execute t javascript "{escaped_js}")
-                    end if
-                end try
-            end repeat
-        end repeat
-        return "NOT_FOUND"
-    end tell
-    '''
-    p = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True, timeout=90)
-    if p.returncode != 0:
-        raise RuntimeError(f"AppleScript error: {p.stderr.strip()}")
+    for attempt in range(2):
+        applescript = (f'tell application "Arc" to return (execute (tab id "{CANVAS_TAB["tab"]}" '
+                       f'of window id "{CANVAS_TAB["window"]}") javascript "{escaped_js}")')
+        p = subprocess.run(['osascript', '-e', applescript], capture_output=True, text=True, timeout=30)
+        if p.returncode == 0:
+            break
+        # The tab may have moved windows or been closed; look for it once more.
+        if attempt or "NOT_FOUND" in find_canvas_tab():
+            raise RuntimeError(f"AppleScript error: {p.stderr.strip()}")
     res = p.stdout.strip()
     if res.startswith('"') and res.endswith('"'):
         try:
@@ -115,6 +106,58 @@ def arc_eval(js_code):
         except Exception:
             pass
     return res
+
+
+def browser_run(async_body, timeout=JOB_TIMEOUT):
+    """Run an async function body in the Canvas tab and return the string it resolves to.
+
+    Arc is only busy for the instant each start, poll, or chunk read takes. The body
+    must resolve to JSON or ASCII: non-ASCII is sent as \\uXXXX escapes so chunk
+    boundaries never split a character."""
+    key = "j" + os.urandom(6).hex()
+    slot = f"window.__canvasSync[{json.dumps(key)}]"
+    started = arc_eval(f"""(() => {{
+        window.__canvasSync = window.__canvasSync || {{}};
+        const s = {slot} = {{done: false}};
+        (async () => {{ {async_body} }})().then(
+            v => {{ s.value = String(v).replace(/[\\u0080-\\uffff]/g,
+                c => '\\\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')); s.done = true; }},
+            e => {{ s.error = String(e); s.done = true; }});
+        return 'started';
+    }})()""")
+    if started != "started":
+        raise RuntimeError("Could not start a request in the Canvas tab; scan is incomplete.")
+    deadline = time.monotonic() + timeout
+    wait = 0.05
+    try:
+        while True:
+            state = arc_eval(f"""(() => {{ const s = {slot};
+                if (!s) return 'MISSING'; if (!s.done) return 'PENDING';
+                if (s.error !== undefined) return 'ERROR:' + s.error;
+                return 'LEN:' + s.value.length; }})()""")
+            if state.startswith("LEN:"):
+                length = int(state[4:])
+                break
+            if state == "MISSING":
+                raise RuntimeError("The Canvas tab reloaded during the scan; scan is incomplete.")
+            if state.startswith("ERROR:"):
+                raise RuntimeError("Canvas request failed in Arc: " + state[6:])
+            if time.monotonic() > deadline:
+                raise RuntimeError("A Canvas request in Arc timed out; scan is incomplete.")
+            time.sleep(wait)
+            wait = min(wait * 2, POLL_SECONDS)
+        chunks = []
+        for start in range(0, length, CHUNK_CHARS):
+            chunks.append(arc_eval(f"{slot}.value.slice({start}, {start + CHUNK_CHARS})"))
+        value = "".join(chunks)
+        if len(value) != length:
+            raise RuntimeError("Arc returned a truncated response; scan is incomplete.")
+        return value
+    finally:
+        try:
+            arc_eval(f"(delete {slot}, 'ok')")
+        except Exception:
+            pass
 
 def canvas_api_response(endpoint):
     """Read JSON and pagination headers with the existing browser session."""
@@ -125,15 +168,11 @@ def canvas_api_response(endpoint):
         raise RuntimeError("Refusing a Canvas API link outside the configured Canvas origin.")
     if url in API_CACHE:
         return API_CACHE[url]
-    js = f"""(() => {{
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', {json.dumps(url)}, false);
-        xhr.send(null);
-        return JSON.stringify({{status: xhr.status, body: xhr.responseText,
-                               link: xhr.getResponseHeader('Link') || ''}});
-    }})()"""
+    js = f"""const r = await fetch({json.dumps(url)}, {{credentials: 'same-origin'}});
+        return JSON.stringify({{status: r.status, body: await r.text(),
+                               link: r.headers.get('Link') || ''}});"""
     for attempt in range(4):
-        raw = arc_eval(js)
+        raw = browser_run(js)
         try:
             response = json.loads(raw)
             if isinstance(response, str):
@@ -183,40 +222,20 @@ def canvas_api_list(endpoint):
     return rows
 
 def download_file_to(url, dest_path, expected_size=None, existing_hashes=None):
-    """Downloads a file in a single synchronous background call using fast base64 encoding."""
+    """Download a file through the Canvas tab's session; the page base64-encodes it natively."""
     print(f"  Downloading: {os.path.basename(dest_path)}...")
-    dl_js = f"""(() => {{
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', {json.dumps(url)}, false);
-        xhr.overrideMimeType('text/plain; charset=x-user-defined');
-        xhr.send(null);
-        if (xhr.status !== 200) return 'ERROR:' + xhr.status;
-        const bin = xhr.responseText;
-        const len = bin.length;
-        const bytes = new Uint8Array(len);
-        for (let i = 0; i < len; i++) bytes[i] = bin.charCodeAt(i) & 0xff;
-        
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-        let out = '';
-        const extra = len % 3;
-        const main = len - extra;
-        for (let i = 0; i < main; i += 3) {{
-            const b0 = bytes[i], b1 = bytes[i+1], b2 = bytes[i+2];
-            out += chars[b0 >> 2] + chars[((b0 & 3) << 4) | (b1 >> 4)] + chars[((b1 & 15) << 2) | (b2 >> 6)] + chars[b2 & 63];
-        }}
-        if (extra === 1) {{
-            const b0 = bytes[main];
-            out += chars[b0 >> 2] + chars[(b0 & 3) << 4] + '==';
-        }} else if (extra === 2) {{
-            const b0 = bytes[main], b1 = bytes[main+1];
-            out += chars[b0 >> 2] + chars[((b0 & 3) << 4) | (b1 >> 4)] + chars[(b1 & 15) << 2] + '=';
-        }}
-        return out;
-    }})()"""
-    raw = arc_eval(dl_js)
-    if isinstance(raw, str) and raw.startswith('"') and raw.endswith('"'):
-        raw = raw[1:-1]
-    if not isinstance(raw, str) or raw.startswith('ERROR:') or raw == 'NOT_FOUND':
+    dl_js = f"""const r = await fetch({json.dumps(url)}, {{credentials: 'include'}});
+        if (r.status !== 200) return 'ERROR:' + r.status;
+        const blob = await r.blob();
+        const data = await new Promise((resolve, reject) => {{
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(blob);
+        }});
+        return data.slice(data.indexOf(',') + 1);"""
+    raw = browser_run(dl_js)
+    if not isinstance(raw, str) or raw.startswith('ERROR:'):
         raise RuntimeError("Canvas file download failed: " + (raw if isinstance(raw, str) and raw.startswith("ERROR:") else "invalid response"))
 
     data = base64.b64decode(raw, validate=True)
@@ -252,7 +271,17 @@ def extract_file_ids_from_html(html_text):
     matches = set(re.findall(r'/files/(\d+)', html_text))
     matches.update(re.findall(r'data-api-endpoint="[^"]*?/files/(\d+)"', html_text))
     matches.update(re.findall(r'/preview/(\d+)', html_text))
+    matches.update(re.findall(r'attachment_id=(\d+)', html_text))
+    matches.update(re.findall(r'file_id=(\d+)', html_text))
     return matches
+
+def normalize_name(name):
+    """Normalize a filename or title for comparison by stripping extensions and punctuation."""
+    if not name:
+        return ""
+    stem = os.path.splitext(name)[0].lower()
+    cleaned = re.sub(r'[^a-z0-9]+', ' ', stem)
+    return " ".join(cleaned.split())
 
 def get_local_inventory():
     inventory = {}
@@ -279,78 +308,144 @@ def get_local_inventory():
                 pass
     return inventory
 
-def target_dest_for_file(course_folder, filename, source):
-    """Determines appropriate directory in course folder based on filename & source."""
+def target_dest_for_file(course_folder, filename, source, title=None):
+    """Determines appropriate directory in course folder based on filename, source, and display title."""
     if not filename or filename in (".", "..") or any(c in filename for c in ("/", "\\", "\x00")):
         raise RuntimeError("Canvas returned an invalid filename.")
     fn_lower = filename.lower()
     src_lower = source.lower()
+    t_lower = (title or "").lower()
+    combined = f"{fn_lower} {t_lower}"
 
     if course_folder == "SS1-ECON5015-ComputingMLEcon":
-        if "syllabus" in fn_lower:
+        if "syllabus" in combined:
             return os.path.join(REPO_ROOT, course_folder, "Course_Info", filename)
-        if "model_selection" in fn_lower and ("assignment" in fn_lower or "hw" in fn_lower):
+        if "quiz" in combined:
+            if "practice" in combined:
+                return os.path.join(REPO_ROOT, course_folder, "Quizzes", "Practice", filename)
+            return os.path.join(REPO_ROOT, course_folder, "Quizzes", filename)
+        if "midterm" in combined or "exam" in combined:
+            if "practice" in combined or "additional" in combined:
+                return os.path.join(REPO_ROOT, course_folder, "Homeworks", "Exams", "Midterm", "Practice", filename)
+            return os.path.join(REPO_ROOT, course_folder, "Homeworks", "Exams", "Midterm", filename)
+        if "algorithmic" in combined or "efficiency" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Homeworks", "Homework5", "Algorithmic_Efficiency", filename)
+        if "model_selection" in combined and ("assignment" in combined or "hw" in combined):
             return os.path.join(REPO_ROOT, course_folder, "Homeworks", "Model_Selection", filename)
-        if "chinook" in fn_lower or "sql" in fn_lower or "db_2025" in fn_lower or "northwind" in fn_lower:
+        if "chinook" in combined or "sql" in combined or "db_2025" in combined or "northwind" in combined:
             return os.path.join(REPO_ROOT, course_folder, "Homeworks", "Homework10_DatabasesSQL", filename)
+        if "world bank" in combined or "api" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Homeworks", "Homework9_WorldBankAPI", filename)
+        if "datawrangling" in combined or "data_wrangling" in combined or "wrangling" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Homeworks", "Homework8_DataWrangling", filename)
+        m_hw = re.search(r'(?:hw|homework)\s*(\d+)', combined)
+        if m_hw:
+            hw_num = m_hw.group(1)
+            hw_folder = f"Homework{hw_num}"
+            if os.path.isdir(os.path.join(REPO_ROOT, course_folder, "Homeworks", hw_folder)):
+                return os.path.join(REPO_ROOT, course_folder, "Homeworks", hw_folder, filename)
         if fn_lower.endswith(('.ipynb', '.html')):
             return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", filename)
         if fn_lower.endswith('.py'):
             return os.path.join(REPO_ROOT, course_folder, "Scripts", filename)
-        if "world bank" in fn_lower or "api" in fn_lower:
-            return os.path.join(REPO_ROOT, course_folder, "Homeworks", "Homework9_WorldBankAPI", filename)
-        if fn_lower.endswith(('.pptx', '.pdf')) or "statistical learning" in fn_lower or "model_selection" in fn_lower or "database" in fn_lower:
+        if fn_lower.endswith(('.pptx', '.pdf')) or "statistical learning" in combined or "model_selection" in combined or "database" in combined:
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", filename)
         if fn_lower.endswith('.csv'):
             return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", filename)
-        if "hw" in fn_lower or "assignment" in fn_lower:
+        if "hw" in combined or "assignment" in combined:
             return os.path.join(REPO_ROOT, course_folder, "Homeworks", filename)
         return os.path.join(REPO_ROOT, course_folder, "Resources", filename)
 
     elif course_folder == "SS1-ECON5560-AppliedEconProj1":
-        if "presentation" in src_lower or "slidedoc" in fn_lower or "zettlemeyer" in fn_lower:
+        if "presentation" in src_lower or "presentation" in combined or "slidedoc" in combined or "zettlemeyer" in combined:
             return os.path.join(REPO_ROOT, course_folder, "Deliverables", "Presentation", "Resources", filename)
+        if "replication" in combined or "charter" in combined or "milestone" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Replication-Project", "Resources", filename)
         return os.path.join(REPO_ROOT, course_folder, "Resources", filename)
 
     elif course_folder == "SS1-ECON5021-AdvEconometrics1":
-        if "proposal" in fn_lower or "replication" in fn_lower or "replication" in src_lower:
+        if "proposal" in combined or "replication" in combined or "replication" in src_lower:
             return os.path.join(REPO_ROOT, course_folder, "Replication_Project", filename)
-        if fn_lower.endswith('.pdf') and ("lecture" in fn_lower or "note" in fn_lower):
+        if "exam 1" in combined or "exam1" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Exam1", filename)
+        if "exam 2" in combined or "exam2" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Exam2", filename)
+        if fn_lower.endswith('.pdf') and ("lecture" in combined or "note" in combined):
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", filename)
-        if "syllabus" in fn_lower:
+        if "practice" in combined or "in_class" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "In_Class_Practice", filename)
+        if "syllabus" in combined:
             return os.path.join(REPO_ROOT, course_folder, "Course_Info", filename)
         return os.path.join(REPO_ROOT, course_folder, "Exercises", filename)
 
     elif course_folder == "SS1-ECON5030-MicroeconomicAnalysis":
-        if "problem set" in fn_lower or "ps" in fn_lower or "ak" in fn_lower:
-            m = re.search(r'set\s*(\d+)', fn_lower)
+        if "syllabus" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Course_Info", filename)
+        if "midterm" in combined or "exam" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Midterm", filename)
+        if "problem set" in combined or "ps" in combined or "ak" in combined:
+            m = re.search(r'set\s*(\d+)', combined)
             ps_num = m.group(1) if m else "1"
             return os.path.join(REPO_ROOT, course_folder, "ProblemSets", f"ProblemSet{ps_num}", filename)
         return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", filename)
 
     elif course_folder == "SS1-ECON5040-DynamicStochasticModeling":
-        if "prelim" in fn_lower:
-            return os.path.join(REPO_ROOT, course_folder, "Exams", "Prelim", filename)
-        if "final" in src_lower or "final" in fn_lower:
-            return os.path.join(REPO_ROOT, course_folder, "Exams", "Final", filename)
-        if "midterm" in fn_lower:
+        if "prelim" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Course_Info", "Exams", "Prelim", filename)
+        if "midterm" in combined:
             return os.path.join(REPO_ROOT, course_folder, "Course_Info", "Exams", "Midterm", filename)
-        if re.search(r'\bweek[ _-]*11(?=\D|$)', fn_lower):
-            if "problem_set" in fn_lower or "starter" in fn_lower:
+        if re.search(r'\bweek[ _-]*11(?=\D|$)', combined):
+            if "problem_set" in combined or "starter" in combined:
                 return os.path.join(REPO_ROOT, course_folder, "ProblemSets", "ProblemSet10", filename)
             if fn_lower.endswith('.ipynb'):
                 return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", "Week11_Asset_Pricing", filename)
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", "Week11_Lucas_Tree", filename)
-        if "week12" in fn_lower or "complete_markets" in fn_lower or "arrow_securities" in fn_lower:
+        if "week12" in combined or "complete_markets" in combined or "arrow_securities" in combined:
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", "Week12_Complete_Markets", filename)
-        if re.search(r'\bweek[ _-]*1(?=\D|$)', fn_lower) or "intertemporal" in fn_lower or "slutsky" in fn_lower:
+        if re.search(r'\bweek[ _-]*1(?=\D|$)', combined) or "intertemporal" in combined or "slutsky" in combined:
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", "Week1_Intertemporal_Choice", filename)
-        m_ps = re.search(r'(?:problem_set_|ps)(\d+)', fn_lower)
+        if "final" in src_lower or "final" in combined:
+            if "project" in combined or "sir" in combined or fn_lower.endswith('.ipynb'):
+                return os.path.join(REPO_ROOT, course_folder, "Final_Project", filename)
+            if fn_lower.endswith(('.pdf', '.doc', '.docx')):
+                return os.path.join(REPO_ROOT, course_folder, "Readings", filename)
+            return os.path.join(REPO_ROOT, course_folder, "Final_Project", filename)
+        m_ps = re.search(r'(?:problem_set_|ps)(\d+)', combined)
         if m_ps:
             return os.path.join(REPO_ROOT, course_folder, "ProblemSets", f"ProblemSet{m_ps.group(1)}", filename)
         if fn_lower.endswith('.ipynb'):
             return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", filename)
         return os.path.join(REPO_ROOT, course_folder, "Readings", filename)
+
+    elif course_folder == "SP26-ECON470-MicroeconAI":
+        if "syllabus" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Course_Info", filename)
+        if "lab" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Labs", filename)
+        if "exam" in combined or "midterm" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Exams", filename)
+        if "pres" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Presentations", filename)
+        if "reading" in combined or "essay" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Readings", filename)
+        if "lecture" in combined or fn_lower.endswith(('.pptx', '.pdf')):
+            return os.path.join(REPO_ROOT, course_folder, "Lectures", filename)
+        return os.path.join(REPO_ROOT, course_folder, "Readings", filename)
+
+    elif course_folder == "SU26-GSE510-MathEcon":
+        if "syllabus" in combined:
+            return os.path.join(REPO_ROOT, course_folder, filename)
+        if "homework" in combined or "hw" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Homeworks", filename)
+        if "practice" in combined and "exam" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Practice Exams", filename)
+        if "exam" in combined and ("solution" in combined or "sol" in combined):
+            return os.path.join(REPO_ROOT, course_folder, "Exam Solutions", filename)
+        if "claude" in combined:
+            return os.path.join(REPO_ROOT, course_folder, "Claude Exams", filename)
+        if "lecture" in combined or fn_lower.endswith(('.pdf', '.pptx')):
+            return os.path.join(REPO_ROOT, course_folder, "Lecture Notes", filename)
+        return os.path.join(REPO_ROOT, course_folder, "Homeworks", filename)
 
     elif course_folder == "EXT/Graduate_Student_Materials":
         return os.path.join(REPO_ROOT, course_folder, filename)
@@ -441,6 +536,12 @@ def run_sync(dry_run=False, push=False):
                             for pfid in extract_file_ids_from_html(p.get('body', '')):
                                 if str(pfid) not in course_files:
                                     course_files[str(pfid)] = {"source": f"module_page:{m_name}/{title}", "title": None, "meta": None}
+                    elif itype == 'Assignment' and item.get('url'):
+                        a_data = canvas_api_get(item.get('url'))
+                        if isinstance(a_data, dict):
+                            for afid in extract_file_ids_from_html(a_data.get('description', '')):
+                                if str(afid) not in course_files:
+                                    course_files[str(afid)] = {"source": f"module_assignment:{m_name}/{title}", "title": None, "meta": None}
 
         # 3c. All published Course Pages (including those not placed in modules)
         all_pages = canvas_api_list(f'/api/v1/courses/{cid}/pages?per_page=100')
@@ -501,28 +602,38 @@ def run_sync(dry_run=False, push=False):
                 if str(fid) not in course_files:
                     course_files[str(fid)] = {"source": "syllabus", "title": None, "meta": None}
 
-        # 3h. Batch resolve ALL unresolved metadata in browser context
+        # 3h. Quizzes (description)
+        quizzes = canvas_api_list(f'/api/v1/courses/{cid}/quizzes?per_page=100')
+        if isinstance(quizzes, list):
+            for q in quizzes:
+                q_title = q.get('title', '')
+                for fid in extract_file_ids_from_html(q.get('description', '')):
+                    if str(fid) not in course_files:
+                        course_files[str(fid)] = {"source": f"quiz:{q_title}", "title": None, "meta": None}
+
+        # 3i. Batch resolve ALL unresolved metadata in browser context
         unresolved_fids = [fid for fid, finfo in course_files.items() if not finfo.get("meta")]
         if unresolved_fids:
             chunk_size = 30
             for i in range(0, len(unresolved_fids), chunk_size):
                 chunk = unresolved_fids[i:i+chunk_size]
-                batch_js = f"""(() => {{
-                    const fids = {json.dumps(chunk)};
+                batch_js = f"""const fids = {json.dumps(chunk)};
                     const out = {{}};
-                    for (const id of fids) {{
-                        const xhr = new XMLHttpRequest();
-                        xhr.open('GET', '/api/v1/files/' + id, false);
-                        xhr.send(null);
-                        if (xhr.status === 200) {{
-                            try {{ out[id] = JSON.parse(xhr.responseText); }} catch(e) {{}}
-                        }} else {{
-                            out[id] = {{_http_status: xhr.status}};
+                    let next = 0;
+                    const worker = async () => {{
+                        while (next < fids.length) {{
+                            const id = fids[next++];
+                            const r = await fetch('/api/v1/files/' + id, {{credentials: 'same-origin'}});
+                            if (r.status === 200) {{
+                                try {{ out[id] = JSON.parse(await r.text()); }} catch(e) {{}}
+                            }} else {{
+                                out[id] = {{_http_status: r.status}};
+                            }}
                         }}
-                    }}
-                    return JSON.stringify(out);
-                }})()"""
-                raw_res = arc_eval(batch_js)
+                    }};
+                    await Promise.all(Array.from({{length: 4}}, worker));
+                    return JSON.stringify(out);"""
+                raw_res = browser_run(batch_js)
                 try:
                     if isinstance(raw_res, str):
                         batch_data = json.loads(raw_res)
@@ -545,9 +656,15 @@ def run_sync(dry_run=False, push=False):
                 except (ValueError, TypeError):
                     raise RuntimeError("Canvas file metadata response was invalid; scan is incomplete.") from None
 
-        # 3i. Differentiate against local files
+        # 3j. Differentiate against local files
         local_files = local_by_folder.get(folder, [])
         local_filenames_lower = {item["filename"].lower(): item for item in local_files}
+        local_norm_to_file = {}
+        for item in local_files:
+            norm = normalize_name(item["filename"])
+            item_ext = os.path.splitext(item["filename"])[1].lower()
+            if norm:
+                local_norm_to_file[(norm, item_ext)] = item
 
         for fid, finfo in course_files.items():
             meta = finfo.get("meta")
@@ -557,13 +674,29 @@ def run_sync(dry_run=False, push=False):
                 continue
             canvas_size = meta.get("size") if meta else None
             canvas_url = meta.get("url") if meta else None
+            ext = os.path.splitext(filename)[1].lower()
 
             # Skip small non-document announcement icons
             if filename.lower() in ['image.png', 'images.jpeg'] and canvas_size and canvas_size < 500000 and "announcement" in finfo["source"].lower():
                 continue
 
-            # Equal byte sizes across different names do not establish identity.
             matched_local = local_filenames_lower.get(filename.lower())
+
+            # 1. Match by module item display title + file extension
+            if not matched_local and title:
+                title_clean = title.strip()
+                title_ext = f"{title_clean}{ext}".lower()
+                matched_local = local_filenames_lower.get(title_ext)
+
+            # 2. Match by normalized filename with same extension
+            if not matched_local:
+                norm_fn = normalize_name(filename)
+                matched_local = local_norm_to_file.get((norm_fn, ext))
+
+            # 3. Match by normalized title with same extension
+            if not matched_local and title:
+                norm_title = normalize_name(title)
+                matched_local = local_norm_to_file.get((norm_title, ext))
 
             if matched_local:
                 # If notebook or code was executed locally, size differences are normal — skip overwriting
@@ -586,7 +719,7 @@ def run_sync(dry_run=False, push=False):
             if not canvas_url:
                 continue
 
-            dest_path = target_dest_for_file(folder, filename, finfo["source"])
+            dest_path = target_dest_for_file(folder, filename, finfo["source"], title=title)
             if dest_path in protected or dest_path in planned:
                 stem, ext = os.path.splitext(dest_path)
                 dest_path = f"{stem} (Canvas {fid}){ext}"
