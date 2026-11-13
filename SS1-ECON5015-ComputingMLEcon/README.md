@@ -22,9 +22,10 @@
 | [Homework4/](Homeworks/Homework4/) | London crime regression. |
 | [Homework5/](Homeworks/Homework5/) | Numerical optimization; the existing [Algorithmic_Efficiency/](Homeworks/Homework5/Algorithmic_Efficiency/) workspace stays together here. |
 | [Homework6/](Homeworks/Homework6/) | Graph implementation ([handout](Homeworks/Homework6/a_graph_2026.docx), [solution](Homeworks/Homework6/Graph.py)). |
-| [Shortest_Path/](Homeworks/Shortest_Path/) | Shortest-path assignment, filed by topic because its homework number is not specified in the prompt. |
+| [Homework7/](Homeworks/Homework7/) | Shortest path on the Graph class ([handout](Homeworks/Homework7/Assignment_Shortest_Path.docx), [solution](Homeworks/Homework7/Graph.py)). |
 | [Homework8_DataWrangling/](Homeworks/Homework8_DataWrangling/) | FBI crime data concat and groupby ([handout](Homeworks/Homework8_DataWrangling/Data%20Wrangling%20Assignment%20(GroupBy).pdf), [solution](Homeworks/Homework8_DataWrangling/crimedata.py)). |
 | [Homework9_WorldBankAPI/](Homeworks/Homework9_WorldBankAPI/) | World Bank API JSON import ([handout](Homeworks/Homework9_WorldBankAPI/World%20Bank%20API%20Import%20Project%202026.docx), [solution](Homeworks/Homework9_WorldBankAPI/jsonimport.py)). |
 | [Homework10_DatabasesSQL/](Homeworks/Homework10_DatabasesSQL/) | Relational databases and SQL ([handout](Homeworks/Homework10_DatabasesSQL/SQL%20HW%20Assignment%202026.docx), [schema](Homeworks/Homework10_DatabasesSQL/db_chinook_schema.pdf), [database](Homeworks/Homework10_DatabasesSQL/chinook.db), and [script](Homeworks/Homework10_DatabasesSQL/db_2025.py)). |
+| [Model_Selection/](Homeworks/Model_Selection/) | BIC vs. LOOCV across six Boston housing models ([handout](Homeworks/Model_Selection/model_selection_assignment_2026.docx), [solution](Homeworks/Model_Selection/model_selection.py)). |
 
 Notebooks labeled `(Instructor Original)` differ from the existing working copy; both versions are retained. Run notebooks from their containing folder so local CSV paths resolve.
