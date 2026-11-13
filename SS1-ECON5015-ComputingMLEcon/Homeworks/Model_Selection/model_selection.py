@@ -11,40 +11,46 @@ from sklearn.model_selection import LeaveOneOut, cross_val_predict
 
 boston = pd.read_csv("http://ashafran.github.io/boston.csv")
 y = boston["MEDV"]
-X = boston.drop(columns="MEDV") # the 13 predictors
+X = boston.drop(columns="MEDV")
 n = len(boston)
 
-X_lin = X.values
-X_int = PolynomialFeatures(degree=2, include_bias=False, interaction_only=True).fit_transform(X) # + interactions
-X_quad = PolynomialFeatures(degree=2, include_bias=False).fit_transform(X) # + interactions and squares
+X1 = X
+X2 = PolynomialFeatures(degree=2, include_bias=False, interaction_only=True).fit_transform(X)
+X3 = PolynomialFeatures(degree=2, include_bias=False).fit_transform(X)
 
-# (X, logged y?) for models 0-5
-models = [(X_lin, False), (X_int, False), (X_quad, False),
-          (X_lin, True), (X_int, True), (X_quad, True)]
 
-bic = np.zeros(6)
-loo = np.zeros(6)
-for i, (Xm, logy) in enumerate(models):
-    yt = np.log(y) if logy else y # log-linear models fit log(y)
-
-    # BIC from the full-sample fit
-    y_pred = LinearRegression().fit(Xm, yt).predict(Xm)
-    if logy:
-        y_pred = np.exp(y_pred) # back to MEDV units so MSE compares to y
+def get_bic(X, y, log):
+    model = LinearRegression()
+    if log:
+        model.fit(X, np.log(y))
+        y_pred = np.exp(model.predict(X)) # undo the log so we can compare to y
+    else:
+        model.fit(X, y)
+        y_pred = model.predict(X)
     mse = np.mean((y_pred - y) ** 2)
-    p = Xm.shape[1] + 1 # predictors + intercept
-    bic[i] = n * np.log(mse) + np.log(n) * p
+    p = X.shape[1] + 1 # plus the intercept
+    return n * np.log(mse) + np.log(n) * p
 
-    # LOOCV test MSE from the held-out predictions
-    y_cv = cross_val_predict(LinearRegression(), Xm, yt, cv=LeaveOneOut())
-    if logy:
-        y_cv = np.exp(y_cv)
-    loo[i] = np.mean((y_cv - y) ** 2)
 
-best_bic = int(np.argmin(bic))
-best_loo = int(np.argmin(loo))
+def get_loo(X, y, log):
+    if log:
+        y_pred = cross_val_predict(LinearRegression(), X, np.log(y), cv=LeaveOneOut())
+        y_pred = np.exp(y_pred)
+    else:
+        y_pred = cross_val_predict(LinearRegression(), X, y, cv=LeaveOneOut())
+    return np.mean((y_pred - y) ** 2)
 
-# re-estimate the LOOCV winner on the full data, intercept first
-Xb, logb = models[best_loo]
-best_model = LinearRegression().fit(Xb, np.log(y) if logb else y)
-best_coef = np.concatenate(([best_model.intercept_], best_model.coef_))
+
+bic = np.array([get_bic(X1, y, False), get_bic(X2, y, False), get_bic(X3, y, False),
+                get_bic(X1, y, True), get_bic(X2, y, True), get_bic(X3, y, True)])
+
+loo = np.array([get_loo(X1, y, False), get_loo(X2, y, False), get_loo(X3, y, False),
+                get_loo(X1, y, True), get_loo(X2, y, True), get_loo(X3, y, True)])
+
+best_bic = np.argmin(bic)
+best_loo = np.argmin(loo)
+
+# best LOOCV model is model 4 (log-linear with interactions), refit on all the data
+best_model = LinearRegression()
+best_model.fit(X2, np.log(y))
+best_coef = np.append(best_model.intercept_, best_model.coef_)
