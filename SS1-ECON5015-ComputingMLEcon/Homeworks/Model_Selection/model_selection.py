@@ -3,6 +3,7 @@ ECON 5015: Model Selection Assignment
 Matthew Suban
 @matthewsuban
 """
+
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
@@ -28,6 +29,7 @@ for log in [False, True]:
 
         y_pred = LinearRegression().fit(Xm, target).predict(Xm)
         y_cv = cross_val_predict(LinearRegression(), Xm, target, cv=LeaveOneOut())
+
         if log:
             y_pred = np.exp(y_pred)
             y_cv = np.exp(y_cv)
