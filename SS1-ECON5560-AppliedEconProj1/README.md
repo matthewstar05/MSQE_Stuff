@@ -36,6 +36,11 @@ Course requirements are grouped in [Project_Management/](Project_Management/) an
 - **Analysis pipeline**: [`ECON5560-Team3/Data-Parsing/`](./ECON5560-Team3/Data-Parsing/) (`run_all.py` runs everything end to end).
 - **Course assets** (Canvas pages, assignment guidance): [`Replication-Project/Resources/`](./Replication-Project/Resources/)
 
+## Individual R replication (Proposal 1)
+
+- **Paper**: Abbas Nejad, Musillo, Wicker & Zaccaria (2026), *"Labor Market Signals: The Role of Large Language Models,"* *Journal of Labor Economics*. Proposal: [`Replication-Project/Proposals/Proposal1_LLM_Labor_Market_Signals.pdf`](./Replication-Project/Proposals/Proposal1_LLM_Labor_Market_Signals.pdf).
+- **Repo**: https://github.com/matthewstar05/llm-labor-signals-replication (private), cloned at `Replication-Project/llm-labor-signals-replication/`. It is a separate git repository, so it is git-ignored here; commit and push from inside that folder.
+
 ## Syncing the team repo
 
 `ECON5560-Team3/` is a `git subtree` copy of https://github.com/matthewstar05/ECON5560-Team3. Run these from the MSQE_Stuff root. On this computer the shortcuts `git team3-pull` and `git team3-push` do the same thing (they're set in this repo's local git config, so they don't carry over to other clones).
