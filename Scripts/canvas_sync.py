@@ -273,6 +273,9 @@ def extract_file_ids_from_html(html_text):
     matches.update(re.findall(r'/preview/(\d+)', html_text))
     matches.update(re.findall(r'attachment_id=(\d+)', html_text))
     matches.update(re.findall(r'file_id=(\d+)', html_text))
+    matches.update(re.findall(r'files%2F(\d+)', html_text, re.IGNORECASE))
+    matches.update(re.findall(r'file_id%3D(\d+)', html_text, re.IGNORECASE))
+    matches.update(re.findall(r'attachment_id%3D(\d+)', html_text, re.IGNORECASE))
     return matches
 
 def normalize_name(name):
@@ -315,7 +318,7 @@ def target_dest_for_file(course_folder, filename, source, title=None):
     fn_lower = filename.lower()
     src_lower = source.lower()
     t_lower = (title or "").lower()
-    combined = f"{fn_lower} {t_lower}"
+    combined = f"{fn_lower} {t_lower} {src_lower}"
 
     if course_folder == "SS1-ECON5015-ComputingMLEcon":
         if "syllabus" in combined:
@@ -395,13 +398,23 @@ def target_dest_for_file(course_folder, filename, source, title=None):
         if "midterm" in combined:
             return os.path.join(REPO_ROOT, course_folder, "Course_Info", "Exams", "Midterm", filename)
         if re.search(r'\bweek[ _-]*11(?=\D|$)', combined):
-            if "problem_set" in combined or "starter" in combined:
+            if any(k in combined for k in ("problem_set", "starter", "answer_key", "solution", "ps")):
                 return os.path.join(REPO_ROOT, course_folder, "ProblemSets", "ProblemSet10", filename)
             if fn_lower.endswith('.ipynb'):
                 return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", "Week11_Asset_Pricing", filename)
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", "Week11_Lucas_Tree", filename)
-        if "week12" in combined or "complete_markets" in combined or "arrow_securities" in combined:
+        if re.search(r'\bweek[ _-]*12(?=\D|$)', combined) or "complete_markets" in combined or "arrow_securities" in combined:
+            if any(k in combined for k in ("problem_set", "starter", "answer_key", "solution", "ps")):
+                return os.path.join(REPO_ROOT, course_folder, "ProblemSets", "ProblemSet11", filename)
+            if fn_lower.endswith('.ipynb'):
+                return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", filename)
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", "Week12_Complete_Markets", filename)
+        if re.search(r'\bweek[ _-]*13(?=\D|$)', combined) or "incomplete_markets" in combined or "hall" in combined or "bewley" in combined:
+            if any(k in combined for k in ("problem_set", "starter", "answer_key", "solution", "ps")):
+                return os.path.join(REPO_ROOT, course_folder, "ProblemSets", "ProblemSet12", filename)
+            if fn_lower.endswith('.ipynb'):
+                return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", "Week13_Incomplete_Markets", filename)
+            return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", "Week13_Incomplete_Markets", filename)
         if re.search(r'\bweek[ _-]*1(?=\D|$)', combined) or "intertemporal" in combined or "slutsky" in combined:
             return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", "Week1_Intertemporal_Choice", filename)
         if "final" in src_lower or "final" in combined:
@@ -410,6 +423,16 @@ def target_dest_for_file(course_folder, filename, source, title=None):
             if fn_lower.endswith(('.pdf', '.doc', '.docx')):
                 return os.path.join(REPO_ROOT, course_folder, "Readings", filename)
             return os.path.join(REPO_ROOT, course_folder, "Final_Project", filename)
+        m_wk = re.search(r'\bweek[ _-]*(\d+)(?=\D|$)', combined)
+        if m_wk:
+            wk_num = int(m_wk.group(1))
+            if any(k in combined for k in ("problem_set", "starter", "answer_key", "solution", "ps")):
+                ps_num = wk_num - 1 if wk_num >= 10 else wk_num
+                return os.path.join(REPO_ROOT, course_folder, "ProblemSets", f"ProblemSet{ps_num}", filename)
+            if fn_lower.endswith('.ipynb'):
+                return os.path.join(REPO_ROOT, course_folder, "In_Class_Notebooks", f"Week{wk_num}", filename)
+            if fn_lower.endswith(('.pdf', '.pptx')):
+                return os.path.join(REPO_ROOT, course_folder, "Lecture_Notes", f"Week{wk_num}", filename)
         m_ps = re.search(r'(?:problem_set_|ps)(\d+)', combined)
         if m_ps:
             return os.path.join(REPO_ROOT, course_folder, "ProblemSets", f"ProblemSet{m_ps.group(1)}", filename)
@@ -451,6 +474,30 @@ def target_dest_for_file(course_folder, filename, source, title=None):
         return os.path.join(REPO_ROOT, course_folder, filename)
 
     return os.path.join(REPO_ROOT, course_folder, "Resources", filename)
+
+def discover_courses():
+    """Discover courses from Canvas that correspond to local directories in MSQE_Stuff."""
+    discovered = dict(COURSE_MAP)
+    try:
+        user_courses = canvas_api_list('/api/v1/courses?per_page=50')
+        local_dirs = [d for d in os.listdir(REPO_ROOT) if os.path.isdir(os.path.join(REPO_ROOT, d)) and not d.startswith('.')]
+        for c in user_courses:
+            cid = c.get('id')
+            if not cid or cid in discovered:
+                continue
+            name = (c.get('name') or '').strip()
+            code = (c.get('course_code') or '').strip()
+            for ld in local_dirs:
+                m = re.search(r'ECON[- ]*S?(\d{4})', ld, re.IGNORECASE)
+                if m:
+                    num = m.group(1)
+                    if num in code or num in name:
+                        discovered[cid] = ld
+                        print(f"  [DISCOVERED] Auto-mapped Canvas course {cid} ({code or name}) -> {ld}")
+                        break
+    except Exception:
+        pass
+    return discovered
 
 # ----------------------------------------------------------------------
 # Core Routine
@@ -507,7 +554,8 @@ def run_sync(dry_run=False, push=False):
     differentials = [] # list of (url, dest_path, file_meta, folder, is_update)
     planned = set()
     
-    for cid, folder in COURSE_MAP.items():
+    courses_to_scan = discover_courses()
+    for cid, folder in courses_to_scan.items():
         print(f"\nScanning {folder} (ID: {cid})...")
         course_files = {}
 
@@ -528,8 +576,13 @@ def run_sync(dry_run=False, push=False):
                     itype = item.get('type')
                     fid = item.get('content_id')
                     title = item.get('title')
-                    if itype == 'File' and fid and str(fid) not in course_files:
-                        course_files[str(fid)] = {"source": f"module:{m_name}", "title": title, "meta": None}
+                    if itype == 'File':
+                        if not fid and item.get('url'):
+                            m_fid = re.search(r'/files/(\d+)', item.get('url') or '')
+                            if m_fid:
+                                fid = m_fid.group(1)
+                        if fid and str(fid) not in course_files:
+                            course_files[str(fid)] = {"source": f"module:{m_name}", "title": title, "meta": None}
                     elif itype == 'Page' and item.get('page_url'):
                         p = canvas_api_get(f'/api/v1/courses/{cid}/pages/{item.get("page_url")}')
                         if isinstance(p, dict):
@@ -542,6 +595,18 @@ def run_sync(dry_run=False, push=False):
                             for afid in extract_file_ids_from_html(a_data.get('description', '')):
                                 if str(afid) not in course_files:
                                     course_files[str(afid)] = {"source": f"module_assignment:{m_name}/{title}", "title": None, "meta": None}
+                    elif itype == 'Quiz' and item.get('url'):
+                        q_data = canvas_api_get(item.get('url'))
+                        if isinstance(q_data, dict):
+                            for qfid in extract_file_ids_from_html(q_data.get('description', '')):
+                                if str(qfid) not in course_files:
+                                    course_files[str(qfid)] = {"source": f"module_quiz:{m_name}/{title}", "title": None, "meta": None}
+                    elif itype == 'Discussion' and item.get('url'):
+                        d_data = canvas_api_get(item.get('url'))
+                        if isinstance(d_data, dict):
+                            for dfid in extract_file_ids_from_html(d_data.get('message', '')):
+                                if str(dfid) not in course_files:
+                                    course_files[str(dfid)] = {"source": f"module_discussion:{m_name}/{title}", "title": None, "meta": None}
 
         # 3c. All published Course Pages (including those not placed in modules)
         all_pages = canvas_api_list(f'/api/v1/courses/{cid}/pages?per_page=100')

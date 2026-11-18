@@ -255,6 +255,42 @@ class CanvasSyncTests(unittest.TestCase):
         self.assertIn("/Final_Project/", sync.target_dest_for_file(course, "final_project.pdf", "module:Final Project"))
         self.assertIn("/Readings/", sync.target_dest_for_file(course, "covid_lessons.pdf", "module:Finals week"))
 
+    def test_econ5040_week13_and_answer_key_routing(self):
+        course = "SS1-ECON5040-DynamicStochasticModeling"
+        self.assertIn("/ProblemSets/ProblemSet10/", sync.target_dest_for_file(course, "Week11_Markov_Asset_Pricing_Answer_Key.ipynb", "module:Week 11"))
+        self.assertIn("/ProblemSets/ProblemSet12/", sync.target_dest_for_file(course, "Week13_Problem_Set.pdf", "module:Week 13: Incomplete Markets"))
+        self.assertIn("/ProblemSets/ProblemSet12/", sync.target_dest_for_file(course, "Week13_Starter.ipynb", "module:Week 13: Incomplete Markets"))
+        self.assertIn("/Lecture_Notes/Week13_Incomplete_Markets/", sync.target_dest_for_file(course, "lecture1_hall.pdf", "module:Week 13: Incomplete Markets"))
+        self.assertIn("/Lecture_Notes/Week13_Incomplete_Markets/", sync.target_dest_for_file(course, "lecture2_bewley.pdf", "module:Week 13: Incomplete Markets"))
+
+    def test_extract_file_ids_from_html_handles_encoded_urls(self):
+        html = '<a href="/courses/1/files%2F12345/download?file_id%3D67890&amp;attachment_id%3D11223">Link</a>'
+        fids = sync.extract_file_ids_from_html(html)
+        self.assertIn("12345", fids)
+        self.assertIn("67890", fids)
+        self.assertIn("11223", fids)
+
+    def test_module_file_without_content_id_uses_url(self):
+        folder = "SS1-ECON5015-ComputingMLEcon"
+        module_item = {"type": "File", "content_id": None, "title": "Missing ID Doc", "url": "https://canvas.calpoly.edu/api/v1/courses/1/files/54321"}
+        metadata = {"54321": {"id": 54321, "display_name": "test_doc.pdf", "size": 100,
+                              "url": "https://canvas.calpoly.edu/files/54321/download"}}
+
+        def listing(path):
+            if "/modules?" in path:
+                return [{"id": 1, "name": "Module 1", "items_count": 1, "items": [module_item]}]
+            return []
+
+        with patch.object(sync, "COURSE_MAP", {1: folder}), \
+                patch.object(sync, "find_canvas_tab", return_value=sync.CANVAS_ORIGIN), \
+                patch.object(sync, "canvas_api_get", return_value={"id": 1}), \
+                patch.object(sync, "canvas_api_list", side_effect=listing), \
+                patch.object(sync, "browser_run", return_value=json.dumps(metadata)), \
+                patch.object(sync.subprocess, "run", return_value=subprocess.CompletedProcess([], 0, stdout=b"")), \
+                contextlib.redirect_stdout(io.StringIO()) as output:
+            sync.run_sync(dry_run=True)
+        self.assertIn("test_doc.pdf", output.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main()
